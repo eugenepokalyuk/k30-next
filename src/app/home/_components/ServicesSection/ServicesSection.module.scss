@@ -1,0 +1,185 @@
+@use '@/styles/index' as s;
+
+.notice {
+  margin-bottom: s.gap(5);
+}
+
+.grid {
+  display: grid;
+  gap: s.gap(3);
+
+  // На телефоне карточки идут в один столбец: minmax(240px, 1fr) при
+  // ширине контента 288px давал ровно одну колонку, но с риском
+  // горизонтальной прокрутки на 320px экране.
+  grid-template-columns: 1fr;
+
+  @include s.media_up(sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: s.gap(4);
+  }
+
+  // auto-fit, а не auto-fill: сервисов в продаже может быть три, и при
+  // auto-fill сетка держала пустую четвёртую колонку — ряд обрывался
+  // на середине контейнера.
+  @include s.media_up(lg) {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+}
+
+.card {
+  @include s.card;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+
+  padding: s.gap(5);
+  overflow: hidden;
+
+  transition:
+    border-color s.$transition-duration s.$ease_out,
+    transform s.$transition-duration s.$ease_out;
+
+  // Цвет приезжает с бэкенда (Service.accent_color). Если его не задали,
+  // карточка берёт фирменный фиолетовый.
+  --accent: #{s.$primary};
+
+  // Подсветка углом от фирменного цвета сервиса. Появляется на
+  // наведении и не занимает места в потоке.
+  &::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -30%;
+
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent), transparent 70%);
+    opacity: 0;
+
+    transition: opacity s.$transition-duration s.$ease_out;
+    pointer-events: none;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+
+      &::before {
+        opacity: 0.14;
+      }
+    }
+  }
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 16px var(--accent);
+
+  // Не даём кружку сжаться, когда длинное название забирает всю ширину.
+  flex-shrink: 0;
+}
+
+// Фонарик, название и вилка цен — одной строкой: цена прижата вправо,
+// чтобы колонка читалась сверху вниз и на карточках разной ширины.
+//
+// Выравнивание по центру, а не по базовой линии: у пустого кружка
+// базовой линии нет — по ней он уезжает вниз относительно текста.
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: s.gap(2);
+}
+
+.name {
+  @include s.text_header_3;
+
+  display: flex;
+  align-items: center;
+  gap: s.gap(2);
+  min-width: 0;
+
+  color: var(--text_default);
+}
+
+.price_from {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+  white-space: nowrap;
+}
+
+.tagline {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+  text-wrap: pretty;
+}
+
+// Список тарифов прижимаем к низу карточки: подписи у сервисов разной
+// длины, и без этого тарифы плясали бы по вертикали от карточки к
+// карточке. У Claude их два, у ChatGPT четыре — ряд всё равно ровный.
+.plans {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(1);
+
+  margin-top: auto;
+  padding-top: s.gap(3);
+}
+
+.plan {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: s.gap(2);
+}
+
+.plan_name {
+  @include s.text_body_2;
+
+  color: var(--text_default);
+  font-weight: s.$semi_bold;
+}
+
+// Справа одна подпись: цена либо «скоро». Не переносим её — «1 990 ₽»,
+// разорванное по строкам, читается как две разные цифры.
+.plan_price {
+  @include s.text_body_2;
+
+  color: var(--text_default);
+  white-space: nowrap;
+}
+
+.stock_out {
+  @include s.text_caption;
+
+  color: var(--text_muted);
+  white-space: nowrap;
+}
+
+.skeleton {
+  height: 132px;
+  border-radius: s.$br_5;
+  background: var(--background_secondary);
+  border: 1px solid var(--stroke_default);
+
+  animation: pulse 1.4s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.55;
+  }
+}

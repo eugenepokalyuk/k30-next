@@ -1,0 +1,108 @@
+@use '@/styles/index' as s;
+
+.hero {
+  position: relative;
+
+  // Отступы тянутся вместе с экраном: на телефоне первый экран должен
+  // начинаться сразу, на большом мониторе — дышать.
+  padding: clamp(s.gap(8), 7vw, s.gap(20)) 0 clamp(s.gap(10), 6vw, s.gap(16));
+  overflow: hidden;
+
+  // Фиолетовое свечение за заголовком. Декоративное, поэтому псевдо-
+  // элементом, а не картинкой: не грузится и не попадает в вёрстку.
+  &::before {
+    @include s.glow;
+
+    top: -180px;
+    left: -120px;
+  }
+
+  &::after {
+    @include s.glow($size: 360px);
+
+    top: 40px;
+    right: -80px;
+  }
+}
+
+.container {
+  @include s.glass(var(--glass));
+
+  position: relative;
+  display: grid;
+  gap: s.gap(10);
+
+  // Правая колонка появляется только когда под неё есть место. До этого
+  // текст и форма занимают всю ширину, а не половину при пустой второй.
+  @include s.media_up(lg) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+    gap: s.gap(12);
+    align-items: center;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+  min-width: 0;
+}
+
+.overline {
+  @include s.text_overline;
+
+  color: var(--text_primary);
+}
+
+.title {
+  @include s.text_display;
+
+  color: var(--text_default);
+
+  // Заголовок из двух строк не должен ломаться на «и подписка / ваша» —
+  // balance выравнивает строки по длине.
+  text-wrap: balance;
+}
+
+.accent {
+  background: linear-gradient(115deg, s.$primary, s.$primary_light 55%, #fff0c2);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.description {
+  @include s.text_body_1;
+
+  max-width: 56ch;
+  color: var(--text_secondary);
+  text-wrap: pretty;
+}
+
+.form {
+  margin-top: s.gap(2);
+}
+
+.advantages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: s.gap(3) s.gap(6);
+
+  margin-top: s.gap(3);
+}
+
+.advantage {
+  display: inline-flex;
+  align-items: center;
+  gap: s.gap(2);
+
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+}
+
+.advantage_icon {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--icon_primary);
+}

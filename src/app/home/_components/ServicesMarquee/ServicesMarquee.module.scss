@@ -1,0 +1,55 @@
+@use '@/styles/index' as s;
+
+.marquee {
+  position: relative;
+  overflow: hidden;
+
+  padding: s.gap(4) 0;
+  border-top: 1px solid var(--stroke_default);
+  border-bottom: 1px solid var(--stroke_default);
+  background: var(--background_secondary);
+
+  // Лента уходит в фон по краям, а не обрывается на границе экрана.
+  // mask, а не градиентные накладки: те пришлось бы красить в цвет
+  // подложки и держать в синхроне с ней.
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000000 8%,
+    #000000 92%,
+    transparent
+  );
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  // Ширина по содержимому: иначе flex сожмёт элементы до ширины экрана
+  // и прокручивать станет нечего.
+  width: max-content;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: s.gap(2);
+
+  padding: 0 s.gap(5);
+
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+  white-space: nowrap;
+
+  --accent: #{s.$primary};
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}

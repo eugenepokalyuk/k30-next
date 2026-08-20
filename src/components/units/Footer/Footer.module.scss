@@ -1,0 +1,110 @@
+@use '@/styles/index' as s;
+
+.footer {
+  margin-top: var(--section_gap);
+  padding: clamp(s.gap(8), 5vw, s.gap(12)) 0 s.gap(6);
+  border-top: 1px solid var(--stroke_default);
+  background: var(--background_secondary);
+
+  // На телефоне под подвалом ещё есть системная панель жестов.
+  padding-bottom: calc(#{s.gap(6)} + env(safe-area-inset-bottom));
+}
+
+.container {
+  @include s.glass(var(--glass));
+
+  display: grid;
+  gap: s.gap(7);
+
+  // Два столбца ссылок встают рядом уже на телефоне: по четыре пункта
+  // в каждом, и в одну колонку подвал растягивался на два экрана.
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @include s.media_up(md) {
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: s.gap(8);
+  }
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+  max-width: 380px;
+
+  // Логотип с описанием занимает всю ширину над столбцами ссылок.
+  grid-column: 1 / -1;
+
+  @include s.media_up(md) {
+    grid-column: auto;
+  }
+}
+
+.about {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+  text-wrap: pretty;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(1);
+}
+
+.heading {
+  @include s.text_overline;
+
+  color: var(--text_muted);
+  margin-bottom: s.gap(2);
+}
+
+.link {
+  @include s.text_body_2;
+
+  display: inline-flex;
+  align-items: center;
+  // Ссылки в подвале — самая частая цель промаха на телефоне: они
+  // стоят вплотную друг к другу.
+  min-height: 36px;
+
+  color: var(--text_secondary);
+  transition: color s.$transition-duration s.$ease_out;
+  overflow-wrap: anywhere;
+
+  &:hover {
+    color: var(--text_primary);
+  }
+}
+
+.bottom {
+  @include s.glass(var(--glass));
+
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+
+  margin-top: s.gap(9);
+  padding-top: s.gap(5);
+  border-top: 1px solid var(--stroke_default);
+
+  @include s.text_caption;
+
+  color: var(--text_muted);
+
+  @include s.media_up(md) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: s.gap(4);
+  }
+}
+
+.disclaimer {
+  max-width: 480px;
+
+  @include s.media_up(md) {
+    text-align: right;
+  }
+}

@@ -1,0 +1,137 @@
+@use '@/styles/index' as s;
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: s.gap(6);
+  width: 100%;
+}
+
+// === Выбор вида данных ===
+//
+// Показывается, только когда поставщик принимает больше одного варианта
+// (у ChatGPT это JSON сессии либо один account_id). Одинокая радиогруппа
+// из единственного пункта — лишний вопрос там, где выбора нет.
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.choice_title {
+  @include s.text_body_2;
+
+  padding: 0;
+  color: var(--text_secondary);
+}
+
+.choice_options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: s.gap(2);
+
+  padding: s.gap(2) s.gap(0);
+}
+
+.choice_option {
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  gap: s.gap(2);
+
+  padding: s.gap(2) s.gap(4);
+
+  background: var(--background_elevated);
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_full;
+
+  transition: s.$transition;
+
+  &[data-selected='true'] {
+    color: var(--text_primary);
+    border-color: var(--stroke_primary);
+    background: var(--background_primary_10);
+  }
+
+  // Клавиатурный фокус живёт на скрытом input — подсвечиваем обёртку,
+  // иначе при табуляции не видно, где ты.
+  &:focus-within {
+    @include s.focus_ring(2px);
+  }
+}
+
+.choice_input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.choice_label {
+  @include s.text_body_2;
+}
+
+// === Подтверждение ===
+
+.preview {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+}
+
+.account {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+  width: 100%;
+}
+
+.subscriptions {
+  margin: s.gap(0) s.gap(0) s.gap(2);
+  padding-left: s.gap(5);
+}
+
+.note {
+  @include s.text_body_2;
+
+  color: var(--warning);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: s.gap(4);
+  flex-wrap: wrap;
+
+  padding: s.gap(4);
+  background: var(--background_elevated);
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_3;
+}
+
+.user {
+  display: inline-flex;
+  align-items: center;
+  gap: s.gap(2);
+
+  @include s.text_body_1;
+
+  color: var(--text_default);
+  overflow-wrap: anywhere;
+}
+
+.button {
+  @include s.media_down(lg) {
+    width: 100%;
+  }
+}

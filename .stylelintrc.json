@@ -1,0 +1,19 @@
+{
+  "plugins": ["stylelint-scss"],
+  "rules": {},
+  "overrides": [
+    {
+      "files": ["**/*.scss"],
+      "customSyntax": "postcss-scss",
+      "rules": {
+        "at-rule-disallowed-list": [
+          ["import"],
+          {
+            "message": "Sass @import устарел (удаляется в Dart Sass 3.0) — используй @use/@forward"
+          }
+        ],
+        "scss/no-global-function-names": true
+      }
+    }
+  ]
+}

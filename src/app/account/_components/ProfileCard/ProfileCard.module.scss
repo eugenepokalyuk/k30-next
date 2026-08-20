@@ -1,0 +1,78 @@
+@use '@/styles/index' as s;
+
+.card {
+  @include s.card;
+
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(5);
+  padding: s.gap(5);
+  height: fit-content;
+
+  @include s.media_up(sm) {
+    padding: s.gap(6);
+  }
+}
+
+// Кто вошёл — сверху, отделено линией от того, что можно поменять.
+// Без разделителя почта читалась как ещё одно поле формы.
+.header {
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+  min-width: 0;
+
+  padding-bottom: s.gap(5);
+  border-bottom: 1px solid var(--stroke_default);
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  width: 44px;
+  height: 44px;
+
+  background: var(--background_primary_10);
+  border: 1px solid var(--stroke_primary);
+  border-radius: 50%;
+  color: var(--icon_primary);
+}
+
+// 14px, а не 16: в колонке профиля на почту остаётся около 210px, и
+// адрес вида eugene.pokalyuk@gmail.com рвался посреди домена — «gmail.co»
+// и «m» на следующей строке. Перенос как крайняя мера всё равно оставлен:
+// почтовые адреса бывают и длиннее.
+.email {
+  @include s.text_body_2;
+
+  color: var(--text_default);
+  font-weight: s.$semi_bold;
+  overflow-wrap: anywhere;
+}
+
+.since {
+  @include s.text_caption;
+
+  color: var(--text_muted);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+}
+
+.actions {
+  display: flex;
+  gap: s.gap(2);
+  margin-top: s.gap(1);
+}

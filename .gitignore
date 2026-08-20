@@ -1,0 +1,18 @@
+# Зависимости и сборка
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+
+# Генерируется Next при запуске
+next-env.d.ts
+
+# Окружение
+.env
+.env.local
+
+# Редакторы и ОС
+.DS_Store
+.idea/
+.vscode/

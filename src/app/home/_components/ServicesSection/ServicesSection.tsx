@@ -1,0 +1,125 @@
+'use client';
+
+import React, { FC } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+
+import { duration, ease } from '@/components/motion';
+import { Notice, Section } from '@/components/ui';
+import { useServicesQuery } from '@/store/api/k30Api';
+import { formatPrice, formatPriceFrom } from '@/utils/helpers';
+
+import classes from './ServicesSection.module.scss';
+
+/** Список сервисов приходит с бэкенда: их заводит менеджер в админке,
+ *  и захардкоженный список разъезжался бы с тем, что реально в продаже. */
+export const ServicesSection: FC = () => {
+  const { data, isLoading, isError } = useServicesQuery();
+
+  return (
+    <Section
+      id="services"
+      overline="Что активируем"
+      title="Сервисы"
+      description="Ключ работает только со своим сервисом — он зашит в код и определяется автоматически."
+    >
+      {isError && (
+        <Notice
+          tone="error"
+          title="Не получилось загрузить список"
+          className={classes.notice}
+        >
+          Обновите страницу или напишите в поддержку — на активацию ключа это не
+          влияет.
+        </Notice>
+      )}
+
+      <ul className={classes.grid}>
+        {/* Скелетоны, а не спиннер: карточки занимают своё место сразу,
+            и остальная страница не прыгает, когда список приедет. */}
+        {isLoading &&
+          Array.from({ length: 4 }).map((_, index) => (
+            <li key={index} className={classes.skeleton} />
+          ))}
+
+        {/* Карточки появляются по очереди уже после ответа сервера,
+            поэтому задержка считается от индекса, а не вариантами
+            родителя: на момент его появления детей ещё нет. */}
+        <AnimatePresence>
+          {data?.map((service, index) => {
+            const priceFrom = formatPriceFrom(service.plans);
+
+            return (
+              <motion.li
+                key={service.slug}
+                className={classes.card}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: duration.base,
+                  ease,
+                  delay: Math.min(index * 0.06, 0.4),
+                }}
+                style={
+                  service.accent_color
+                    ? ({
+                        '--accent': service.accent_color,
+                      } as React.CSSProperties)
+                    : undefined
+                }
+              >
+                <div className={classes.head}>
+                  {/* Фонарик — часть заголовка, а не отдельная строка:
+                      он маркирует сервис, и оторванный от названия
+                      читался как украшение. */}
+                  <p className={classes.name}>
+                    <span className={classes.dot} />
+                    {service.name}
+                  </p>
+                  {/* Вилка по тарифам: карточка отвечает на «сколько это
+                    стоит» до того, как её раскроют. */}
+                  {priceFrom && (
+                    <p className={classes.price_from}>{priceFrom}</p>
+                  )}
+                </div>
+                {service.tagline && (
+                  <p className={classes.tagline}>{service.tagline}</p>
+                )}
+
+                {/* Тарифы внутри карточки сервиса: Claude Pro и Claude
+                  Max 5x — разный товар, но инструкция активации у них
+                  одна, и разносить их по отдельным карточкам значило бы
+                  дважды объяснять покупателю одно и то же.
+
+                  Справа ровно одна подпись. Продаём — показываем цену,
+                  не продаём — «скоро». Цена и наличие отвечают на один и
+                  тот же вопрос — «брать сейчас?», — и рядом друг с
+                  другом только шумят.
+
+                  Цена сервиса при этом всегда видна в шапке карточки
+                  («от 890 ₽»), так что заполненный ценник не пропадает,
+                  даже когда все тарифы ждут поставки.
+
+                  Наличие приходит флагом, а не числом: точный остаток
+                  бэкенд не отдаёт — по нему видны обороты. */}
+                <ul className={classes.plans}>
+                  {service.plans.map((plan) => (
+                    <li key={plan.slug} className={classes.plan}>
+                      <span className={classes.plan_name}>{plan.name}</span>
+                      {plan.in_stock ? (
+                        <span className={classes.plan_price}>
+                          {formatPrice(plan.price) ?? 'по запросу'}
+                        </span>
+                      ) : (
+                        <span className={classes.stock_out}>скоро</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </motion.li>
+            );
+          })}
+        </AnimatePresence>
+      </ul>
+    </Section>
+  );
+};

@@ -1,0 +1,146 @@
+@use 'sass:math';
+@use '@/styles/index' as s;
+
+$marker: 44px;
+$column_gap: 20px;
+
+.list {
+  position: relative;
+  display: grid;
+  gap: 0;
+
+  // Ширину списка ничем не ограничиваем — он занимает весь контейнер
+  // секции. Сброс padding у ol лежит в globals: браузерные 40px слева
+  // сдвигали блок вправо и не давали ему дойти до правого края.
+
+  @include s.media_up(md) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: s.gap(8) s.gap(5);
+  }
+
+  @include s.media_up(lg) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: $column_gap;
+  }
+}
+
+.item {
+  position: relative;
+  display: grid;
+  grid-template-columns: $marker 1fr;
+  align-items: start;
+  gap: s.gap(4);
+
+  padding-bottom: s.gap(6);
+
+  // Вертикальная линия таймлайна — от номера до номера. У последнего
+  // шага её нет: линия в никуда читается как «дальше ещё что-то».
+  &:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    top: $marker;
+    bottom: s.gap(1);
+    left: calc(#{math.div($marker, 2)} - 0.5px);
+
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      var(--stroke_strong),
+      var(--stroke_default)
+    );
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  // На широком экране шаги встают карточками, номер уходит наверх,
+  // а связывает их горизонтальная линия на .list.
+  @include s.media_up(md) {
+    // Номер своей высоты, карточка забирает остаток: тогда карточки
+    // соседних шагов заканчиваются на одной линии, сколько бы строк
+    // ни занял текст.
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    gap: s.gap(4);
+    padding-bottom: 0;
+
+    &:not(:last-child)::before {
+      content: none;
+    }
+  }
+
+  // Горизонтальная связка между номерами. Рисуется от каждого шага к
+  // следующему, а не одной линией на весь список: номера стоят у левого
+  // края своей колонки, и общая линия по процентам ширины мимо них
+  // промахивалась.
+  @include s.media_up(lg) {
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: math.div($marker, 2);
+      left: calc(#{$marker} + #{s.gap(3)});
+      right: -$column_gap;
+
+      height: 1px;
+      background: var(--stroke_strong);
+    }
+  }
+}
+
+.number {
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 1;
+
+  width: $marker;
+  height: $marker;
+
+  // Заливка непрозрачная и совпадает с фоном страницы: линия проходит
+  // за номером и не просвечивает сквозь него.
+  background: var(--background_default);
+  border: 1px solid var(--stroke_primary);
+  border-radius: 50%;
+  color: var(--text_primary);
+
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: s.$bold;
+  font-size: 17px;
+  line-height: 1;
+
+  box-shadow: 0 0 0 6px var(--background_default);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+  min-width: 0;
+
+  // Карточка появляется только там, где шаги стоят в ряд. На телефоне
+  // рамка вокруг каждого шага спорила бы с линией таймлайна.
+  @include s.media_up(md) {
+    @include s.card;
+
+    gap: s.gap(2.5);
+    padding: s.gap(5);
+    height: 100%;
+  }
+}
+
+.title {
+  @include s.text_header_3;
+
+  color: var(--text_default);
+}
+
+.text {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+
+  // Строка не должна становиться длиннее читаемой, даже когда карточка
+  // растянута на четверть экрана 4K.
+  max-width: 42ch;
+}

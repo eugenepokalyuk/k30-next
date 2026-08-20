@@ -1,0 +1,67 @@
+@use '@/styles/index' as s;
+
+.page {
+  padding: clamp(s.gap(6), 5vw, s.gap(12)) 0;
+}
+
+.container {
+  @include s.glass(s.$width_narrow);
+
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(6);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+}
+
+.title {
+  @include s.text_header_1;
+
+  color: var(--text_default);
+}
+
+.subtitle {
+  @include s.text_body_1;
+
+  color: var(--text_primary);
+}
+
+.steps {
+  margin-bottom: s.gap(2);
+}
+
+.key {
+  margin-bottom: s.gap(2);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(6);
+}
+
+.loading {
+  @include s.text_body_1;
+
+  color: var(--text_secondary);
+}
+
+.support {
+  @include s.text_body_2;
+
+  padding-top: s.gap(4);
+  border-top: 1px solid var(--stroke_default);
+  color: var(--text_muted);
+}
+
+.support_link {
+  color: var(--text_primary);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -1,0 +1,46 @@
+@use '@/styles/index' as s;
+
+.instruction {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: s.gap(4);
+
+  @include s.media_down(lg) {
+    a {
+      width: 100%;
+    }
+  }
+}
+
+.paragraph {
+  @include s.text_body_1;
+
+  color: var(--text_secondary);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2.5);
+}
+
+.item {
+  @include s.text_body_1;
+
+  position: relative;
+  padding-left: s.gap(6);
+  color: var(--text_default);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: s.gap(2);
+
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--background_primary);
+  }
+}

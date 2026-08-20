@@ -1,0 +1,167 @@
+@use '@/styles/index' as s;
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: s.gap(2);
+
+  border: 1px solid transparent;
+  border-radius: s.$br_3;
+  cursor: pointer;
+
+  text-align: center;
+  font-weight: s.$medium;
+
+  // Раньше стоял nowrap, и длинные подписи («Подтвердить и активировать»)
+  // на узком экране вылезали за пределы карточки. Перенос по словам с
+  // балансировкой строк — кнопка сама становится в две строки, а не
+  // распирает вёрстку.
+  text-wrap: balance;
+  max-width: 100%;
+
+  // transform отдельным быстрым переходом — чтобы нажатие «пружинило»
+  // мгновенно, а не плыло вместе с остальными свойствами.
+  transition:
+    s.$transition,
+    transform 0.08s s.$ease_out;
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &:focus-visible {
+    @include s.focus_ring;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+// === Sizes ===
+
+// Горизонтальные отступы на телефоне меньше: при 320px экрана пара
+// «32px + подпись + 32px» уже не помещалась в контейнер.
+
+.large {
+  padding: s.gap(4) s.gap(5);
+  min-height: 56px;
+
+  @include s.text_body_1;
+
+  @include s.media_up(sm) {
+    padding: s.gap(4) s.gap(8);
+  }
+}
+
+.medium {
+  padding: s.gap(3) s.gap(5);
+  min-height: 48px;
+
+  @include s.text_body_1;
+
+  @include s.media_up(sm) {
+    padding: s.gap(3) s.gap(6);
+  }
+}
+
+.small {
+  padding: s.gap(2) s.gap(4);
+
+  // 44px — минимальная зона нажатия по гайдлайнам Apple и Google.
+  min-height: 44px;
+
+  @include s.text_body_2;
+}
+
+// === Colors ===
+
+.primary {
+  background: var(--button_primary_background);
+  color: var(--button_primary_text);
+  box-shadow: s.$box-shadow-primary;
+
+  // Подсветку усиливаем только там, где есть курсор. На тач-экране
+  // :hover залипает после нажатия, и кнопка остаётся «подсвеченной»
+  // до следующего касания в стороне.
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background: var(--button_primary_background_hover);
+      box-shadow: 0 10px 36px -8px rgba(226, 169, 58, 0.55);
+    }
+  }
+}
+
+.default {
+  background: var(--button_default_background);
+  color: var(--text_default);
+  border-color: var(--stroke_default);
+
+  &:hover:not(:disabled) {
+    border-color: var(--stroke_strong);
+  }
+}
+
+// === Variants ===
+
+.outlined {
+  background: transparent;
+  border-color: var(--stroke_strong);
+  color: var(--text_default);
+  box-shadow: none;
+
+  // На наведении меняется только рамка и лёгкая подложка. Текст
+  // остаётся светлым: перекрашивать и его в фирменный цвет — значит
+  // потерять контраст ровно в тот момент, когда на кнопку смотрят.
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background: var(--background_primary_10);
+      border-color: var(--stroke_primary);
+    }
+  }
+}
+
+.ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text_secondary);
+  box-shadow: none;
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background: var(--background_elevated);
+      color: var(--text_default);
+    }
+  }
+}
+
+.full_width {
+  width: 100%;
+}
+
+.loading {
+  cursor: progress;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentcolor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+
+  // Пользователи с включённым «уменьшить движение» получают статичную
+  // дугу: кнопка всё равно выключена, вращение здесь не несёт смысла.
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

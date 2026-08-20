@@ -1,0 +1,98 @@
+@use '@/styles/index' as s;
+
+.progress {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: s.gap(4);
+  width: 100%;
+
+  padding: s.gap(5);
+  background: var(--background_secondary);
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_4;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: s.gap(4);
+  width: 100%;
+}
+
+.spinner {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+
+  border: 2px solid var(--stroke_strong);
+  border-top-color: var(--stroke_primary);
+  border-radius: 50%;
+
+  animation: spin 0.9s linear infinite;
+
+  // Крутящиеся элементы — частая причина дурноты при вестибулярных
+  // расстройствах. Пульсация несёт тот же смысл «идёт работа».
+  @media (prefers-reduced-motion: reduce) {
+    animation: pulse 1.6s ease-in-out infinite;
+    border-top-color: var(--stroke_strong);
+    background: var(--background_primary_10);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.headings {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(1);
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  @include s.text_body_1;
+
+  color: var(--text_default);
+}
+
+.subtitle {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+}
+
+.timer {
+  @include s.text_mono;
+
+  flex-shrink: 0;
+  color: var(--text_muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.message {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+}
+
+.warning {
+  @include s.text_caption;
+
+  color: var(--text_muted);
+}

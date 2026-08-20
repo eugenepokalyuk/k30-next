@@ -1,0 +1,44 @@
+@use '@/styles/index' as s;
+
+.form {
+  display: flex;
+  align-items: flex-start;
+  gap: s.gap(3);
+
+  width: 100%;
+  max-width: 560px;
+
+  // Кнопка встаёт вровень с полем, а не с его подписью сверху.
+  // flex-shrink: 0 — иначе поле забирает всю ширину и подпись кнопки
+  // ломается на «Проверить / ключ».
+  > :last-child {
+    margin-top: 26px;
+    flex-shrink: 0;
+  }
+
+  @include s.media_down(sm) {
+    flex-direction: column;
+
+    > :last-child {
+      margin-top: 0;
+      width: 100%;
+    }
+  }
+}
+
+.input {
+  @include s.text_mono;
+
+  // Код набирают заглавными в любом регистре — приводим визуально,
+  // значение в состоянии уже нормализовано.
+  text-transform: uppercase;
+
+  // 16px — порог, ниже которого Safari на iOS зумит страницу при
+  // фокусе в поле. Моноширинный кегль 15px именно на этом поле и
+  // вызывал рывок масштаба при первом же касании.
+  font-size: 16px;
+
+  @include s.media_up(md) {
+    font-size: 15px;
+  }
+}

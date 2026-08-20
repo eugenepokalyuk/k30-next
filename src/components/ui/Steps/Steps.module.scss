@@ -1,0 +1,196 @@
+@use 'sass:math';
+@use '@/styles/index' as s;
+
+$marker: 32px;
+
+// Зазор между колонками. Держим переменной: его же ширину отыгрывают
+// отрезки линии, и разъехавшись, они порвали бы линию.
+$gap: s.gap(2);
+
+// Воздух между кружком и линией. Одно значение на все стыки — иначе
+// полоса выглядит собранной на глаз. Числом, а не через `s.gap()`:
+// функция отдаёт строку, и в арифметике она склеится, а не сложится.
+$line_air: 8px;
+
+// Насколько отрезок линии не доходит до центра колонки: радиус кружка
+// плюс воздух. Раньше отрезки шли до самого центра и прятались за
+// кружком — но у пройденного шага фон полупрозрачный, и линия
+// просвечивала прямо через галочку, будто наезжает на неё.
+//
+// Работает это ровно до тех пор, пока все кружки одного размера:
+// отступ считается от центра колонки, а не от края кружка. Поэтому
+// текущий шаг выделен цветом и свечением без чёткой границы, а не
+// увеличен — стоило ему стать больше на 12%, и воздух вокруг него
+// съедался, а подпись подъезжала ближе, чем у соседей.
+$line_inset: math.div($marker, 2) + $line_air;
+
+.steps {
+  display: grid;
+  // Колонок ровно столько, сколько шагов пришло из констант, и все
+  // равной ширины. Фиксированное число здесь уже один раз разъехалось
+  // с `ActivationSteps`: шагов стало четыре, а колонок осталось три, и
+  // последний шаг уезжал на вторую строку вместе с линией.
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: $gap;
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: s.gap(2);
+
+  // Колонка `1fr` — это `minmax(auto, 1fr)`: без этого длинная подпись
+  // («Активация») раздувает свою колонку до min-content, соседние
+  // сжимаются, и на телефоне кружки перестают стоять по равному шагу,
+  // а подписи сходятся вплотную.
+  min-width: 0;
+
+  text-align: center;
+
+  // Отрезки линии слева и справа от номера. Каждый шаг рисует свою
+  // половину — так линия делится ровно по центрам кружков независимо
+  // от ширины колонки.
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: math.div($marker, 2);
+
+    height: 2px;
+    background: var(--stroke_default);
+  }
+
+  &::before {
+    right: calc(50% + #{$line_inset});
+    // Тянем отрезок влево через зазор сетки — до правого края соседа.
+    // С `left: 0` линия обрывалась на границе колонки и шла пунктиром:
+    // на каждом стыке оставалась дыра шириной в gap.
+    left: -$gap;
+  }
+
+  &::after {
+    left: calc(50% + #{$line_inset});
+    right: 0;
+  }
+
+  &:first-child::before,
+  &:last-child::after {
+    content: none;
+  }
+}
+
+.marker {
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 1;
+
+  // Ровно $marker вместе с рамкой — от этого размера отсчитан воздух
+  // до линии, и «плюс два пикселя рамки» сдвинули бы всю полосу.
+  box-sizing: border-box;
+  flex: none;
+  width: $marker;
+  height: $marker;
+
+  background: var(--background_elevated);
+  border: 1px solid var(--stroke_strong);
+  border-radius: 50%;
+  color: var(--text_secondary);
+
+  @include s.text_body_2;
+
+  font-weight: s.$semi_bold;
+
+  transition:
+    background s.$transition-duration s.$ease_out,
+    border-color s.$transition-duration s.$ease_out,
+    box-shadow s.$transition-duration s.$ease_out,
+    color s.$transition-duration s.$ease_out;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  // На телефоне подпись мельче основного текста: в колонку шириной в
+  // четверть экрана «Активация» в 14px не влезает, и подписи сходятся
+  // вплотную. С 12px влезает даже на 320px — самом узком экране, что
+  // ещё встречается.
+  @include s.text_caption;
+
+  color: var(--text_secondary);
+  font-weight: s.$semi_bold;
+
+  // Страховка на совсем узкие экраны: пусть слово перенесётся, чем
+  // вылезет из колонки на соседний шаг.
+  overflow-wrap: break-word;
+
+  @include s.media_up(sm) {
+    @include s.text_body_2;
+
+    font-weight: s.$semi_bold;
+  }
+}
+
+.hint {
+  @include s.text_caption;
+
+  color: var(--text_muted);
+
+  // Подсказка — уточнение, а не содержание. На узкой колонке она
+  // переносится по слогам и мешает читать сам заголовок шага.
+  display: none;
+
+  @include s.media_up(sm) {
+    display: block;
+  }
+}
+
+.current {
+  .marker {
+    background: var(--background_primary);
+    border-color: var(--background_primary);
+    color: var(--text_contrast);
+
+    // Свечение без spread: оно не даёт кружку чёткого края, поэтому
+    // текущий шаг заметен, но занимает те же 32px, что и остальные, и
+    // воздух вокруг него такой же. Кольцо `0 0 0 4px` этим и мешало —
+    // кружок читался как 40px, линия упиралась в него, а подпись
+    // оказывалась ближе, чем у соседних шагов.
+    box-shadow: 0 0 12px 2px var(--background_primary_20);
+  }
+
+  .title {
+    color: var(--text_default);
+  }
+}
+
+.done {
+  // Пройденный участок линии закрашен — видно, сколько уже позади.
+  &::before,
+  &::after {
+    background: var(--success);
+  }
+
+  .marker {
+    background: var(--success_10);
+    border-color: var(--success);
+    color: var(--success);
+  }
+
+  .title {
+    color: var(--text_default);
+  }
+}
+
+// Линия слева от текущего шага тоже пройдена.
+.current::before {
+  background: var(--success);
+}

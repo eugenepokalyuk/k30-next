@@ -1,0 +1,56 @@
+@use '@/styles/index' as s;
+
+.notice {
+  display: flex;
+  gap: s.gap(3);
+  align-items: flex-start;
+
+  padding: s.gap(3.5) s.gap(4);
+  border: 1px solid transparent;
+  border-radius: s.$br_3;
+}
+
+.icon {
+  display: flex;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(1);
+  min-width: 0;
+}
+
+.title {
+  @include s.text_body_1;
+
+  font-weight: s.$semi_bold;
+}
+
+.text {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+  // Длинная почта и ссылка активации не должны распирать карточку.
+  overflow-wrap: anywhere;
+}
+
+.info {
+  background: var(--background_elevated);
+  border-color: var(--stroke_default);
+  color: var(--text_default);
+}
+
+.success {
+  background: var(--success_10);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.error {
+  background: var(--danger_10);
+  border-color: var(--danger);
+  color: var(--danger);
+}

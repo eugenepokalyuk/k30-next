@@ -1,0 +1,43 @@
+@use '@/styles/index' as s;
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: s.gap(3);
+  flex-wrap: wrap;
+
+  padding: s.gap(3) s.gap(4);
+  background: var(--background_elevated);
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_3;
+}
+
+.code {
+  @include s.text_mono;
+
+  color: var(--text_default);
+  overflow-wrap: anywhere;
+}
+
+.copy {
+  display: inline-flex;
+  align-items: center;
+  gap: s.gap(1.5);
+
+  padding: s.gap(1.5) s.gap(2.5);
+  background: transparent;
+  border: 1px solid var(--stroke_strong);
+  border-radius: s.$br_2;
+  color: var(--text_secondary);
+  cursor: pointer;
+
+  transition: s.$transition;
+
+  @include s.text_body_2;
+
+  &:hover {
+    color: var(--text_default);
+    border-color: var(--stroke_primary);
+  }
+}

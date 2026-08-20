@@ -1,0 +1,68 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Деплой при сливе в main.
+  push:
+    branches: [main]
+  # И кнопкой из вкладки Actions, если нужно перевыкатить без коммита.
+  workflow_dispatch:
+
+# Пушу в Pages нужны эти права; GITHUB_TOKEN по умолчанию их не даёт.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Не отменяем уже идущий деплой — пусть докатится, лишние встают в очередь.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static export
+        env:
+          # Адрес бэкенда. Пока у сервера нет домена — это http на IP.
+          # Заводится переменной репозитория (Settings → Secrets and variables
+          # → Actions → Variables → API_URL), чтобы переезд на домен был
+          # правкой одного поля, а не коммитом.
+          NEXT_PUBLIC_API_URL: ${{ vars.API_URL }}
+          NEXT_PUBLIC_APP_URL: ${{ vars.APP_URL }}
+          # Сайт лежит в подкаталоге /k30-next: у Pages без своего домена
+          # адрес такой. Со своим доменом переменную нужно очистить.
+          NEXT_PUBLIC_BASE_PATH: ${{ vars.BASE_PATH }}
+        run: npm run build
+
+      - name: Disable Jekyll
+        # Pages прогоняет статику через Jekyll, а тот выкидывает папки,
+        # начинающиеся с подчёркивания, — то есть весь _next. Без этого
+        # файла сайт открывается без стилей и скриптов.
+        run: touch out/.nojekyll
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

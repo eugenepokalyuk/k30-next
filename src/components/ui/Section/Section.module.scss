@@ -1,0 +1,51 @@
+@use '@/styles/index' as s;
+
+.section {
+  padding: calc(var(--section_gap) / 2) 0;
+}
+
+.container {
+  @include s.glass(var(--glass));
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+
+  // Отступ до содержимого секции тянется вместе с остальным ритмом:
+  // фиксированные 32px на телефоне отрывали заголовок от блока.
+  margin-bottom: clamp(s.gap(6), 4vw, s.gap(9));
+
+  // Ограничение только на текст заголовка — содержимое секции ниже
+  // занимает всю ширину контейнера.
+  max-width: s.$width_reading;
+}
+
+.centered {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  align-items: center;
+}
+
+.overline {
+  @include s.text_overline;
+
+  color: var(--text_primary);
+}
+
+.title {
+  @include s.text_header_1;
+
+  color: var(--text_default);
+  text-wrap: balance;
+}
+
+.description {
+  @include s.text_body_1;
+
+  margin-top: s.gap(1);
+  color: var(--text_secondary);
+  text-wrap: pretty;
+}

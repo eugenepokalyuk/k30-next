@@ -1,0 +1,44 @@
+@use '@/styles/index' as s;
+
+.result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: s.gap(4);
+  width: 100%;
+}
+
+.hint {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: s.gap(3);
+}
+
+.support {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: s.gap(3);
+  width: 100%;
+
+  padding: s.gap(4);
+  background: var(--background_secondary);
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_3;
+}
+
+.support_text {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+}
+
+.support_code {
+  width: 100%;
+}

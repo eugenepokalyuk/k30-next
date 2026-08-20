@@ -1,0 +1,140 @@
+@use '@/styles/index' as s;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+}
+
+.item {
+  @include s.card;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: s.gap(4);
+  padding: s.gap(5);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: s.gap(3);
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.service {
+  @include s.text_header_3;
+
+  color: var(--text_default);
+}
+
+.badge {
+  @include s.text_caption;
+
+  padding: s.gap(1) s.gap(2.5);
+  background: var(--background_elevated);
+  border: 1px solid var(--stroke_strong);
+  border-radius: s.$br_full;
+  color: var(--text_secondary);
+}
+
+.badge_done {
+  @extend .badge;
+
+  background: var(--success_10);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+  width: 100%;
+}
+
+// На узком экране подпись встаёт над значением: в строку 88px подписи
+// и код ключа моноширинным вместе не помещаются, и код переносился
+// посередине группы символов.
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+
+  @include s.text_body_2;
+
+  @include s.media_up(sm) {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: s.gap(3);
+  }
+
+  dt {
+    color: var(--text_muted);
+  }
+
+  dd {
+    margin: 0;
+    color: var(--text_secondary);
+    overflow-wrap: anywhere;
+  }
+}
+
+.code {
+  @include s.text_mono;
+
+  font-size: 13px;
+  color: var(--text_default);
+}
+
+.loading {
+  @include s.text_body_1;
+
+  color: var(--text_secondary);
+}
+
+// Пустой список — не ошибка, а нормальное состояние нового кабинета.
+// Содержимое по центру карточки: прижатое к левому краю, оно оставляло
+// справа полосу пустоты во всю ширину колонки заказов.
+.empty {
+  @include s.card;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: s.gap(3);
+
+  padding: clamp(s.gap(8), 6vw, s.gap(12)) s.gap(5);
+}
+
+.empty_icon {
+  display: grid;
+  place-items: center;
+
+  width: 56px;
+  height: 56px;
+
+  background: var(--background_primary_10);
+  border: 1px solid var(--stroke_primary);
+  border-radius: 50%;
+  color: var(--icon_primary);
+
+  margin-bottom: s.gap(1);
+}
+
+.empty_title {
+  @include s.text_header_3;
+
+  color: var(--text_default);
+}
+
+.empty_text {
+  @include s.text_body_2;
+
+  max-width: 44ch;
+  color: var(--text_secondary);
+  text-wrap: pretty;
+}

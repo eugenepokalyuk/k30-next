@@ -1,0 +1,118 @@
+@use '@/styles/index' as s;
+
+.visual {
+  position: relative;
+  perspective: 1000px;
+
+  // На телефоне картинка не показывается: она ничего не добавляет к
+  // форме ввода, которая там и так занимает весь экран, зато отодвигает
+  // саму форму ниже сгиба.
+  display: none;
+
+  @include s.media_up(lg) {
+    display: block;
+  }
+}
+
+.card {
+  @include s.card;
+
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+
+  padding: s.gap(5);
+  background: linear-gradient(
+    160deg,
+    var(--background_secondary),
+    var(--background_default)
+  );
+  box-shadow: s.$box-shadow;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: s.gap(3);
+
+  padding-bottom: s.gap(4);
+  border-bottom: 1px solid var(--stroke_default);
+}
+
+.dots {
+  display: inline-flex;
+  gap: s.gap(1.5);
+
+  i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--stroke_strong);
+  }
+}
+
+.status {
+  @include s.text_caption;
+
+  color: var(--text_muted);
+}
+
+.code {
+  @include s.text_mono;
+
+  padding: s.gap(3) s.gap(4);
+  background: var(--background_elevated);
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_3;
+  color: var(--text_default);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+
+  @include s.text_body_2;
+}
+
+.check {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  width: 22px;
+  height: 22px;
+
+  background: var(--success_10);
+  border-radius: 50%;
+  color: var(--success);
+}
+
+.label {
+  color: var(--text_muted);
+}
+
+.value {
+  margin-left: auto;
+  color: var(--text_default);
+  font-weight: s.$medium;
+}
+
+.result {
+  @include s.text_body_2;
+
+  padding: s.gap(3) s.gap(4);
+  background: var(--success_10);
+  border: 1px solid var(--success);
+  border-radius: s.$br_3;
+  color: var(--success);
+  font-weight: s.$medium;
+  text-align: center;
+}

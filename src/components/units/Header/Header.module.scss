@@ -1,0 +1,226 @@
+@use '@/styles/index' as s;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: s.$zi_header;
+
+  // Подложка отдельным слоем, а не фоном самой шапки. Дело не в
+  // красоте: backdrop-filter на элементе делает его containing block
+  // для position: fixed внутри — из-за этого затемнение под мобильным
+  // меню схлопывалось до высоты шапки вместо всего экрана.
+  //
+  // Заодно появление фона стало анимацией одной opacity вместо
+  // одновременного перехода background, border и backdrop-filter.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    background: rgba(10, 11, 15, 0.72);
+    border-bottom: 1px solid var(--stroke_default);
+    backdrop-filter: blur(12px);
+
+    opacity: 0;
+    transition: opacity s.$transition-duration s.$ease_out;
+  }
+}
+
+// Над героем шапка прозрачная и не режет первый экран. Подложка
+// приезжает, когда страницу пролистали.
+.scrolled::before {
+  opacity: 1;
+}
+
+.container {
+  @include s.glass(var(--glass));
+
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: s.gap(4);
+  height: var(--header_height);
+}
+
+.logo {
+  flex-shrink: 0;
+}
+
+.nav {
+  display: none;
+
+  @include s.media_up(lg) {
+    display: flex;
+    align-items: center;
+    gap: s.gap(7);
+  }
+}
+
+.link {
+  @include s.text_body_2;
+
+  position: relative;
+  color: var(--text_secondary);
+  transition: color s.$transition-duration s.$ease_out;
+
+  // Подчёркивание растёт из середины — тот же жест, что и у карточек
+  // сервисов: наведение всегда «раскрывается», а не мигает.
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+
+    height: 1px;
+    background: var(--stroke_primary);
+    transform: scaleX(0);
+    transition: transform s.$transition-duration s.$ease_out;
+  }
+
+  &:hover {
+    color: var(--text_default);
+
+    &::after {
+      transform: scaleX(1);
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: s.gap(2);
+
+  // Место под кнопку резервируем всегда: она появляется после чтения
+  // localStorage, и без этого логотип с меню дёргались бы вбок.
+  min-width: 108px;
+  justify-content: flex-end;
+}
+
+// Кнопку входа на узком экране прячем в меню — в строке рядом с
+// бургером она оставляла логотипу меньше половины ширины.
+.auth {
+  display: none;
+
+  @include s.media_up(sm) {
+    display: block;
+  }
+}
+
+.button {
+  @include s.media_down(lg) {
+    width: 100%;
+  }
+}
+
+.burger {
+  display: grid;
+  place-items: center;
+
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
+
+  background: transparent;
+  border: none;
+  border-radius: s.$br_2;
+  color: var(--icon_default);
+  cursor: pointer;
+
+  @include s.media_up(lg) {
+    display: none;
+  }
+}
+
+.burger_icon {
+  display: grid;
+  place-items: center;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+
+  // Страница и так почти чёрная, поэтому затемнение само по себе её не
+  // отделяет — работает размытие.
+  background: rgba(4, 5, 8, 0.66);
+  backdrop-filter: blur(4px);
+
+  @include s.media_up(lg) {
+    display: none;
+  }
+}
+
+.panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+
+  padding: s.gap(4) var(--gap_side) s.gap(6);
+  background: var(--background_secondary);
+  border-bottom: 1px solid var(--stroke_default);
+  box-shadow: s.$box-shadow;
+
+  // Панель короче экрана: если пунктов станет больше, она прокрутится
+  // сама, а не уедет под нижнюю кромку.
+  max-height: calc(100dvh - var(--header_height));
+  overflow-y: auto;
+
+  @include s.media_up(lg) {
+    display: none;
+  }
+}
+
+.panel_list {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel_link {
+  display: flex;
+  align-items: center;
+
+  // 52px — палец попадает не глядя, и пункты не сливаются в столбик.
+  min-height: 52px;
+
+  @include s.text_body_1;
+
+  color: var(--text_default);
+  border-bottom: 1px solid var(--stroke_default);
+  transition: color s.$transition-duration s.$ease_out;
+
+  &:hover,
+  &:active {
+    color: var(--text_primary);
+  }
+}
+
+.panel_footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: s.gap(3);
+
+  margin-top: s.gap(3);
+}
+
+.panel_support {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+
+  &:hover {
+    color: var(--text_primary);
+  }
+}

@@ -1,0 +1,117 @@
+// === Gap function ===
+
+@function gap($size) {
+  @return #{$size * 4}px;
+}
+
+// === Colors ===
+
+// Тёмная тема как единственная: витрину открывают, чтобы ввести ключ и
+// уйти, а тёмный фон меньше бьёт по глазам ночью — а именно ночью чаще
+// всего и активируют подписку.
+//
+// Фирменный цвет золотой. На тёмном фоне он светлее подложки, поэтому
+// текст на заливке — тёмный ($text-contrast), а не белый: белый по
+// золоту не проходит по контрасту.
+
+$primary: #e2a93a; // золотой — фирменный цвет
+$primary_light: #f3c969; // светлый оттенок для градиентов и ховера
+$primary_hover: $primary_light;
+$primary_10: rgba(226, 169, 58, 0.1);
+$primary_20: rgba(226, 169, 58, 0.2);
+
+$success: #34d399; // проверка прошла
+$success_10: rgba(52, 211, 153, 0.1);
+$danger: #f87171; // ошибка под полем
+$danger_10: rgba(248, 113, 113, 0.1);
+
+// Оранжевый, а не жёлтый: жёлтый теперь фирменный цвет, и предупреждение
+// в том же тоне читалось бы как обычный акцент.
+$warning: #fb923c;
+
+$text-default: #edeef2;
+$text-secondary: #9ba1b0;
+$text-muted: #6b7280;
+$text-primary: $primary;
+$text-contrast: #0a0b0f;
+
+$icon-default: #edeef2;
+$icon-secondary: #9ba1b0;
+$icon-primary: $primary;
+
+$background-default: #0a0b0f;
+$background-secondary: #12141b; // карточки
+$background-elevated: #1a1d26; // поля ввода, поповеры
+$background-primary: $primary;
+$background-contrast: #edeef2;
+
+$stroke-default: #22252f;
+$stroke-strong: #2f3340;
+$stroke-primary: $primary;
+
+$transition-duration: 0.2s;
+$transition-ease: ease;
+$transition: all $transition-duration $transition-ease;
+$box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.4);
+$box-shadow-primary: 0 8px 32px -8px rgba(226, 169, 58, 0.4);
+
+// Одна кривая на CSS-переходы и на framer-motion (там же значениями в
+// motion/tokens.ts): иначе одинаковые на вид движения приезжают с разной
+// динамикой и интерфейс выглядит собранным из кусков.
+$ease_out: cubic-bezier(0.22, 1, 0.36, 1);
+$ease_in_out: cubic-bezier(0.65, 0, 0.35, 1);
+
+// === Widths ===
+
+// Ширина контента. Полосу задаёт только максимум: до него контейнер
+// тянется на все 100% минус боковой отступ. Раньше на узких экранах
+// стояла фиксированная ширина, и на 500–767px страница висела колонкой
+// посреди пустого экрана.
+$width_lg: 1120px;
+$width_narrow: 720px; // формы и текстовые страницы
+$width_reading: 640px; // строка текста, за которой читать неудобно
+$width_xs: 320px;
+
+// === Side gaps ===
+
+$gap_side_lg: 32px;
+$gap_side_md: 24px;
+$gap_side_sm: 16px;
+
+// === Gaps ===
+
+$gap_lg: 20px;
+$gap_md: 16px;
+$gap_sm: 12px;
+
+// === Border radius ===
+
+$br_full: 99999px;
+$br_6: 24px;
+$br_5: 20px;
+$br_4: 16px;
+$br_3: 12px;
+$br_2: 8px;
+$br_1: 4px;
+
+// === Z-index ===
+
+$zi_header: 20;
+$zi_modal: 40;
+
+// === Font weights ===
+
+$bold: 700;
+$semi_bold: 600;
+$medium: 500;
+$regular: 400;
+
+// === Breakpoints ===
+
+$breakpoints: (
+  xs: 0,
+  sm: 480px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1440px,
+);

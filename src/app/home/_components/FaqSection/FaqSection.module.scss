@@ -1,0 +1,142 @@
+@use '@/styles/index' as s;
+
+.layout {
+  display: grid;
+  gap: s.gap(5);
+  align-items: start;
+
+  @include s.media_up(lg) {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: s.gap(6);
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+}
+
+.item {
+  @include s.card;
+
+  overflow: hidden;
+  transition: border-color s.$transition-duration s.$ease_out;
+}
+
+.item_open {
+  border-color: var(--stroke_strong);
+}
+
+.heading {
+  margin: 0;
+  font: inherit;
+}
+
+.question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: s.gap(3);
+
+  width: 100%;
+  // Вся строка — зона нажатия: на телефоне попасть в текст вопроса
+  // проще, чем в маленький значок справа.
+  min-height: 56px;
+  padding: s.gap(3) s.gap(4);
+
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+
+  @include s.text_body_1;
+
+  color: var(--text_default);
+  font-weight: s.$medium;
+
+  @include s.media_up(md) {
+    padding: s.gap(4) s.gap(5);
+  }
+
+  &:focus-visible {
+    @include s.focus_ring(-2px);
+  }
+}
+
+.chevron {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: var(--icon_secondary);
+}
+
+// Высоту анимирует framer-motion, поэтому обёртка не должна иметь
+// собственных вертикальных отступов — они не схлопываются в 0 и
+// оставляют щель у закрытого вопроса.
+.answer_wrapper {
+  overflow: hidden;
+}
+
+.answer {
+  @include s.text_body_2;
+
+  padding: s.gap(0) s.gap(4) s.gap(4);
+  color: var(--text_secondary);
+  text-wrap: pretty;
+
+  @include s.media_up(md) {
+    padding: s.gap(0) s.gap(5) s.gap(5);
+    max-width: 68ch;
+  }
+}
+
+.support {
+  @include s.card;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: s.gap(3);
+
+  padding: s.gap(6) s.gap(5);
+  background: var(--background_primary_10);
+  border-color: var(--stroke_primary);
+
+  // На широком экране карточка едет вместе со списком и не отрывается
+  // от него при прокрутке длинного FAQ.
+  @include s.media_up(lg) {
+    position: sticky;
+    top: calc(var(--header_height) + #{s.gap(4)});
+  }
+
+  @include s.media_down(lg) {
+    a {
+      width: 100%;
+    }
+  }
+}
+
+.support_icon {
+  display: grid;
+  place-items: center;
+
+  width: 44px;
+  height: 44px;
+
+  background: var(--background_primary_20);
+  border-radius: 50%;
+  color: var(--icon_primary);
+}
+
+.support_title {
+  @include s.text_header_3;
+
+  color: var(--text_default);
+}
+
+.support_text {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+}

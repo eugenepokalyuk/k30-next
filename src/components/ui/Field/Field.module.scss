@@ -1,0 +1,79 @@
+@use '@/styles/index' as s;
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+  width: 100%;
+}
+
+.label {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+  font-weight: s.$medium;
+}
+
+.control_wrapper {
+  position: relative;
+  display: flex;
+}
+
+.control {
+  width: 100%;
+  padding: s.gap(3.5) s.gap(4);
+
+  background: var(--background_elevated);
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_3;
+  color: var(--text_default);
+
+  transition: s.$transition;
+  resize: vertical;
+
+  @include s.text_body_1;
+
+  &::placeholder {
+    color: var(--text_muted);
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--stroke_strong);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--stroke_primary);
+    box-shadow: 0 0 0 3px var(--background_primary_20);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.invalid {
+  border-color: var(--danger);
+
+  &:focus {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px var(--danger_10);
+  }
+}
+
+.addon {
+  position: absolute;
+  top: s.gap(1.5);
+  right: s.gap(1.5);
+}
+
+.hint {
+  @include s.text_body_2;
+
+  color: var(--text_muted);
+}
+
+.error {
+  color: var(--danger);
+}
