@@ -2,7 +2,6 @@ export const Routes = {
   Home: '/',
   Activate: '/activate',
   Login: '/login',
-  Register: '/register',
   Account: '/account',
   Services: '/#services',
   How: '/#how',

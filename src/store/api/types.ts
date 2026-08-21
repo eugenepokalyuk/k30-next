@@ -35,11 +35,7 @@ export interface KeyStateDto {
 /** Вид данных, которые просит поставщик. Формат и проверки — общие с
  *  бэкендом (providers/targets.py), см. utils/helpers/target.ts. */
 export type TargetKind =
-  | 'access_token'
-  | 'session_json'
-  | 'account_id'
-  | 'org_id'
-  | 'user_id';
+  'access_token' | 'session_json' | 'account_id' | 'org_id' | 'user_id';
 
 /** Описание одного варианта заполнения формы.
  *
@@ -143,8 +139,10 @@ export interface ServiceDto {
 
 /** Сервис со всем, что нужно странице активации. Инструкция приезжает
  *  уже с подставленным кодом ключа — собирать её на клиенте нечем. */
-export interface ServiceActivationDto
-  extends Omit<ServiceDto, 'in_stock' | 'plans'> {
+export interface ServiceActivationDto extends Omit<
+  ServiceDto,
+  'in_stock' | 'plans'
+> {
   instruction: string;
   instruction_url: string;
   instruction_url_label: string;
@@ -217,6 +215,77 @@ export interface AuthResponse {
   access: string;
   refresh: string;
   user: UserDto;
+  /** Сколько прошлых покупок привязалось к кабинету при этом входе.
+   *  Заказы с Маркета заводятся до того, как покупатель впервые вошёл, —
+   *  без этой цифры непонятно, откуда в «пустом» кабинете история. */
+  claimed_orders?: number;
+}
+
+/** Заявка на вход через бота: ссылка, по которой открывается телеграм.
+ *
+ *  Вход диплинком, а не штатным Login Widget телеграма: виджету нужен
+ *  домен, привязанный в BotFather, а витрина живёт на GitHub Pages.
+ */
+export interface TelegramStartDto {
+  nonce: string;
+  url: string;
+  /** Сколько секунд заявка ещё годна. Дальше нужна новая ссылка. */
+  expires_in: number;
+}
+
+export type TelegramLoginStatus =
+  'pending' | 'confirmed' | 'needs_email' | 'expired';
+
+/** Ответ опроса заявки. Пока ждём — только `status`; после подтверждения
+ *  приезжает обычная пара токенов с профилем. */
+export interface TelegramStatusResponse extends Partial<AuthResponse> {
+  status: TelegramLoginStatus;
+}
+
+/** Что показать на экране входа. Отдельная ручка от настроек витрины:
+ *  форме входа не нужен весь блок ссылок и подписей. */
+export interface AuthOptionsDto {
+  telegram_support_url: string;
+  /** У бота не прописан токен — входить через телеграм нечем, и кнопку
+   *  показывать нельзя. */
+  telegram_login_enabled: boolean;
+  /** Не «включён ли вход по почте», а «уходят ли письма»: без SMTP код
+   *  печатается в журнал сервера, и покупатель будет ждать письмо,
+   *  которого не будет. */
+  email_login_enabled: boolean;
+}
+
+/** Ответ на запрос кода. Одинаков для известного и неизвестного адреса —
+ *  иначе форма входа превращается в справочник наших покупателей. */
+export interface EmailCodeRequestDto {
+  sent: boolean;
+  /** Сколько секунд код годен. */
+  expires_in: number;
+  detail: string;
+}
+
+/** Успешный вход по коду. `registered` — адрес был новым, и кабинет
+ *  завёлся только что: отдельного экрана регистрации у нас нет. */
+export interface EmailLoginResponse extends AuthResponse {
+  registered?: boolean;
+}
+
+/** Ссылки и подписи витрины из админки.
+ *
+ *  Раньше это лежало в переменных окружения фронта, и смена ссылки на
+ *  телеграм означала пересборку статики. Теперь менеджер правит их сам.
+ */
+export interface SiteSettingsDto {
+  telegram_channel_url: string;
+  telegram_support_url: string;
+  telegram_bot_url: string;
+  /** Показывать ли круглую кнопку телеграма в углу страницы. */
+  widget_is_enabled: boolean;
+  buy_is_enabled: boolean;
+  buy_title: string;
+  buy_text: string;
+  buy_telegram_url: string;
+  buy_yandex_market_url: string;
 }
 
 export type OrderStatus = 'new' | 'issued' | 'activated' | 'cancelled';

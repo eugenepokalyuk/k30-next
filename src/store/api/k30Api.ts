@@ -8,6 +8,7 @@ import {
 
 import {
   authStorage,
+  signedIn,
   signedOut,
   tokenRefreshed,
 } from '@/store/slices/auth/authSlice';
@@ -17,11 +18,17 @@ import type {
   ActivateResponse,
   ActivationDto,
   ActivationStatusResponse,
+  AuthOptionsDto,
   AuthResponse,
   CheckAccountResponse,
+  EmailCodeRequestDto,
+  EmailLoginResponse,
   OrderDto,
   ServiceDto,
+  SiteSettingsDto,
   TargetKind,
+  TelegramStartDto,
+  TelegramStatusResponse,
   UserDto,
   VerifyKeyResponse,
 } from './types';
@@ -136,15 +143,99 @@ export const k30Api = createApi({
       invalidatesTags: ['Activations'],
     }),
 
-    register: builder.mutation<
-      AuthResponse,
-      { email: string; password: string; name?: string }
-    >({
-      query: (body) => ({ url: 'auth/register', method: 'POST', body }),
+    /** Ссылки и подписи витрины из админки: телеграм, блок покупки,
+     *  круглая кнопка в углу. Читается анонимно — это содержимое
+     *  страницы, такое же публичное, как список сервисов. */
+    siteSettings: builder.query<SiteSettingsDto, void>({
+      query: () => 'site-settings',
     }),
 
-    login: builder.mutation<AuthResponse, { email: string; password: string }>({
-      query: (body) => ({ url: 'auth/login', method: 'POST', body }),
+    /** Что показать на экране входа. Отдельно от настроек витрины:
+     *  форме входа не нужен весь блок ссылок и подписей. */
+    authOptions: builder.query<AuthOptionsDto, void>({
+      query: () => 'auth/options',
+    }),
+
+    /** Шаг 1 входа по почте: отправить код.
+     *
+     *  Ответ одинаков для известного и неизвестного адреса. Разный
+     *  ответ превратил бы форму входа в способ выяснить, кто у нас
+     *  зарегистрирован.
+     */
+    requestEmailCode: builder.mutation<EmailCodeRequestDto, string>({
+      query: (email) => ({
+        url: 'auth/email/request',
+        method: 'POST',
+        body: { email },
+      }),
+    }),
+
+    /** Шаг 2: код из письма. Он же регистрация — неизвестный адрес с
+     *  верным кодом заводит кабинет, отдельного экрана для этого нет. */
+    verifyEmailCode: builder.mutation<
+      EmailLoginResponse,
+      { email: string; code: string }
+    >({
+      query: (body) => ({ url: 'auth/email/verify', method: 'POST', body }),
+
+      /** Токены кладём здесь же, рядом с телеграмным входом: способов
+       *  войти два, а место, где начинается сессия, должно быть одно —
+       *  иначе следующий способ снова забудет записать refresh на диск.
+       */
+      async onQueryStarted(_body, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(signedIn(data));
+          authStorage.write(data.refresh);
+        } catch {
+          // Неверный код и сеть — оба случая показывает форма входа по
+          // тексту ошибки мутации, второй раз объяснять их нечем.
+        }
+      },
+    }),
+
+    /** Шаг 1 входа через телеграм: получить одноразовую ссылку на бота.
+     *
+     *  Мутация, а не запрос: каждый вызов заводит новую заявку с новым
+     *  nonce, и кэшировать её нельзя — просроченная ссылка ведёт в бота,
+     *  который на неё уже не ответит.
+     */
+    telegramLoginStart: builder.mutation<TelegramStartDto, void>({
+      query: () => ({ url: 'auth/telegram/start', method: 'POST' }),
+    }),
+
+    /** Шаг 2: ждём, пока человек нажмёт «Запустить» в боте.
+     *
+     *  Опрос, а не webhook: витрина — статика на Pages, принимать
+     *  входящие ей нечем. Темп задаёт экран входа через pollingInterval.
+     */
+    telegramLoginStatus: builder.query<TelegramStatusResponse, string>({
+      query: (nonce) =>
+        `auth/telegram/status?nonce=${encodeURIComponent(nonce)}`,
+
+      /** Подтверждение приходит в ответе опроса — и вход завершается
+       *  здесь же, а не в компоненте.
+       *
+       *  Токены выдаются ровно один раз: бэкенд гасит заявку сразу
+       *  после выдачи, и второй опрос по тому же nonce вернёт «не
+       *  найдено». Пропустить этот ответ нельзя, поэтому забираем его
+       *  там, где он гарантированно виден, — а не в эффекте экрана,
+       *  который к этому моменту может уже размонтироваться.
+       */
+      async onQueryStarted(_nonce, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (data.status !== 'confirmed' || !data.access || !data.refresh) {
+            return;
+          }
+
+          dispatch(signedIn(data as AuthResponse));
+          authStorage.write(data.refresh);
+        } catch {
+          // Сеть или просроченная заявка: опрос повторится сам, а что
+          // показать — решает экран входа по статусу.
+        }
+      },
     }),
 
     me: builder.query<UserDto, void>({
@@ -173,13 +264,17 @@ export const k30Api = createApi({
 
 export const {
   useServicesQuery,
+  useSiteSettingsQuery,
+  useAuthOptionsQuery,
+  useRequestEmailCodeMutation,
+  useVerifyEmailCodeMutation,
+  useTelegramLoginStartMutation,
+  useTelegramLoginStatusQuery,
   useVerifyKeyMutation,
   useCheckAccountMutation,
   useActivateMutation,
   useActivationStatusQuery,
   useCancelActivationMutation,
-  useRegisterMutation,
-  useLoginMutation,
   useMeQuery,
   useUpdateMeMutation,
   useMyOrdersQuery,

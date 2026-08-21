@@ -3,7 +3,7 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: s.gap(5);
+  gap: s.gap(4);
 }
 
 .link {
@@ -11,5 +11,55 @@
 
   &:hover {
     text-decoration: underline;
+  }
+}
+
+/* Черта со словом «или» между двумя способами входа: без неё кнопка
+   телеграма читается как второе действие той же формы. */
+.divider {
+  @include s.text_caption;
+
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+
+  color: var(--text_secondary);
+
+  &::before,
+  &::after {
+    content: '';
+
+    flex: 1;
+    height: 1px;
+
+    background: var(--stroke_default);
+  }
+}
+
+.secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: s.gap(2) s.gap(4);
+  justify-content: space-between;
+}
+
+.plain {
+  @include s.text_caption;
+
+  padding: 0;
+  border: 0;
+
+  background: none;
+  color: var(--text_secondary);
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    color: var(--text_default);
+    text-decoration: underline;
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.6;
   }
 }
