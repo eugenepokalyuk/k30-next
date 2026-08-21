@@ -39,7 +39,12 @@ interface Props {
  *  `useTargetStep`, выбор способа и панель подтверждения — в соседних
  *  файлах: у них своя разметка, и правят их по разным поводам.
  */
-export const TargetStep: FC<Props> = ({ code, service, targets, onStarted }) => {
+export const TargetStep: FC<Props> = ({
+  code,
+  service,
+  targets,
+  onStarted,
+}) => {
   const step = useTargetStep({ code, targets, onStarted });
 
   if (!step.option) {

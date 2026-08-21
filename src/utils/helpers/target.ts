@@ -14,8 +14,7 @@
 
 import type { TargetKind } from '@/store/api/types';
 
-const UUID =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const UUID_ANYWHERE =
   /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
@@ -37,7 +36,9 @@ export function normalizeTarget(kind: TargetKind, raw: string): string {
 
   if (ID_KINDS.includes(kind)) {
     const found = value.match(UUID_ANYWHERE);
-    return (found ? found[0] : value.replace(/^["'`\s]+|["'`,;\s]+$/g, '')).toLowerCase();
+    return (
+      found ? found[0] : value.replace(/^["'`\s]+|["'`,;\s]+$/g, '')
+    ).toLowerCase();
   }
 
   if (kind === 'access_token') {

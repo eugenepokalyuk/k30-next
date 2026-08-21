@@ -98,3 +98,21 @@ export const AlertIcon: FC<IconProps> = ({ size = 20, className }) => (
     <path d="M12 7.5v5.5M12 16.3v.2" />
   </svg>
 );
+
+/** Бумажный самолётик телеграма. Рисуем контуром, как остальные иконки,
+ *  а не фирменным залитым логотипом: залитый круг из брендбука рядом с
+ *  линейными иконками читается как чужой элемент. */
+export const TelegramIcon: FC<IconProps> = ({ size = 20, className }) => (
+  <svg {...base(size)} className={className}>
+    <path d="M21.5 4.3 2.9 11.4c-.8.3-.8 1.4.1 1.6l4.7 1.4 1.8 5.3c.2.7 1.1.9 1.6.3l2.5-2.7 4.7 3.5c.6.4 1.4.1 1.6-.6l3-14.3c.1-.7-.6-1.3-1.4-1z" />
+    <path d="m7.7 14.4 10.6-7.6-6.7 9" />
+  </svg>
+);
+
+/** Пакет с ручкой — блок покупки и ссылка на Маркет. */
+export const CartIcon: FC<IconProps> = ({ size = 20, className }) => (
+  <svg {...base(size)} className={className}>
+    <path d="M4 7h16l-1.2 12.1a2 2 0 0 1-2 1.9H7.2a2 2 0 0 1-2-1.9z" />
+    <path d="M8.5 10V6.5a3.5 3.5 0 1 1 7 0V10" />
+  </svg>
+);

@@ -76,7 +76,12 @@ export const AccountConfirmation: FC<Props> = ({
           {account.email}
         </span>
       )}
-      <Button type="button" size="large" onClick={onConfirm} loading={isStarting}>
+      <Button
+        type="button"
+        size="large"
+        onClick={onConfirm}
+        loading={isStarting}
+      >
         Подтвердить и активировать
       </Button>
     </div>

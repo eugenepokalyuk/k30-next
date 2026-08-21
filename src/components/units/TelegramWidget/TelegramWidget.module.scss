@@ -1,0 +1,43 @@
+@use '@/styles/index' as s;
+
+.widget {
+  position: fixed;
+  right: clamp(s.gap(3), 4vw, s.gap(6));
+  bottom: clamp(s.gap(3), 4vw, s.gap(6));
+  z-index: s.$zi_widget;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+
+  background: linear-gradient(135deg, s.$primary, s.$primary_light);
+  color: s.$text-contrast;
+  box-shadow: s.$box-shadow-primary;
+
+  // Зона нажатия здесь не добирается миксином `tap_target`: он ставит
+  // `position: relative` и вышиб бы кнопку из угла обратно в поток.
+  // Круг и так 52×52 — больше минимальных 44 по гайдлайнам.
+
+  &:focus-visible {
+    @include s.focus_ring;
+  }
+}
+
+.icon {
+  // Самолётик в квадратном viewBox визуально смещён вправо-вниз:
+  // сдвигаем обратно, иначе он не в центре круга.
+  transform: translate(-1px, 1px);
+}
+
+.label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

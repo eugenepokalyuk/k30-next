@@ -65,7 +65,12 @@
 }
 
 .accent {
-  background: linear-gradient(115deg, s.$primary, s.$primary_light 55%, #fff0c2);
+  background: linear-gradient(
+    115deg,
+    s.$primary,
+    s.$primary_light 55%,
+    #fff0c2
+  );
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;

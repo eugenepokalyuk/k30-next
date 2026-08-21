@@ -1,0 +1,85 @@
+@use '@/styles/index' as s;
+
+// Заголовок живёт внутри карточки, а не в шапке секции: блок
+// короткий, и разнесённые заголовок с кнопками читались бы как две
+// разные секции.
+.card {
+  @include s.card;
+
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(5);
+
+  padding: clamp(s.gap(5), 4vw, s.gap(8));
+  position: relative;
+  overflow: hidden;
+
+  // Тёплая подсветка от фирменного цвета — блок продающий, и он должен
+  // отличаться от соседних карточек сервисов.
+  &::before {
+    content: '';
+    position: absolute;
+    top: -60%;
+    right: -10%;
+
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, s.$primary_20, transparent 70%);
+
+    pointer-events: none;
+  }
+
+  // На широком экране текст и кнопки встают в строку: блок перестаёт
+  // занимать пол-экрана между двумя секциями.
+  @include s.media_up(md) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: s.gap(6);
+  }
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+
+  position: relative;
+  min-width: 0;
+}
+
+.title {
+  @include s.text_header_2;
+
+  color: var(--text_default);
+}
+
+.description {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: s.gap(3);
+
+  position: relative;
+
+  // Кнопки во всю ширину на телефоне: две узкие в ряд на 320px не
+  // помещаются, а перенос оставлял вторую висеть половиной строки.
+  > * {
+    flex: 1 1 auto;
+  }
+
+  @include s.media_up(md) {
+    flex-wrap: nowrap;
+
+    > * {
+      flex: 0 0 auto;
+    }
+  }
+}

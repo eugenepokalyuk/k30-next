@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import { duration, ease } from '@/components/motion';
 import { CloseIcon, Logo, MenuIcon } from '@/components/ui';
-import { SupportTelegram } from '@/utils/consts';
+import { useSiteSettings } from '@/lib/hooks';
 
 import classes from './Header.module.scss';
 import { AuthButton } from './AuthButton';
@@ -23,9 +23,14 @@ import { useHeaderState } from './useHeaderState';
  */
 export const Header: FC = () => {
   const { isScrolled, isOpen, toggle, close } = useHeaderState();
+  // Контакт поддержки — из админки: он меняется чаще, чем выходит
+  // релиз витрины, и раньше ради этого пересобиралась вся статика.
+  const { telegram_support_url } = useSiteSettings();
 
   return (
-    <header className={clsx(classes.header, { [classes.scrolled]: isScrolled })}>
+    <header
+      className={clsx(classes.header, { [classes.scrolled]: isScrolled })}
+    >
       <div className={classes.container}>
         <Logo className={classes.logo} />
 
@@ -37,7 +42,7 @@ export const Header: FC = () => {
           ))}
           <a
             className={classes.link}
-            href={SupportTelegram}
+            href={telegram_support_url}
             target="_blank"
             rel="noopener noreferrer"
           >

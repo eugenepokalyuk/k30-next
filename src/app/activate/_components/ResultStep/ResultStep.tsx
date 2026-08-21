@@ -44,8 +44,8 @@ export const ResultStep: FC<Props> = ({ activation, onRetry }) => {
           {activation.account_email
             ? `Аккаунт: ${activation.account_email}. `
             : ''}
-          {activation.message || ''} Если сервис ещё не видит подписку —
-          выйдите из аккаунта и зайдите снова.
+          {activation.message || ''} Если сервис ещё не видит подписку — выйдите
+          из аккаунта и зайдите снова.
         </Notice>
 
         {activation.activation_url && (
