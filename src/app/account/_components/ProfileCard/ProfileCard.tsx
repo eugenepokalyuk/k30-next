@@ -1,15 +1,12 @@
 'use client';
 
 import React, { FC, FormEvent, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 
-import { Button, Field, UserIcon } from '@/components/ui';
+import { Button, Field } from '@/components/ui';
 import { useUpdateMeMutation } from '@/store/api/k30Api';
 import type { UserDto } from '@/store/api/types';
 import { useAppDispatch } from '@/store/hooks';
-import { authStorage, profileLoaded, signedOut } from '@/store/slices/auth';
-import { Routes } from '@/utils/consts';
-import { formatDate } from '@/utils/helpers';
+import { profileLoaded } from '@/store/slices/auth';
 
 import classes from './ProfileCard.module.scss';
 
@@ -17,8 +14,13 @@ interface Props {
   user: UserDto;
 }
 
+/** Как к покупателю обращаться и где его искать в телеграме.
+ *
+ *  Почты и кнопки «Выйти» здесь больше нет — они уехали в шапку
+ *  кабинета. Заходят сюда не за формой, а посмотреть подписки, и
+ *  пустое поле «Имя» первым экраном отвечало не на тот вопрос.
+ */
 export const ProfileCard: FC<Props> = ({ user }) => {
-  const router = useRouter();
   const dispatch = useAppDispatch();
   const [updateMe, { isLoading }] = useUpdateMeMutation();
 
@@ -53,25 +55,9 @@ export const ProfileCard: FC<Props> = ({ user }) => {
     }
   };
 
-  const signOut = () => {
-    authStorage.write(null);
-    dispatch(signedOut());
-    router.replace(Routes.Home);
-  };
-
   return (
     <section className={classes.card}>
-      <header className={classes.header}>
-        <span className={classes.avatar}>
-          <UserIcon size={22} />
-        </span>
-        <div className={classes.identity}>
-          <p className={classes.email}>{user.email}</p>
-          <p className={classes.since}>
-            С нами с {formatDate(user.date_joined)}
-          </p>
-        </div>
-      </header>
+      <h2 className={classes.title}>Профиль</h2>
 
       <form className={classes.form} onSubmit={save}>
         <Field label="Имя" name="name" value={name} onChange={setName} />
@@ -87,9 +73,6 @@ export const ProfileCard: FC<Props> = ({ user }) => {
         <div className={classes.actions}>
           <Button type="submit" size="small" loading={isLoading}>
             {saved ? 'Сохранено' : 'Сохранить'}
-          </Button>
-          <Button type="button" size="small" variant="ghost" onClick={signOut}>
-            Выйти
           </Button>
         </div>
       </form>

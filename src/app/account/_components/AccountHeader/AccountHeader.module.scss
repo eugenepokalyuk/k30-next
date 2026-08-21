@@ -1,0 +1,71 @@
+@use '@/styles/index' as s;
+
+.header {
+  @include s.card;
+
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: s.gap(4);
+
+  padding: s.gap(5);
+
+  // Кнопки уезжают под почту, пока строка целиком не помещается:
+  // прижатые к правому краю на 700px они наезжали на длинный адрес.
+  @include s.media_up(md) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    padding: s.gap(6);
+  }
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  width: 52px;
+  height: 52px;
+
+  background: var(--background_primary_10);
+  border: 1px solid var(--stroke_primary);
+  border-radius: 50%;
+  color: var(--icon_primary);
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.email {
+  @include s.text_header_3;
+
+  color: var(--text_default);
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  @include s.text_caption;
+
+  color: var(--text_muted);
+}
+
+.separator {
+  padding: 0 s.gap(1.5);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: s.gap(2);
+
+  // На узком экране действия встают под аватар и почту, во всю ширину
+  // карточки: колонка аватара для них слишком узкая.
+  grid-column: 1 / -1;
+
+  @include s.media_up(md) {
+    grid-column: auto;
+  }
+}

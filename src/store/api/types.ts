@@ -290,6 +290,29 @@ export interface SiteSettingsDto {
 
 export type OrderStatus = 'new' | 'issued' | 'activated' | 'cancelled';
 
+/** Живая подписка: то, чем покупатель может пользоваться прямо сейчас.
+ *
+ *  Отдельно от заказа, хотя строка в базе та же. Заказ отвечает на «что
+ *  я покупал», подписка — на «что у меня работает и сколько осталось».
+ *  Второй вопрос в кабинете задают чаще, и ради него не нужны ни номер
+ *  заказа, ни источник, ни код ключа.
+ */
+export interface SubscriptionDto {
+  number: number;
+  service: string;
+  service_slug: string;
+  /** Цвет сервиса из админки — им подсвечивается карточка. */
+  accent_color: string;
+  plan: string;
+  /** Срок тарифа целиком: из него и days_left считается полоса. */
+  duration_days: number;
+  account_email: string;
+  activated_at: string | null;
+  expires_at: string | null;
+  /** Ноль — истекает сегодня. */
+  days_left: number | null;
+}
+
 export interface OrderDto {
   number: number;
   service: string;

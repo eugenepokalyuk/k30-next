@@ -1,0 +1,149 @@
+@use '@/styles/index' as s;
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+}
+
+.title {
+  @include s.text_header_2;
+
+  color: var(--text_default);
+}
+
+.list {
+  display: grid;
+  gap: s.gap(3);
+
+  // Карточки сами решают, сколько их влезет в ряд: подписок бывает и
+  // одна, и шесть, а фиксированные колонки на одной оставляли бы
+  // растянутую на весь экран полосу срока.
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.item {
+  @include s.card;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+
+  padding: s.gap(5);
+  overflow: hidden;
+
+  // Цвет сервиса из админки. Запасной — фирменный: карточка без цвета
+  // не должна оставаться единственной серой в ряду.
+  --accent: var(--background_primary);
+
+  // Полоска сервиса по верхнему краю — единственное место, где цвет
+  // берётся в полную силу. Заливать им карточку целиком нельзя: рядом
+  // стоят соседи с другими цветами, и ряд превращался в радугу.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: s.gap(3);
+}
+
+.service {
+  @include s.text_header_3;
+
+  display: flex;
+  align-items: center;
+  gap: s.gap(2);
+  min-width: 0;
+
+  color: var(--text_default);
+}
+
+.dot {
+  flex-shrink: 0;
+
+  width: 8px;
+  height: 8px;
+
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.plan {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+}
+
+.left {
+  @include s.text_caption;
+
+  flex-shrink: 0;
+  color: var(--text_secondary);
+  font-weight: s.$semi_bold;
+  white-space: nowrap;
+}
+
+.soon {
+  color: var(--warning);
+}
+
+.track {
+  display: block;
+  overflow: hidden;
+
+  height: 4px;
+  margin-top: s.gap(1);
+
+  background: var(--background_elevated);
+  border-radius: s.$br_full;
+}
+
+.bar {
+  display: block;
+  height: 100%;
+
+  background: var(--accent);
+  border-radius: s.$br_full;
+}
+
+.bar_soon {
+  background: var(--warning);
+}
+
+.meta {
+  @include s.text_caption;
+
+  color: var(--text_muted);
+  white-space: nowrap;
+}
+
+.account {
+  @include s.text_caption;
+
+  overflow: hidden;
+
+  color: var(--text_muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.separator {
+  padding: 0 s.gap(1.5);
+}
+
+// Дата переносится целиком, а не «2026» и «г.» на разных строках.
+.nowrap {
+  white-space: nowrap;
+}

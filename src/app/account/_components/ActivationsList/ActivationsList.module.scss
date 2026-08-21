@@ -79,43 +79,29 @@
   color: var(--danger);
 }
 
-.details {
+.meta {
+  @include s.text_caption;
+
   display: flex;
-  flex-direction: column;
-  gap: s.gap(2);
-  width: 100%;
+  flex-wrap: wrap;
+  align-items: center;
+
+  color: var(--text_muted);
+  overflow-wrap: anywhere;
 }
 
-// На узком экране подпись встаёт над значением: в строку 88px подписи
-// и код ключа моноширинным вместе не помещаются.
-.row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 2px;
-
-  @include s.text_body_2;
-
-  @include s.media_up(sm) {
-    grid-template-columns: 88px minmax(0, 1fr);
-    gap: s.gap(3);
-  }
-
-  dt {
-    color: var(--text_muted);
-  }
-
-  dd {
-    margin: 0;
-    color: var(--text_secondary);
-    overflow-wrap: anywhere;
-  }
+.separator {
+  padding: 0 s.gap(1.5);
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
+// Код тянется на всю карточку — иначе поле с кнопкой «скопировать»
+// сжимается до ширины кода и справа остаётся пустота.
 .code {
-  @include s.text_mono;
-
-  font-size: 13px;
-  color: var(--text_default);
+  width: 100%;
 }
 
 .error {

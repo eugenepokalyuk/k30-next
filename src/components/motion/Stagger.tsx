@@ -19,6 +19,9 @@ const tags = {
 interface Props extends PropsWithChildren {
   as?: MotionTag;
   className?: string;
+  /** Инлайновые переменные вроде --accent: цвет сервиса приходит из
+   *  админки, и в классах его не выразить. */
+  style?: React.CSSProperties;
 }
 
 /** Список, элементы которого появляются по очереди.
@@ -27,12 +30,13 @@ interface Props extends PropsWithChildren {
  *  элементе: количество карточек приходит с бэкенда (сервисы), и
  *  считать задержки по индексу пришлось бы в разметке.
  */
-export const Stagger: FC<Props> = ({ as = 'div', className, children }) => {
+export const Stagger: FC<Props> = ({ as = 'div', className, style, children }) => {
   const Tag = tags[as] as typeof motion.div;
 
   return (
     <Tag
       className={className}
+      style={style}
       variants={staggerContainer}
       initial="hidden"
       whileInView="visible"
@@ -45,11 +49,16 @@ export const Stagger: FC<Props> = ({ as = 'div', className, children }) => {
 
 /** Элемент такого списка. Наследует состояние от родителя — своих
  *  initial/animate у него нет намеренно. */
-export const StaggerItem: FC<Props> = ({ as = 'div', className, children }) => {
+export const StaggerItem: FC<Props> = ({
+  as = 'div',
+  className,
+  style,
+  children,
+}) => {
   const Tag = tags[as] as typeof motion.div;
 
   return (
-    <Tag className={className} data-reveal="" variants={fadeUp}>
+    <Tag className={className} style={style} data-reveal="" variants={fadeUp}>
       {children}
     </Tag>
   );

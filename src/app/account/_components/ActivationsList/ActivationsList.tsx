@@ -2,7 +2,7 @@
 
 import React, { FC } from 'react';
 
-import { Button, Notice } from '@/components/ui';
+import { Button, KeyCode, Notice } from '@/components/ui';
 import { useMyActivationsQuery } from '@/store/api/k30Api';
 import type { ActivationDto } from '@/store/api/types';
 import { activateRoute } from '@/utils/consts';
@@ -47,22 +47,24 @@ export const ActivationsList: FC = () => {
               </span>
             </div>
 
-            <dl className={classes.details}>
-              <div className={classes.row}>
-                <dt>Ключ</dt>
-                <dd className={classes.code}>{activation.key.code}</dd>
-              </div>
+            {/* Дата и аккаунт — одной строкой мелким, как в заказах:
+                это подписи к попытке, а не её содержание. Содержание —
+                статус наверху и причина отказа ниже. */}
+            <p className={classes.meta}>
+              <span className={classes.nowrap}>
+                {formatDateTime(activation.created_at)}
+              </span>
               {activation.account_email && (
-                <div className={classes.row}>
-                  <dt>Аккаунт</dt>
-                  <dd>{activation.account_email}</dd>
-                </div>
+                <>
+                  <span className={classes.separator} aria-hidden>
+                    ·
+                  </span>
+                  {activation.account_email}
+                </>
               )}
-              <div className={classes.row}>
-                <dt>Начата</dt>
-                <dd>{formatDateTime(activation.created_at)}</dd>
-              </div>
-            </dl>
+            </p>
+
+            <KeyCode code={activation.key.code} className={classes.code} />
 
             {activation.error && (
               <Notice

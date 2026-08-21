@@ -14,65 +14,27 @@
   }
 }
 
-// Кто вошёл — сверху, отделено линией от того, что можно поменять.
-// Без разделителя почта читалась как ещё одно поле формы.
-.header {
-  display: flex;
-  align-items: center;
-  gap: s.gap(3);
-  min-width: 0;
-
-  padding-bottom: s.gap(5);
-  border-bottom: 1px solid var(--stroke_default);
-}
-
-.identity {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.avatar {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-
-  width: 44px;
-  height: 44px;
-
-  background: var(--background_primary_10);
-  border: 1px solid var(--stroke_primary);
-  border-radius: 50%;
-  color: var(--icon_primary);
-}
-
-// 14px, а не 16: в колонке профиля на почту остаётся около 210px, и
-// адрес вида eugene.pokalyuk@gmail.com рвался посреди домена — «gmail.co»
-// и «m» на следующей строке. Перенос как крайняя мера всё равно оставлен:
-// почтовые адреса бывают и длиннее.
-.email {
-  @include s.text_body_2;
+.title {
+  @include s.text_header_3;
 
   color: var(--text_default);
-  font-weight: s.$semi_bold;
-  overflow-wrap: anywhere;
 }
 
-.since {
-  @include s.text_caption;
-
-  color: var(--text_muted);
-}
-
+// Два поля в ряд на широком экране. Карточка теперь во всю полосу, и
+// поле «Telegram» длиной в экран выглядело так, будто туда ждут абзац.
 .form {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: s.gap(4);
+
+  @include s.media_up(md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
 }
 
 .actions {
   display: flex;
   gap: s.gap(2);
-  margin-top: s.gap(1);
+  grid-column: 1 / -1;
 }

@@ -1,15 +1,25 @@
 'use client';
 
 import React, { FC } from 'react';
+import clsx from 'clsx';
 
 import { Stagger, StaggerItem } from '@/components/motion';
-import { Button, KeyIcon, Notice } from '@/components/ui';
+import { Button, KeyCode, KeyIcon, Notice } from '@/components/ui';
 import { useMyOrdersQuery } from '@/store/api/k30Api';
 import type { OrderDto } from '@/store/api/types';
 import { Routes } from '@/utils/consts';
-import { formatDateTime } from '@/utils/helpers';
+import { formatDate } from '@/utils/helpers';
 
 import classes from './OrdersList.module.scss';
+
+/** Откуда пришла покупка. Коды бэкенда покупателю ничего не говорят, а
+ *  «Яндекс Маркет» в строке заказа отвечает на «где я это брал». */
+const SOURCES: Record<string, string> = {
+  site: 'Активация на сайте',
+  telegram: 'Telegram',
+  yandex_market: 'Яндекс Маркет',
+  manual: 'Заведён вручную',
+};
 
 /** Статус активации важнее статуса заказа: покупателя интересует
  *  «работает ли подписка», а не наш внутренний учёт. */
@@ -54,56 +64,74 @@ export const OrdersList: FC = () => {
 
   return (
     <Stagger as="ul" className={classes.list}>
-      {data.map((order) => (
-        <StaggerItem as="li" key={order.number} className={classes.item}>
-          <div className={classes.top}>
-            <span className={classes.service}>
-              {[order.service, order.plan].filter(Boolean).join(' ')}
-            </span>
-            <span
-              className={
-                order.activation_status === 'activated'
-                  ? classes.badge_done
-                  : classes.badge
-              }
-            >
-              {activationLabel(order)}
-            </span>
-          </div>
+      {data.map((order) => {
+        const isActivated = order.activation_status === 'activated';
 
-          <dl className={classes.details}>
-            <div className={classes.row}>
-              <dt>Заказ</dt>
-              <dd>№{order.number}</dd>
+        return (
+          <StaggerItem as="li" key={order.number} className={classes.item}>
+            <div className={classes.top}>
+              <span className={classes.service}>
+                {[order.service, order.plan].filter(Boolean).join(' ')}
+              </span>
+              <span
+                className={clsx(classes.badge, isActivated && classes.done)}
+              >
+                {activationLabel(order)}
+              </span>
             </div>
-            <div className={classes.row}>
-              <dt>Ключ</dt>
-              <dd className={classes.code}>{order.key_code || '—'}</dd>
-            </div>
-            {order.account_email && (
-              <div className={classes.row}>
-                <dt>Аккаунт</dt>
-                <dd>{order.account_email}</dd>
-              </div>
+
+            {/* Номер, дата и источник — одной строкой мелким шрифтом.
+                Раньше это были три строки таблицы «подпись — значение»
+                того же размера, что и всё остальное, и карточка читалась
+                как анкета, в которой нечего выделить. */}
+            <p className={classes.meta}>
+              <span className={classes.nowrap}>№{order.number}</span>
+              <Dot />
+              <span className={classes.nowrap}>
+                {formatDate(order.created_at)}
+              </span>
+              {SOURCES[order.source] && (
+                <>
+                  <Dot />
+                  <span className={classes.nowrap}>
+                    {SOURCES[order.source]}
+                  </span>
+                </>
+              )}
+            </p>
+
+            {/* Код ключа тем же компонентом, что и на активации: его
+                пересылают в поддержку, и набирать руками — верный способ
+                получить опечатку. */}
+            {order.key_code && (
+              <KeyCode code={order.key_code} className={classes.code} />
             )}
-            <div className={classes.row}>
-              <dt>Создан</dt>
-              <dd>{formatDateTime(order.created_at)}</dd>
-            </div>
-          </dl>
 
-          {order.activation_url && (
-            <Button
-              href={order.activation_url}
-              external
-              size="small"
-              variant="outlined"
-            >
-              Ссылка активации
-            </Button>
-          )}
-        </StaggerItem>
-      ))}
+            {order.account_email && (
+              <p className={classes.account}>
+                Подписка на {order.account_email}
+              </p>
+            )}
+
+            {order.activation_url && (
+              <Button
+                href={order.activation_url}
+                external
+                size="small"
+                variant="outlined"
+              >
+                Ссылка активации
+              </Button>
+            )}
+          </StaggerItem>
+        );
+      })}
     </Stagger>
   );
 };
+
+const Dot: FC = () => (
+  <span className={classes.separator} aria-hidden>
+    ·
+  </span>
+);

@@ -25,6 +25,7 @@ import type {
   EmailLoginResponse,
   OrderDto,
   ServiceDto,
+  SubscriptionDto,
   SiteSettingsDto,
   TargetKind,
   TelegramStartDto,
@@ -253,6 +254,14 @@ export const k30Api = createApi({
       providesTags: ['Orders'],
     }),
 
+    /** Что работает прямо сейчас. Считает бэкенд: срок подписки — это
+     *  дата активации плюс длительность тарифа, и складывать это на
+     *  витрине значит держать второе место, где живёт то же правило. */
+    mySubscriptions: builder.query<SubscriptionDto[], void>({
+      query: () => 'me/subscriptions',
+      providesTags: ['Orders'],
+    }),
+
     /** История попыток активации. Отвечает на «почему не заработало» —
      *  вопрос, с которым чаще всего приходят в поддержку. */
     myActivations: builder.query<ActivationDto[], void>({
@@ -278,5 +287,6 @@ export const {
   useMeQuery,
   useUpdateMeMutation,
   useMyOrdersQuery,
+  useMySubscriptionsQuery,
   useMyActivationsQuery,
 } = k30Api;
