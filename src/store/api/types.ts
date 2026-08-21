@@ -234,7 +234,14 @@ export interface TelegramStartDto {
 }
 
 export type TelegramLoginStatus =
-  'pending' | 'confirmed' | 'needs_email' | 'expired';
+  | 'pending'
+  | 'confirmed'
+  /** Бот спросил почту у того, кто пришёл впервые. */
+  | 'needs_email'
+  /** Почта названа, и бот ждёт код из письма: без него адрес ничего не
+   *  доказывает — назвать чужой может кто угодно. */
+  | 'needs_code'
+  | 'expired';
 
 /** Ответ опроса заявки. Пока ждём — только `status`; после подтверждения
  *  приезжает обычная пара токенов с профилем. */

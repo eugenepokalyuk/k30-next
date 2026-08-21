@@ -21,6 +21,7 @@ export type TelegramLoginStage =
   | 'idle'
   | 'waiting'
   | 'needs_email'
+  | 'needs_code'
   /** Заявка устарела или потерялась — нужна новая ссылка. */
   | 'lost';
 
@@ -98,6 +99,7 @@ export function useTelegramLogin(): Result {
   let stage: TelegramLoginStage = 'idle';
   if (link && isLost) stage = 'lost';
   else if (status === 'needs_email') stage = 'needs_email';
+  else if (status === 'needs_code') stage = 'needs_code';
   else if (link) stage = 'waiting';
 
   return {
