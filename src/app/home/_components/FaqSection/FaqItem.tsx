@@ -58,7 +58,18 @@ export const FaqItem: FC<Props> = ({ question, answer }) => {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: duration.base, ease }}
           >
-            <p className={classes.answer}>{answer}</p>
+            {/* Абзацы разделяются пустой строкой: ответ пишет менеджер
+                в админке, размечать его нечем, а длинный ответ одним
+                куском не читается. */}
+            <div className={classes.answer}>
+              {answer
+                .split(/\n\s*\n/)
+                .map((paragraph) => paragraph.trim())
+                .filter(Boolean)
+                .map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

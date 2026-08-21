@@ -290,6 +290,14 @@ export interface SiteSettingsDto {
 
 export type OrderStatus = 'new' | 'issued' | 'activated' | 'cancelled';
 
+/** Вопрос и ответ из блока «Частые вопросы». Порядок задаёт бэкенд —
+ *  витрина показывает список как пришёл. */
+export interface FaqEntryDto {
+  id: number;
+  question: string;
+  answer: string;
+}
+
 /** Живая подписка: то, чем покупатель может пользоваться прямо сейчас.
  *
  *  Отдельно от заказа, хотя строка в базе та же. Заказ отвечает на «что

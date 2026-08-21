@@ -21,6 +21,7 @@ import type {
   AuthOptionsDto,
   AuthResponse,
   CheckAccountResponse,
+  FaqEntryDto,
   EmailCodeRequestDto,
   EmailLoginResponse,
   OrderDto,
@@ -151,6 +152,13 @@ export const k30Api = createApi({
       query: () => 'site-settings',
     }),
 
+    /** Частые вопросы с главной. Отдельной ручкой, а не полем в
+     *  настройках витрины: список правят по следам поддержки, чаще
+     *  всего остального. */
+    faq: builder.query<FaqEntryDto[], void>({
+      query: () => 'faq',
+    }),
+
     /** Что показать на экране входа. Отдельно от настроек витрины:
      *  форме входа не нужен весь блок ссылок и подписей. */
     authOptions: builder.query<AuthOptionsDto, void>({
@@ -274,6 +282,7 @@ export const k30Api = createApi({
 export const {
   useServicesQuery,
   useSiteSettingsQuery,
+  useFaqQuery,
   useAuthOptionsQuery,
   useRequestEmailCodeMutation,
   useVerifyEmailCodeMutation,

@@ -1,65 +1,65 @@
+'use client';
+
 import React, { FC } from 'react';
 
 import { Reveal } from '@/components/motion';
 import { Button, ChatIcon, Section } from '@/components/ui';
-import { SupportTelegram } from '@/utils/consts';
+import { useSiteSettings } from '@/lib/hooks';
+import { useFaqQuery } from '@/store/api/k30Api';
 
 import classes from './FaqSection.module.scss';
 import { FaqItem } from './FaqItem';
 
-const questions = [
-  {
-    question: 'Нужен ли пароль от моего аккаунта?',
-    answer:
-      'Нет. Для активации нужен токен сессии со страницы самого сервиса — он даёт право выдать подписку, но не даёт доступа к переписке и настройкам. Пароль мы не спрашиваем никогда.',
-  },
-  {
-    question: 'Ключ не подходит — что делать?',
-    answer:
-      'Проверьте, что скопировали код целиком, включая последний символ после дефиса. Если код набран верно, а ключ не находится, напишите в поддержку — мы найдём его по номеру заказа.',
-  },
-  {
-    question: 'Можно активировать ключ второй раз?',
-    answer:
-      'Нет. Ключ одноразовый: после активации он привязан к аккаунту, на который выдана подписка. Если активация прошла не на тот аккаунт, напишите в поддержку сразу.',
-  },
-  {
-    question: 'Сколько ждать подписку после активации?',
-    answer:
-      'Обычно она появляется сразу. Если сервис не видит подписку, выйдите из аккаунта и зайдите снова или очистите кеш страницы — так она подтягивается быстрее.',
-  },
-  {
-    question: 'Зачем нужен личный кабинет?',
-    answer:
-      'В нём видно все ваши покупки и их статусы: какой ключ к какому сервису, активирован он или ещё ждёт. Активировать ключ можно и без кабинета.',
-  },
-];
+/**
+ * Частые вопросы — из админки, а не из разметки.
+ *
+ * Вопросы сюда попадают по следам поддержки: пришёл третий человек с
+ * одним и тем же — ответ надо повесить сегодня. Раньше это означало
+ * правку кода, сборку и выкатку статики, теперь запись в разделе
+ * «Частые вопросы».
+ *
+ * Пока список едет (или если он пуст), секция не рисуется вовсе:
+ * заголовок «Частые вопросы» над пустотой хуже отсутствия блока, а
+ * заглушка из скелетонов мигала бы при каждой загрузке главной.
+ */
+export const FaqSection: FC = () => {
+  const { data } = useFaqQuery();
+  const { telegram_support_url } = useSiteSettings();
 
-export const FaqSection: FC = () => (
-  <Section id="faq" overline="Вопросы" title="Частые вопросы">
-    <div className={classes.layout}>
-      <Reveal as="ul" className={classes.list}>
-        {questions.map((item) => (
-          <FaqItem
-            key={item.question}
-            question={item.question}
-            answer={item.answer}
-          />
-        ))}
-      </Reveal>
+  if (!data?.length) return null;
 
-      <Reveal as="aside" delay={0.1} className={classes.support}>
-        <span className={classes.support_icon}>
-          <ChatIcon size={22} />
-        </span>
-        <p className={classes.support_title}>Не нашли ответ?</p>
-        <p className={classes.support_text}>
-          Напишите в телеграм — отвечаем и помогаем довести активацию до конца.
-        </p>
-        <Button href={SupportTelegram} external variant="outlined" size="small">
-          Написать в поддержку
-        </Button>
-      </Reveal>
-    </div>
-  </Section>
-);
+  return (
+    <Section id="faq" overline="Вопросы" title="Частые вопросы">
+      <div className={classes.layout}>
+        <Reveal as="ul" className={classes.list}>
+          {data.map((item) => (
+            <FaqItem
+              key={item.id}
+              question={item.question}
+              answer={item.answer}
+            />
+          ))}
+        </Reveal>
+
+        <Reveal as="aside" delay={0.1} className={classes.support}>
+          <span className={classes.support_icon}>
+            <ChatIcon size={22} />
+          </span>
+          <p className={classes.support_title}>Не нашли ответ?</p>
+          <p className={classes.support_text}>
+            Напишите в телеграм — отвечаем и помогаем довести активацию до
+            конца.
+          </p>
+          <Button
+            href={telegram_support_url}
+            external
+            variant="outlined"
+            size="small"
+          >
+            Написать в поддержку
+          </Button>
+        </Reveal>
+      </div>
+    </Section>
+  );
+};

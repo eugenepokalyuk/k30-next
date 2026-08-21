@@ -81,6 +81,12 @@
 .answer {
   @include s.text_body_2;
 
+  // Колонка абзацев: ответ пишет менеджер, и длинный текст он разобьёт
+  // пустой строкой — иначе абзацы слиплись бы в один кусок.
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+
   padding: s.gap(0) s.gap(4) s.gap(4);
   color: var(--text_secondary);
   text-wrap: pretty;
@@ -90,7 +96,6 @@
     max-width: 68ch;
   }
 }
-
 .support {
   @include s.card;
 
