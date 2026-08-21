@@ -3,6 +3,7 @@
 
 $marker: 44px;
 $column_gap: 20px;
+$gap_to_marker: 12px;
 
 .list {
   position: relative;
@@ -74,16 +75,31 @@ $column_gap: 20px;
   // следующему, а не одной линией на весь список: номера стоят у левого
   // края своей колонки, и общая линия по процентам ширины мимо них
   // промахивалась.
+  //
+  // Зазор до кружка одинаковый с обеих сторон — $gap_to_marker и слева,
+  // и справа. Раньше правый конец упирался в следующий кружок вплотную,
+  // и линия выглядела приклеенной к нему одним концом: отступ с той
+  // стороны рисовало только фоновое «гало» номера, вдвое уже левого.
   @include s.media_up(lg) {
     &:not(:last-child)::after {
       content: '';
       position: absolute;
-      top: math.div($marker, 2);
-      left: calc(#{$marker} + #{s.gap(3)});
-      right: -$column_gap;
+      // Полпикселя вверх: линия толщиной 1px из центра кружка иначе
+      // ложится целиком ниже него.
+      top: calc(#{math.div($marker, 2)} - 0.5px);
+      left: calc(#{$marker} + #{$gap_to_marker});
+      right: calc(#{$gap_to_marker} - #{$column_gap});
 
       height: 1px;
-      background: var(--stroke_strong);
+      // К концам линия гаснет — так она читается как связь между
+      // номерами, а не как черта, случайно доехавшая до края.
+      background: linear-gradient(
+        90deg,
+        var(--stroke_default),
+        var(--stroke_strong) 20%,
+        var(--stroke_strong) 80%,
+        var(--stroke_default)
+      );
     }
   }
 }
