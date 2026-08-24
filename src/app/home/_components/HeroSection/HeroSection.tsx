@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 
 import { Reveal } from '@/components/motion';
 import { BoltIcon, ShieldIcon } from '@/components/ui';
+import { KeyForm } from '@/components/units';
 
 import classes from './HeroSection.module.scss';
 import { HeroVisual } from '../HeroVisual/HeroVisual';
-import { KeyForm } from '../KeyForm/KeyForm';
 
 const advantages = [
   { icon: <BoltIcon size={18} />, text: 'Активация за пару минут' },
@@ -16,9 +16,6 @@ export const HeroSection: FC = () => (
   <section className={classes.hero}>
     <div className={classes.container}>
       <div className={classes.content}>
-        {/* Задержки нарастают сверху вниз: блок собирается в том же
-            порядке, в каком его читают, и взгляд не догоняет форму
-            раньше заголовка. */}
         <Reveal delay={0}>
           <p className={classes.overline}>Активация подписок</p>
         </Reveal>

@@ -44,6 +44,18 @@
   gap: s.gap(6);
 }
 
+.prompt {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+}
+
+.prompt_text {
+  @include s.text_body_1;
+
+  color: var(--text_secondary);
+}
+
 .loading {
   @include s.text_body_1;
 

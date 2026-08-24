@@ -4,6 +4,7 @@ import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import { KeyCode, Notice, Steps } from '@/components/ui';
+import { KeyForm } from '@/components/units';
 import { throttleMessage } from '@/store/api/errors';
 import { useVerifyKeyMutation } from '@/store/api/k30Api';
 import type { ActivationDto } from '@/store/api/types';
@@ -25,10 +26,9 @@ import { TargetStep } from '../TargetStep/TargetStep';
 
 /** Страница активации: четыре шага и один источник правды.
  *
- *  Какой шаг показывать, определяет состояние активации, приехавшее с
- *  бэкенда, а не локальный флаг в компоненте. Это нужно потому, что
- *  вернуться сюда можно откуда угодно: по ссылке из мессенджера, после
- *  перезагрузки, из второй вкладки, — и во всех случаях страница обязана
+ *  Какой шаг показывать, определяет состояние активации с бэкенда, а не
+ *  локальный флаг: вернуться сюда можно по ссылке из мессенджера, после
+ *  перезагрузки или из второй вкладки, и во всех случаях страница обязана
  *  показать то, что происходит на самом деле, а не начать сначала.
  */
 export const ActivateView: FC = () => {
@@ -112,9 +112,6 @@ export const ActivateView: FC = () => {
       <div className={classes.container}>
         <header className={classes.header}>
           <h1 className={classes.title}>Активация подписки</h1>
-          {/* Сервис и тариф вместе: «ChatGPT Plus». Покупатель узнаёт
-              свой товар по этой строке, а сервис без тарифа ему ничего
-              не говорит — у ChatGPT их четыре. */}
           {cached?.key && (
             <p className={classes.subtitle}>
               {[cached.key.service, cached.key.plan].filter(Boolean).join(' ')}
@@ -128,9 +125,12 @@ export const ActivateView: FC = () => {
 
         <div className={classes.body}>
           {!code && (
-            <Notice tone="error" title="Ключ не указан">
-              Вернитесь на главную и введите код из письма.
-            </Notice>
+            <div className={classes.prompt}>
+              <p className={classes.prompt_text}>
+                Введите код из письма — проверим его и откроем активацию.
+              </p>
+              <KeyForm />
+            </div>
           )}
 
           {error && (
@@ -143,9 +143,8 @@ export const ActivateView: FC = () => {
             <p className={classes.loading}>Проверяем ключ…</p>
           )}
 
-          {/* Ключ найден, но активировать нельзя, и активации при этом
-              нет: уже активирован раньше или поставщик отказал.
-              Причину присылает бэкенд. */}
+          {/* Ключ найден, но активировать нельзя: уже активирован или
+              поставщик отказал. Причину присылает бэкенд. */}
           {cached && !cached.canActivate && !activation && (
             <Notice tone="error" title="Активация недоступна">
               {cached.message || 'Напишите в поддержку — разберёмся.'}
