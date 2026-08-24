@@ -32,20 +32,13 @@ export const Button: FC<Props> = ({
   const cx = clsx(
     classes.button,
     classes[size],
-    // Класс цвета — только у залитой кнопки. Раньше он вешался всегда, и
-    // у outlined поверх прозрачного фона всё равно срабатывал
-    // .primary:hover: кнопка «Кабинет» на наведении заливалась фирменным
-    // цветом, а текст красился в него же и пропадал.
     variant === 'filled' ? classes[color] : classes[variant],
     className,
     { [classes.full_width]: fullWidth, [classes.loading]: loading },
   );
 
-  // Ссылке отдаём только onClick, а не весь rest: остальные пропсы
-  // типизированы под <button> и на <a> либо не нужны, либо приводят к
-  // невалидному html. onClick исключение — им закрывают меню при
-  // переходе, и без него кнопка «Войти» в мобильной панели оставляла
-  // её открытой поверх новой страницы.
+  // Ссылке отдаём только onClick: остальные пропсы типизированы под
+  // <button> и на <a> дают невалидный html.
   const linkProps = {
     className: cx,
     onClick: onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>,
@@ -72,8 +65,8 @@ export const Button: FC<Props> = ({
       type="button"
       {...rest}
       onClick={onClick}
-      // Пока идёт запрос, кнопка выключена — иначе второй клик отправит
-      // второй запрос к провайдеру, а тот за два вызова спишет две подписки.
+      // Пока идёт запрос, кнопка выключена: второй клик ушёл бы вторым
+      // запросом к провайдеру, а тот спишет вторую подписку.
       disabled={disabled || loading}
       className={cx}
     >

@@ -12,8 +12,7 @@ import { formatDate } from '@/utils/helpers';
 
 import classes from './OrdersList.module.scss';
 
-/** Откуда пришла покупка. Коды бэкенда покупателю ничего не говорят, а
- *  «Яндекс Маркет» в строке заказа отвечает на «где я это брал». */
+/** Коды источника с бэкенда — в понятные покупателю названия. */
 const SOURCES: Record<string, string> = {
   site: 'Активация на сайте',
   telegram: 'Telegram',
@@ -80,10 +79,6 @@ export const OrdersList: FC = () => {
               </span>
             </div>
 
-            {/* Номер, дата и источник — одной строкой мелким шрифтом.
-                Раньше это были три строки таблицы «подпись — значение»
-                того же размера, что и всё остальное, и карточка читалась
-                как анкета, в которой нечего выделить. */}
             <p className={classes.meta}>
               <span className={classes.nowrap}>№{order.number}</span>
               <Dot />
@@ -100,9 +95,6 @@ export const OrdersList: FC = () => {
               )}
             </p>
 
-            {/* Код ключа тем же компонентом, что и на активации: его
-                пересылают в поддержку, и набирать руками — верный способ
-                получить опечатку. */}
             {order.key_code && (
               <KeyCode code={order.key_code} className={classes.code} />
             )}

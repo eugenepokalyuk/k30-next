@@ -15,16 +15,11 @@ import { MobileMenu } from './MobileMenu';
 import { navLinks } from './navLinks';
 import { useHeaderState } from './useHeaderState';
 
-/** Шапка сайта.
- *
- *  Сам компонент только раскладывает элементы. Побочные эффекты —
- *  прокрутка, блокировка скролла, Escape, закрытие при смене адреса —
- *  живут в `useHeaderState`, панель для узких экранов в `MobileMenu`.
- */
+/** Шапка сайта. Побочные эффекты — в `useHeaderState`, панель для
+ *  узких экранов — в `MobileMenu`. */
 export const Header: FC = () => {
   const { isScrolled, isOpen, toggle, close } = useHeaderState();
-  // Контакт поддержки — из админки: он меняется чаще, чем выходит
-  // релиз витрины, и раньше ради этого пересобиралась вся статика.
+  // Контакт поддержки — из админки, без пересборки статики.
   const { telegram_support_url } = useSiteSettings();
 
   return (
@@ -63,9 +58,6 @@ export const Header: FC = () => {
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
           >
-            {/* Иконки меняются местами через AnimatePresence, а не
-                сменой пути в svg: так поворот виден и на медленном
-                телефоне, где мгновенная подмена читается как глитч. */}
             <AnimatePresence initial={false} mode="wait">
               <motion.span
                 key={isOpen ? 'close' : 'menu'}

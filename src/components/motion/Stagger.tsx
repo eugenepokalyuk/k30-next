@@ -24,12 +24,8 @@ interface Props extends PropsWithChildren {
   style?: React.CSSProperties;
 }
 
-/** Список, элементы которого появляются по очереди.
- *
- *  Очередь задаётся вариантами на родителе, а не задержкой на каждом
- *  элементе: количество карточек приходит с бэкенда (сервисы), и
- *  считать задержки по индексу пришлось бы в разметке.
- */
+/** Список, элементы которого появляются по очереди. Очередь задаётся
+ *  вариантами на родителе: число карточек приходит с бэкенда. */
 export const Stagger: FC<Props> = ({ as = 'div', className, style, children }) => {
   const Tag = tags[as] as typeof motion.div;
 
@@ -47,8 +43,8 @@ export const Stagger: FC<Props> = ({ as = 'div', className, style, children }) =
   );
 };
 
-/** Элемент такого списка. Наследует состояние от родителя — своих
- *  initial/animate у него нет намеренно. */
+/** Элемент такого списка. Своих initial/animate нет намеренно —
+ *  состояние наследуется от родителя. */
 export const StaggerItem: FC<Props> = ({
   as = 'div',
   className,

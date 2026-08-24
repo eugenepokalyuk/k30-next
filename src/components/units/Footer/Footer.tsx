@@ -54,8 +54,6 @@ export const Footer: FC = () => {
           <a className={classes.link} href={`mailto:${SupportEmail}`}>
             {SupportEmail}
           </a>
-          {/* Канал — только когда он заведён в админке: пункт «Канал»,
-            ведущий на пустую страницу, хуже отсутствующего. */}
           {telegram_channel_url && (
             <a
               className={classes.link}

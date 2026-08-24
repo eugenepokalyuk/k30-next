@@ -14,13 +14,7 @@ interface Props {
   answer: string;
 }
 
-/** Вопрос с раскрывающимся ответом.
- *
- *  Раньше это был <details>: он раскрывается мгновенно, и на телефоне
- *  скачок высоты уводил из-под пальца соседние вопросы. Кнопка с
- *  aria-expanded даёт то же поведение для скринридера, а высоту можно
- *  анимировать.
- */
+/** Вопрос с раскрывающимся ответом. */
 export const FaqItem: FC<Props> = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
   const id = useId();
@@ -58,9 +52,8 @@ export const FaqItem: FC<Props> = ({ question, answer }) => {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: duration.base, ease }}
           >
-            {/* Абзацы разделяются пустой строкой: ответ пишет менеджер
-                в админке, размечать его нечем, а длинный ответ одним
-                куском не читается. */}
+            {/* Ответ пишет менеджер в админке простым текстом:
+                абзацы разделяются пустой строкой. */}
             <div className={classes.answer}>
               {answer
                 .split(/\n\s*\n/)

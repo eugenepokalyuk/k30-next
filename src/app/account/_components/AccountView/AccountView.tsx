@@ -19,14 +19,7 @@ import { OrdersList } from '../OrdersList/OrdersList';
 import { ProfileCard } from '../ProfileCard/ProfileCard';
 import { SubscriptionsList } from '../SubscriptionsList/SubscriptionsList';
 
-/**
- * Кабинет: что работает сейчас, что куплено, что пошло не так.
- *
- * Порядок блоков — это порядок вопросов, с которыми сюда заходят.
- * Сначала живые подписки и их сроки, потом покупки целиком, и только
- * потом история попыток активации. Профиль ушёл в самый низ страницы —
- * его правят раз в жизни, а раньше он занимал первый экран.
- */
+/** Кабинет: что работает сейчас, что куплено, что пошло не так. */
 export const AccountView: FC = () => {
   const router = useRouter();
   const isReady = useAppSelector(selectIsAuthReady);
@@ -59,10 +52,6 @@ export const AccountView: FC = () => {
   return (
     <div className={classes.page}>
       <div className={classes.container}>
-        {/* Заголовок страницы остался, но подписью: имя раздела и так
-            стоит в шапке сайта, а разворачивать его в крупный заголовок
-            значит отодвинуть подписки ниже сгиба ради слов, которые
-            покупатель и так знает. */}
         <h1 className={classes.title}>Личный кабинет</h1>
 
         <AccountHeader user={user} active={subscriptions?.length ?? 0} />
@@ -74,9 +63,6 @@ export const AccountView: FC = () => {
           <OrdersList />
         </section>
 
-        {/* История попыток — ниже заказов и только если они были. Она
-            отвечает на «почему не заработало», а этот вопрос возникает
-            после того, как покупку уже нашли глазами. */}
         <ActivationsList />
 
         <ProfileCard user={user} />

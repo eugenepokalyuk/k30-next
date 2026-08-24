@@ -8,7 +8,7 @@ import classes from './Field.module.scss';
 interface Props {
   label?: string;
   hint?: string;
-  /** Текст ошибки под полем. Пусто — блок не рендерится и вёрстка не прыгает. */
+  /** Текст ошибки под полем. */
   error?: string;
   placeholder?: string;
   value: string;
@@ -66,8 +66,6 @@ export const Field: FC<Props> = ({
     spellCheck,
     enterKeyHint,
     'aria-invalid': Boolean(error),
-    // Подсказку и ошибку связываем с полем: скринридер прочитает их
-    // вместе с подписью, а не отдельным текстом непонятно про что.
     'aria-describedby': error || hint ? hintId : undefined,
     className: clsx(classes.control, inputClassName, {
       [classes.invalid]: Boolean(error),

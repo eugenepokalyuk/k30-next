@@ -10,9 +10,6 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => (
     <Header />
     <main className={classes.main}>{children}</main>
     <Footer />
-    {/* Кнопка телеграма живёт в раскладке, а не на главной: писать в
-        канал чаще всего хотят как раз со страницы активации, когда
-        что-то пошло не так. */}
     <TelegramWidget />
   </div>
 );

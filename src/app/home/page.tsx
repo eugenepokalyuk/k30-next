@@ -11,12 +11,8 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      {/* Лента сразу под первым экраном: она отвечает на «а что у вас
-          вообще есть» раньше, чем до этого вопроса дойдёт секция ниже. */}
       <ServicesMarquee />
       <ServicesSection />
-      {/* Сразу после списка сервисов: цену человек уже увидел, и
-          следующий его вопрос — «где взять ключ». */}
       <BuySection />
       <HowSection />
       <FaqSection />
