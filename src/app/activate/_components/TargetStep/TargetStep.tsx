@@ -88,7 +88,7 @@ export const TargetStep: FC<Props> = ({
       {step.localEmail && !step.isConfirmed && (
         <p className={classes.preview}>
           Похоже, это аккаунт <strong>{maskEmail(step.localEmail)}</strong>.
-          Проверим у поставщика.
+          Сейчас проверим.
         </p>
       )}
 

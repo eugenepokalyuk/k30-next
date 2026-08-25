@@ -78,7 +78,7 @@ export const ResultStep: FC<Props> = ({ activation, onRetry }) => {
       <div className={classes.result}>
         <Notice tone="info" title="Проверяем вручную">
           {activation.error ||
-            'Поставщик не дал однозначного ответа, и мы перепроверяем заказ.'}{' '}
+            'Активация не дала однозначного результата, и мы перепроверяем её.'}{' '}
           Ключ закреплён за вами — повторять активацию не нужно.
         </Notice>
         <Support code={activation.key.code} />
@@ -101,8 +101,8 @@ export const ResultStep: FC<Props> = ({ activation, onRetry }) => {
 
       {activation.blame === 'provider' && (
         <p className={classes.hint}>
-          Ключ не потрачен. Это временно на стороне поставщика — попробуйте
-          через несколько минут.
+          Ключ не потрачен. Это временная заминка — попробуйте через
+          несколько минут.
         </p>
       )}
 

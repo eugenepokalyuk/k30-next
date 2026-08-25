@@ -21,7 +21,7 @@ export const MarketplaceUrl = 'https://market.yandex.ru/';
 export const ActivationSteps = [
   { id: 'key', title: 'Ключ', hint: 'Проверяем код' },
   { id: 'account', title: 'Аккаунт', hint: 'Куда выдать' },
-  { id: 'progress', title: 'Активация', hint: 'Поставщик выдаёт' },
+  { id: 'progress', title: 'Активация', hint: 'Выдаём подписку' },
   { id: 'done', title: 'Готово', hint: 'Подписка активна' },
 ] as const;
 

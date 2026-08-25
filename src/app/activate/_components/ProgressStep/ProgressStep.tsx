@@ -66,7 +66,7 @@ export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
           </p>
           <p className={classes.subtitle}>
             {isQueued && current.queue_position
-              ? `Вы ${current.queue_position}-й в очереди у поставщика.`
+              ? `Вы ${current.queue_position}-й в очереди.`
               : 'Обычно это занимает от 30 секунд до двух минут.'}
           </p>
         </div>
