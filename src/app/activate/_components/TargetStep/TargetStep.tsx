@@ -56,6 +56,8 @@ export const TargetStep: FC<Props> = ({
     <form className={classes.step} onSubmit={step.check} noValidate>
       <Instruction
         text={service.instruction}
+        serviceName={service.name}
+        serviceUrl={service.source_url}
         url={option.how_to_url || service.instruction_url}
         urlLabel={option.how_to_label || service.instruction_url_label}
       />
@@ -88,7 +90,6 @@ export const TargetStep: FC<Props> = ({
       {step.localEmail && !step.isConfirmed && (
         <p className={classes.preview}>
           Похоже, это аккаунт <strong>{maskEmail(step.localEmail)}</strong>.
-          Сейчас проверим.
         </p>
       )}
 

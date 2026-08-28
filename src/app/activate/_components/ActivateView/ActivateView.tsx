@@ -20,11 +20,12 @@ import { Routes, SupportTelegram } from '@/utils/consts';
 import { formatKey, isKeyComplete } from '@/utils/helpers';
 
 import classes from './ActivateView.module.scss';
+import { ActivationRules } from '../ActivationRules/ActivationRules';
 import { ProgressStep } from '../ProgressStep/ProgressStep';
 import { ResultStep } from '../ResultStep/ResultStep';
 import { TargetStep } from '../TargetStep/TargetStep';
 
-/** Страница активации: четыре шага и один источник правды.
+/** Страница активации: три шага и один источник правды.
  *
  *  Какой шаг показывать, определяет состояние активации с бэкенда, а не
  *  локальный флаг: вернуться сюда можно по ссылке из мессенджера, после
@@ -42,6 +43,11 @@ export const ActivateView: FC = () => {
   const cached = useAppSelector(selectActivationFor(code));
 
   const [error, setError] = useState('');
+
+  // Для какого ключа правила уже приняты. Код, а не флаг: страницу
+  // открывают со вторым ключом в той же вкладке, и согласие с правилами
+  // одного сервиса не должно молча распространяться на другой.
+  const [rulesAcceptedFor, setRulesAcceptedFor] = useState('');
 
   // Какой код уже спрашивали. Засов в ref, а не флаг в состоянии:
   // запрос меняет и `isLoading`, и стор, и любая подписка на них
@@ -106,6 +112,10 @@ export const ActivateView: FC = () => {
 
   const activation = cached?.activation ?? null;
   const step = currentStep(activation, cached?.canActivate);
+  const isComplete = activation?.status === 'success';
+
+  const rules = cached?.service?.activation_rules ?? '';
+  const needsRules = Boolean(rules) && rulesAcceptedFor !== code;
 
   return (
     <div className={classes.page}>
@@ -119,7 +129,11 @@ export const ActivateView: FC = () => {
           )}
         </header>
 
-        <Steps current={step} className={classes.steps} />
+        <Steps
+          current={step}
+          isComplete={isComplete}
+          className={classes.steps}
+        />
 
         {code && <KeyCode code={code} className={classes.key} />}
 
@@ -151,21 +165,37 @@ export const ActivateView: FC = () => {
             </Notice>
           )}
 
-          {cached?.service && cached.canActivate && !activation && (
-            <TargetStep
-              code={code}
-              service={cached.service}
-              targets={cached.targets}
-              onStarted={onActivation}
-            />
-          )}
+          {/* Форма не рендерится, пока правила не приняты: окно поверх
+              неё покупатель закрыть не может, но и подсматривать поля
+              под ним незачем. */}
+          {cached?.service &&
+            cached.canActivate &&
+            !activation &&
+            (needsRules ? (
+              <ActivationRules
+                serviceName={cached.service.name}
+                rules={rules}
+                onAccept={() => setRulesAcceptedFor(code)}
+              />
+            ) : (
+              <TargetStep
+                code={code}
+                service={cached.service}
+                targets={cached.targets}
+                onStarted={onActivation}
+              />
+            ))}
 
           {activation && isRunning(activation) && (
             <ProgressStep activation={activation} onUpdate={onActivation} />
           )}
 
           {activation && !isRunning(activation) && (
-            <ResultStep activation={activation} onRetry={onRetry} />
+            <ResultStep
+              activation={activation}
+              service={cached?.service ?? undefined}
+              onRetry={onRetry}
+            />
           )}
 
           <p className={classes.support}>
@@ -201,6 +231,8 @@ function currentStep(
   canActivate?: boolean,
 ): ActivationStepId {
   if (!activation) return canActivate ? 'account' : 'key';
-  if (isRunning(activation)) return 'progress';
-  return 'done';
+  // Законченная активация — тот же третий шаг, только закрытый:
+  // успех отмечает галочкой `isComplete`, отказ оставляет шаг текущим,
+  // потому что с него ещё можно повторить попытку.
+  return 'progress';
 }

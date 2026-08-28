@@ -24,6 +24,7 @@ const fallback: SiteSettingsDto = {
   buy_text: '',
   buy_telegram_url: '',
   buy_yandex_market_url: '',
+  review_yandex_market_url: '',
 };
 
 /** Ссылки и подписи витрины из админки.

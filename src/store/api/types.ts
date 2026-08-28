@@ -148,6 +148,11 @@ export interface ServiceActivationDto extends Omit<
   instruction_url_label: string;
   submit_label: string;
   activation_note: string;
+  /** Правила, которые покупатель подтверждает до ввода данных. Пусто —
+   *  окна с правилами нет и подтверждать нечего. */
+  activation_rules: string;
+  /** Памятка «ключ активирован, а подписки нет» — своя у каждого сервиса. */
+  missing_subscription_help: string;
   fields_schema: ServiceFieldDto[];
 }
 
@@ -293,6 +298,8 @@ export interface SiteSettingsDto {
   buy_text: string;
   buy_telegram_url: string;
   buy_yandex_market_url: string;
+  /** Страница отзывов на Маркете — предлагается после успешной активации. */
+  review_yandex_market_url: string;
 }
 
 export type OrderStatus = 'new' | 'issued' | 'activated' | 'cancelled';

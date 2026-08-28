@@ -1,0 +1,58 @@
+@use '@/styles/index' as s;
+
+.title {
+  @include s.text_header_3;
+
+  color: var(--text_default);
+}
+
+.rules {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+}
+
+.paragraph {
+  @include s.text_body_1;
+
+  color: var(--text_secondary);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2.5);
+}
+
+.item {
+  @include s.text_body_1;
+
+  position: relative;
+  padding-left: s.gap(6);
+  color: var(--text_default);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: s.gap(2);
+
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--background_primary);
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+
+  // Согласие и отказ друг под другом, а не в ряд: в ряд отказ читается
+  // как «отмена» и его жмут не глядя, а он уводит в поддержку.
+  a,
+  button {
+    width: 100%;
+  }
+}

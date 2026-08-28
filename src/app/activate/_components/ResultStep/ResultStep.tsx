@@ -1,17 +1,22 @@
 'use client';
 
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { motion } from 'framer-motion';
 
 import { duration, ease } from '@/components/motion';
-import { Button, KeyCode, Notice } from '@/components/ui';
-import type { ActivationDto } from '@/store/api/types';
+import { Button, KeyCode, Modal, Notice } from '@/components/ui';
+import { useSiteSettings } from '@/lib/hooks/useSiteSettings';
+import type { ActivationDto, ServiceActivationDto } from '@/store/api/types';
 import { Routes, SupportTelegram } from '@/utils/consts';
+import { parseInstruction } from '@/utils/helpers';
 
 import classes from './ResultStep.module.scss';
 
 interface Props {
   activation: ActivationDto;
+  /** Нужен только на экране успеха: памятка «подписки нет» своя у
+   *  каждого сервиса. На прямой ссылке его может не оказаться. */
+  service?: ServiceActivationDto;
   onRetry: () => void;
 }
 
@@ -23,7 +28,7 @@ interface Props {
  *  неудачи заморожена до ручной сверки, и вторая попытка либо вернёт ту
  *  же ошибку, либо будет стоить второй карты.
  */
-export const ResultStep: FC<Props> = ({ activation, onRetry }) => {
+export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
   if (activation.status === 'success') {
     return (
       <motion.div
@@ -36,8 +41,12 @@ export const ResultStep: FC<Props> = ({ activation, onRetry }) => {
           {activation.account_email
             ? `Аккаунт: ${activation.account_email}. `
             : ''}
-          {activation.message || ''} Если сервис ещё не видит подписку — выйдите
-          из аккаунта и зайдите снова.
+          {activation.message || ''}
+          {/* Когда у сервиса заведена памятка, тот же совет лежит в ней —
+              и там он подробнее, чем одна строка. */}
+          {service?.missing_subscription_help
+            ? ''
+            : ' Если сервис ещё не видит подписку — выйдите из аккаунта и зайдите снова.'}
         </Notice>
 
         {activation.activation_url && (
@@ -45,6 +54,8 @@ export const ResultStep: FC<Props> = ({ activation, onRetry }) => {
             Открыть ссылку активации
           </Button>
         )}
+
+        <SuccessExtras service={service} />
 
         <div className={classes.actions}>
           <Button href={Routes.Account} variant="outlined" size="small">
@@ -101,8 +112,8 @@ export const ResultStep: FC<Props> = ({ activation, onRetry }) => {
 
       {activation.blame === 'provider' && (
         <p className={classes.hint}>
-          Ключ не потрачен. Это временная заминка — попробуйте через
-          несколько минут.
+          Ключ не потрачен. Это временная заминка — попробуйте через несколько
+          минут.
         </p>
       )}
 
@@ -121,6 +132,112 @@ export const ResultStep: FC<Props> = ({ activation, onRetry }) => {
 
       <Support code={activation.key.code} />
     </div>
+  );
+};
+
+/** Что предлагаем покупателю сразу после выдачи.
+ *
+ *  Просьбы об отзыве и подписке стоят до кнопок «Мои заказы» и «На
+ *  главную» намеренно: после них покупатель уходит со страницы, и
+ *  просить уже некого. Каждый блок исчезает вместе со своей ссылкой —
+ *  пустых кнопок здесь быть не должно.
+ */
+const SuccessExtras: FC<{ service?: ServiceActivationDto }> = ({ service }) => {
+  const settings = useSiteSettings();
+  const [isHelpOpen, setHelpOpen] = useState(false);
+
+  const help = service?.missing_subscription_help ?? '';
+
+  return (
+    <>
+      {settings.review_yandex_market_url && (
+        <div className={classes.offer}>
+          <p className={classes.offer_text}>
+            Будем очень признательны, если вы оставите отзыв на Яндекс Маркете.
+            Заранее благодарим за обратную связь!
+          </p>
+          <Button
+            href={settings.review_yandex_market_url}
+            external
+            variant="outlined"
+            size="small"
+          >
+            Оставить отзыв
+          </Button>
+        </div>
+      )}
+
+      {settings.telegram_channel_url && (
+        <div className={classes.offer}>
+          <p className={classes.offer_text}>
+            Будьте в курсе новостей, акций и обновлений сервиса.
+          </p>
+          <Button
+            href={settings.telegram_channel_url}
+            external
+            variant="outlined"
+            size="small"
+          >
+            Подписаться на Telegram
+          </Button>
+        </div>
+      )}
+
+      {help && (
+        <>
+          <button
+            type="button"
+            className={classes.help_link}
+            onClick={() => setHelpOpen(true)}
+          >
+            Ключ активирован, но подписки нет
+          </button>
+
+          <Modal
+            isOpen={isHelpOpen}
+            title="Ключ активирован, но подписки нет"
+            onClose={() => setHelpOpen(false)}
+          >
+            <h2 className={classes.help_title}>
+              Ключ активирован, но подписки нет
+            </h2>
+
+            <div className={classes.help_body}>
+              {parseInstruction(help).map((block, index) =>
+                block.type === 'list' ? (
+                  <ul key={index} className={classes.help_list}>
+                    {block.items.map((item, itemIndex) => (
+                      <li key={itemIndex}>{item}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p key={index}>{block.text}</p>
+                ),
+              )}
+            </div>
+
+            <div className={classes.actions}>
+              <Button
+                type="button"
+                variant="outlined"
+                size="small"
+                onClick={() => setHelpOpen(false)}
+              >
+                Понятно
+              </Button>
+              <Button
+                href={SupportTelegram}
+                external
+                variant="ghost"
+                size="small"
+              >
+                Написать в поддержку
+              </Button>
+            </div>
+          </Modal>
+        </>
+      )}
+    </>
   );
 };
 

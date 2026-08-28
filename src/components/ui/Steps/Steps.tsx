@@ -10,19 +10,22 @@ import { CheckIcon } from '../Icons/Icons';
 
 interface Props {
   current: ActivationStepId;
+  /** Подписка выдана: последний шаг закрывается галочкой, текущего нет.
+   *  Отдельного шага «Готово» в треке нет — есть завершённый третий. */
+  isComplete?: boolean;
   className?: string;
 }
 
 /** Трек-трейс активации: где покупатель сейчас и что впереди. Состав
  *  шагов — в константах, добавить шаг можно правкой одних их. */
-export const Steps: FC<Props> = ({ current, className }) => {
+export const Steps: FC<Props> = ({ current, isComplete, className }) => {
   const currentIndex = ActivationSteps.findIndex((step) => step.id === current);
 
   return (
     <ol className={clsx(classes.steps, className)}>
       {ActivationSteps.map((step, index) => {
-        const isDone = index < currentIndex;
-        const isCurrent = index === currentIndex;
+        const isDone = isComplete || index < currentIndex;
+        const isCurrent = !isComplete && index === currentIndex;
 
         return (
           <li

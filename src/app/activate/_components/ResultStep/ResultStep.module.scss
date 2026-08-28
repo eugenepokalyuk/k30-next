@@ -42,3 +42,66 @@
 .support_code {
   width: 100%;
 }
+
+.offer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: s.gap(3);
+  width: 100%;
+
+  padding: s.gap(4);
+  background: var(--background_secondary);
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_3;
+}
+
+.offer_text {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+}
+
+// Ссылка, а не кнопка: это не действие с подпиской, а объяснение —
+// и выглядеть наравне с «Мои заказы» оно не должно.
+.help_link {
+  @include s.text_body_2;
+
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text_secondary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--text_default);
+  }
+
+  @include s.focus_ring;
+}
+
+.help_title {
+  @include s.text_header_3;
+
+  color: var(--text_default);
+}
+
+.help_body {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+
+  @include s.text_body_1;
+
+  color: var(--text_secondary);
+}
+
+.help_list {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+  padding-left: s.gap(5);
+  list-style: disc;
+}
