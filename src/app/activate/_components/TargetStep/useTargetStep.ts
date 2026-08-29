@@ -2,7 +2,7 @@
 
 import { FormEvent, useMemo, useState } from 'react';
 
-import { throttleMessage } from '@/store/api/errors';
+import { apiErrorMessage } from '@/store/api/errors';
 import {
   useActivateMutation,
   useCheckAccountMutation,
@@ -18,6 +18,14 @@ import { normalizeTarget, previewEmail, validateTarget } from '@/utils/helpers';
  *  активацию у покупателя. */
 type TargetKind = TargetOptionDto['kind'];
 
+/** Запасной текст: связи нет и сказать по существу нечего.
+ *
+ *  Именно запасной. Бэкенд любой отказ по существу отдаёт с кодом 200 и
+ *  человеческим текстом, поэтому сначала пробуем показать его
+ *  (`apiErrorMessage`), а «не получилось связаться» оставляем на случай,
+ *  когда тела ответа нет вовсе: сеть, CORS, убитый воркер. Раньше этот
+ *  текст стоял на всех исключениях подряд и подменял собой настоящую
+ *  причину — покупатель жал «ещё раз», хотя ключ был уже потрачен. */
 const NETWORK_ERROR = 'Не получилось связаться с сервером. Попробуйте ещё раз.';
 
 interface Params {
@@ -109,18 +117,27 @@ export function useTargetStep({
         value: normalizeTarget(option.kind, value),
       }).unwrap();
 
-      if (!response.supported) {
-        setUnchecked(true);
-        setAccount(response.account);
+      // `success` — первым. Отказ по существу приезжает без остальных
+      // полей, и `supported: undefined` читался как «поставщик не умеет
+      // проверять»: покупателю показывали мягкое «проверить заранее не
+      // получилось» и кнопку «Подтвердить и активировать» — вместо того,
+      // чтобы сказать, что с данными не так.
+      if (!response.success) {
+        setError(response.error || 'Проверка не прошла. Попробуйте ещё раз.');
         return;
       }
-      if (!response.success || !response.account) {
+      if (!response.supported) {
+        setUnchecked(true);
+        setAccount(response.account ?? null);
+        return;
+      }
+      if (!response.account) {
         setError(response.error || 'Проверка не прошла. Попробуйте ещё раз.');
         return;
       }
       setAccount(response.account);
     } catch (exception) {
-      setError(throttleMessage(exception) ?? NETWORK_ERROR);
+      setError(apiErrorMessage(exception, NETWORK_ERROR));
     }
   };
 
@@ -137,9 +154,21 @@ export function useTargetStep({
 
       // Отказ на запуске — тоже активация со статусом failed: экран
       // результата покажет её причину и подскажет, что делать дальше.
+      //
+      // Но не всякий отказ доходит до задачи. «Ключ уже активирован»,
+      // «карта использована», «формат не тот» — это отказ *до* неё, и
+      // активации в ответе нет вовсе. Раньше сюда уезжал `undefined`, и
+      // экран результата открывался пустым, ничего не объяснив.
+      if (!response.activation) {
+        setError(
+          response.error ||
+            'Не получилось запустить активацию. Напишите в поддержку.',
+        );
+        return;
+      }
       onStarted(response.activation);
     } catch (exception) {
-      setError(throttleMessage(exception) ?? NETWORK_ERROR);
+      setError(apiErrorMessage(exception, NETWORK_ERROR));
     }
   };
 

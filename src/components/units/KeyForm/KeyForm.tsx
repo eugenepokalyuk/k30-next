@@ -4,7 +4,7 @@ import React, { FC, FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button, Field } from '@/components/ui';
-import { throttleMessage } from '@/store/api/errors';
+import { apiErrorMessage } from '@/store/api/errors';
 import { useVerifyKeyMutation } from '@/store/api/k30Api';
 import { useAppDispatch } from '@/store/hooks';
 import { keyVerified } from '@/store/slices/activation';
@@ -63,8 +63,10 @@ export const KeyForm: FC = () => {
       // Сеть или бэкенд отвалились: про ключ мы ничего не узнали — так
       // и говорим, а не «ключ неверный».
       setError(
-        throttleMessage(exception) ??
+        apiErrorMessage(
+          exception,
           'Не получилось связаться с сервером. Попробуйте ещё раз.',
+        ),
       );
     }
   };

@@ -189,18 +189,26 @@ export interface AccountDto {
 
 export interface CheckAccountResponse {
   success: boolean;
-  /** Поставщик такой проверки не умеет — шаг просто пропускается. */
-  supported: boolean;
+  /** Поставщик такой проверки не умеет — шаг просто пропускается.
+   *
+   *  Необязательное: отказ по существу («формат не тот», «ключ не
+   *  найден») приезжает с кодом 200 и одним только `success: false`, без
+   *  полей полезного ответа. Читать `supported` до `success` нельзя —
+   *  `undefined` неотличим от «не умеет», и отказ превращался в
+   *  «проверить не удалось, подтверждайте так». */
+  supported?: boolean;
   error?: string;
   error_code?: string;
-  account: AccountDto | null;
+  account?: AccountDto | null;
 }
 
 export interface ActivateResponse {
   success: boolean;
   error?: string;
   error_code?: string;
-  activation: ActivationDto;
+  /** Необязательное по той же причине, что и выше: отказ до запуска
+   *  задачи активацией не является, и записи о нём нет. */
+  activation?: ActivationDto;
 }
 
 export interface ActivationStatusResponse {

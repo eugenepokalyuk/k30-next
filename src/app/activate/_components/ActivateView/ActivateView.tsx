@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 
 import { KeyCode, Notice, Steps } from '@/components/ui';
 import { KeyForm } from '@/components/units';
-import { throttleMessage } from '@/store/api/errors';
+import { apiErrorMessage } from '@/store/api/errors';
 import { useVerifyKeyMutation } from '@/store/api/k30Api';
 import type { ActivationDto } from '@/store/api/types';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -89,8 +89,10 @@ export const ActivateView: FC = () => {
         );
       } catch (exception) {
         setError(
-          throttleMessage(exception) ??
+          apiErrorMessage(
+            exception,
             'Не получилось связаться с сервером. Обновите страницу.',
+          ),
         );
       }
     };
