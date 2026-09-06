@@ -16,7 +16,7 @@ interface Props {
   onClose: () => void;
 }
 
-/** Выезжающая панель меню на узких экранах. */
+/** Выезжающая панель меню на узких экранах */
 export const MobileMenu: FC<Props> = ({ isOpen, onClose }) => {
   const { telegram_support_url } = useSiteSettings();
 

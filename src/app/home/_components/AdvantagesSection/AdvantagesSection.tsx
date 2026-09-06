@@ -3,30 +3,10 @@
 import React, { FC } from 'react';
 
 import { Reveal } from '@/components/motion';
-import {
-  BoltIcon,
-  CartIcon,
-  ChatIcon,
-  CheckIcon,
-  KeyIcon,
-  RefreshIcon,
-  ShieldIcon,
-  SupportIcon,
-} from '@/components/ui';
+import { getBlockIcon } from '@/components/ui';
 import { useAdvantagesQuery } from '@/store/api/k30Api';
 
 import classes from './AdvantagesSection.module.scss';
-
-const icons: Record<string, FC<{ size?: number; className?: string }>> = {
-  bolt: BoltIcon,
-  shield: ShieldIcon,
-  refresh: RefreshIcon,
-  support: SupportIcon,
-  key: KeyIcon,
-  check: CheckIcon,
-  chat: ChatIcon,
-  cart: CartIcon,
-};
 
 export const AdvantagesSection: FC = () => {
   const { data } = useAdvantagesQuery();
@@ -38,7 +18,7 @@ export const AdvantagesSection: FC = () => {
       <div className={classes.container}>
         <ul className={classes.grid}>
           {data.map((item, index) => {
-            const Icon = icons[item.icon] ?? BoltIcon;
+            const Icon = getBlockIcon(item.icon);
 
             return (
               <Reveal

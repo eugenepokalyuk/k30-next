@@ -44,13 +44,13 @@ export const metadata: Metadata = {
   },
   icons: {
     // basePath к ссылкам в метаданных Next не подставляет — на Pages без
-    // своего домена сайт лежит в подкаталоге, и иконка искалась бы в корне.
+    // своего домена сайт лежит в подкаталоге, и иконка искалась бы в корне
     icon: [{ url: `${basePath}/favicon.svg`, type: 'image/svg+xml' }],
     shortcut: `${basePath}/favicon.svg`,
   },
 };
 
-// Тема стоит на <html> до первой отрисовки.
+// Тема стоит на <html> до первой отрисовки
 const themeScript = getColorSchemeScript({
   key: THEME_STORAGE_KEY,
   attribute: 'data-theme',
@@ -63,21 +63,17 @@ export default function RootLayout({ children }: Props) {
   return (
     // suppressHydrationWarning — про тему и только про неё: скрипт ниже
     // меняет data-theme и color-scheme на <html> до гидрации, и React
-    // честно жалуется на расхождение с разметкой сервера.
+    // честно жалуется на расхождение с разметкой сервера
     <html lang="ru" data-theme={DEFAULT_THEME} suppressHydrationWarning>
       <body className={getFonts()}>
-        {/* Через next/script, а не голым <script>: обычный тег React при
-            клиентском рендере не исполняет и пишет об этом в консоль, а
-            `beforeInteractive` кладёт код в разметку до гидрации — ровно
-            туда, где он и должен сработать.
-            */}
+        {/* next/script, а не голый <script>: beforeInteractive кладёт код
+            в разметку до гидрации, где он и должен сработать */}
         <Script id="theme" strategy="beforeInteractive">
           {themeScript}
         </Script>
 
-        {/* Блоки с анимацией появления приезжают в html уже с opacity 0 —
-            их показывает framer-motion после гидрации.
-            */}
+        {/* Блоки анимации приезжают с opacity 0 — их показывает
+            framer-motion после гидрации */}
         <noscript>
           <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
         </noscript>

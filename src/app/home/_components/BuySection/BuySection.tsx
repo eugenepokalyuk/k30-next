@@ -8,10 +8,7 @@ import { useSiteSettings } from '@/lib/hooks';
 
 import classes from './BuySection.module.scss';
 
-/**
- *  Блок «Купить ключ»: своей оплаты у витрины нет, ключи продаются на
- *  Яндекс Маркете и в телеграме.
- */
+/** Своей оплаты у витрины нет: ключи продаются на Маркете и в телеграме */
 export const BuySection: FC = () => {
   const {
     buy_is_enabled,

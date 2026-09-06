@@ -13,7 +13,7 @@ interface Props {
   onSelect: (kind: TargetOptionDto['kind']) => void;
 }
 
-/** Выбор того, чем покупатель подтвердит аккаунт. */
+/** Выбор того, чем покупатель подтвердит аккаунт */
 export const KindChooser: FC<Props> = ({
   targets,
   selected,

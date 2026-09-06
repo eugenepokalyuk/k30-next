@@ -13,7 +13,7 @@ interface Props {
   onNavigate: () => void;
 }
 
-/** Кнопка «Войти» или «Кабинет». */
+/** Кнопка «Войти» или «Кабинет» */
 export const AuthButton: FC<Props> = ({ onNavigate }) => {
   const isAuthorized = useAppSelector(selectIsAuthorized);
   const isReady = useAppSelector(selectIsAuthReady);

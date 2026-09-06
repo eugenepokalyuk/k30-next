@@ -1,21 +1,28 @@
 'use client';
 
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
+import Image from 'next/image';
+import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { duration, ease } from '@/components/motion';
 import { Notice, Section } from '@/components/ui';
 import { useServicesQuery } from '@/store/api/k30Api';
+import type { ServiceDto } from '@/store/api/types';
 import { formatPrice, formatPriceFrom } from '@/utils/helpers';
 
 import classes from './ServicesSection.module.scss';
+import { ServiceModal } from './ServiceModal';
 
-/**
- *  Список сервисов приходит с бэкенда: их заводит менеджер в админке, и
- *  захардкоженный список разъезжался бы с тем, что реально в продаже.
- */
+/** Список сервисов из админки: захардкоженный разъедется с продажами */
 export const ServicesSection: FC = () => {
   const { data, isLoading, isError } = useServicesQuery();
+
+  const [opened, setOpened] = useState<ServiceDto | null>(null);
+
+  // Слот под логотип одинаковый у всех карточек ряда, иначе название на
+  // карточке с картинкой уезжает вниз. Логотипов нет ни у кого — не резервируем
+  const hasLogos = Boolean(data?.some((service) => service.logo));
 
   return (
     <Section
@@ -35,16 +42,12 @@ export const ServicesSection: FC = () => {
         </Notice>
       )}
 
-      <ul className={classes.grid}>
+      <ul className={clsx(classes.grid, { [classes.with_logos]: hasLogos })}>
         {isLoading &&
           Array.from({ length: 4 }).map((_, index) => (
             <li key={index} className={classes.skeleton} />
           ))}
 
-        {/* Карточки появляются уже после ответа сервера, поэтому задержка
-            считается от индекса, а не вариантами родителя: на момент его
-            появления детей ещё нет.
-            */}
         <AnimatePresence>
           {data?.map((service, index) => {
             const priceFrom = formatPriceFrom(service.plans);
@@ -68,22 +71,44 @@ export const ServicesSection: FC = () => {
                     : undefined
                 }
               >
+                <button
+                  type="button"
+                  className={classes.opener}
+                  onClick={() => setOpened(service)}
+                >
+                  <span className={classes.opener_label}>
+                    Тарифы и цены: {service.name}
+                  </span>
+                </button>
+
                 <div className={classes.head}>
-                  <p className={classes.name}>
-                    <span className={classes.dot} />
-                    {service.name}
-                  </p>
-                  {priceFrom && (
-                    <p className={classes.price_from}>{priceFrom}</p>
-                  )}
+                  <span className={classes.mark}>
+                    {service.logo ? (
+                      <Image
+                        src={service.logo}
+                        alt=""
+                        width={48}
+                        height={48}
+                        className={classes.logo}
+                      />
+                    ) : (
+                      <span className={classes.dot} />
+                    )}
+                  </span>
+
+                  <div className={classes.head_text}>
+                    <p className={classes.name}>{service.name}</p>
+
+                    {priceFrom && (
+                      <p className={classes.price_from}>{priceFrom}</p>
+                    )}
+                  </div>
                 </div>
                 {service.tagline && (
                   <p className={classes.tagline}>{service.tagline}</p>
                 )}
 
-                {/* Наличие приходит флагом, а не числом: точный остаток
-                    бэкенд не отдаёт — по нему видны обороты.
-                    */}
+                {/* Наличие флагом, а не числом: по остатку видны обороты */}
                 <ul className={classes.plans}>
                   {service.plans.map((plan) => (
                     <li key={plan.slug} className={classes.plan}>
@@ -103,6 +128,8 @@ export const ServicesSection: FC = () => {
           })}
         </AnimatePresence>
       </ul>
+
+      <ServiceModal service={opened} onClose={() => setOpened(null)} />
     </Section>
   );
 };

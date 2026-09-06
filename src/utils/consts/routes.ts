@@ -8,6 +8,6 @@ export const Routes = {
   Faq: '/#faq',
 };
 
-/** Страница активации с уже проверенным ключом. */
+/** Страница активации с уже проверенным ключом */
 export const activateRoute = (code: string) =>
   `${Routes.Activate}?key=${encodeURIComponent(code)}`;

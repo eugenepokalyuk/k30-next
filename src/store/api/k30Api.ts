@@ -25,6 +25,7 @@ import type {
   EmailCodeRequestDto,
   EmailLoginResponse,
   FaqEntryDto,
+  HowStepDto,
   OrderDto,
   ServiceDto,
   SiteSettingsDto,
@@ -48,7 +49,7 @@ const rawBaseQuery = fetchBaseQuery({
   },
 });
 
-/** Обёртка, которая один раз обновляет access по refresh и повторяет запрос. */
+/** Обёртка, которая один раз обновляет access по refresh и повторяет запрос */
 const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
@@ -91,12 +92,12 @@ export const k30Api = createApi({
       query: () => 'services/',
     }),
 
-    /** Шаг 1. */
+    /** Шаг 1 */
     verifyKey: builder.mutation<VerifyKeyResponse, string>({
       query: (key) => ({ url: 'verify-key', method: 'POST', body: { key } }),
     }),
 
-    /** Шаг 2. */
+    /** Шаг 2 */
     checkAccount: builder.mutation<
       CheckAccountResponse,
       { key: string; kind: TargetKind; value: string }
@@ -104,17 +105,17 @@ export const k30Api = createApi({
       query: (body) => ({ url: 'check-account', method: 'POST', body }),
     }),
 
-    /** Шаг 3. */
+    /** Шаг 3 */
     activate: builder.mutation<
       ActivateResponse,
       { key: string; kind: TargetKind; value: string }
     >({
       query: (body) => ({ url: 'activate', method: 'POST', body }),
-      // Заказ в кабинете заводится по итогу активации — списки перечитать.
+      // Заказ в кабинете заводится по итогу активации — списки перечитать
       invalidatesTags: ['Orders', 'Activations'],
     }),
 
-    /** Шаг 4. */
+    /** Шаг 4 */
     activationStatus: builder.query<ActivationStatusResponse, string>({
       query: (id) => `activations/${id}`,
       providesTags: ['Activations'],
@@ -129,29 +130,33 @@ export const k30Api = createApi({
     }),
 
     /**
-     *  Ссылки и подписи витрины из админки: телеграм, блок покупки, круглая
-     *  кнопка в углу.
+     *  Ссылки и подписи витрины из админки
      */
     siteSettings: builder.query<SiteSettingsDto, void>({
       query: () => 'site-settings',
     }),
 
-    /** Частые вопросы с главной. */
+    /** Частые вопросы с главной */
     faq: builder.query<FaqEntryDto[], void>({
       query: () => 'faq',
     }),
 
-    /** Плитки блока «Почему мы». */
+    /** Плитки блока «Почему мы» */
     advantages: builder.query<AdvantageDto[], void>({
       query: () => 'advantages',
     }),
 
-    /** Что показать на экране входа. */
+    /** Шаги блока «Как это работает» */
+    howSteps: builder.query<HowStepDto[], void>({
+      query: () => 'how-steps',
+    }),
+
+    /** Что показать на экране входа */
     authOptions: builder.query<AuthOptionsDto, void>({
       query: () => 'auth/options',
     }),
 
-    /** Шаг 1 входа по почте: отправить код. */
+    /** Шаг 1 входа по почте: отправить код */
     requestEmailCode: builder.mutation<EmailCodeRequestDto, string>({
       query: (email) => ({
         url: 'auth/email/request',
@@ -160,7 +165,7 @@ export const k30Api = createApi({
       }),
     }),
 
-    /** Шаг 2: код из письма. */
+    /** Шаг 2: код из письма */
     verifyEmailCode: builder.mutation<
       EmailLoginResponse,
       { email: string; code: string }
@@ -168,9 +173,8 @@ export const k30Api = createApi({
       query: (body) => ({ url: 'auth/email/verify', method: 'POST', body }),
 
       /**
-       *  Токены кладём здесь же, рядом с телеграмным входом: способов войти
-       *  два, а место, где начинается сессия, должно быть одно — иначе
-       *  следующий способ снова забудет записать refresh на диск.
+       *  Токены здесь же, рядом с телеграмным входом: способов войти два,
+       *  а место старта сессии должно быть одно
        */
       async onQueryStarted(_body, { dispatch, queryFulfilled }) {
         try {
@@ -178,25 +182,23 @@ export const k30Api = createApi({
           dispatch(signedIn(data));
           authStorage.write(data.refresh);
         } catch {
-          // Неверный код и сеть — оба случая показывает форма входа по
-          // тексту ошибки мутации, второй раз объяснять их нечем.
+          // Ошибку показывает форма входа по тексту мутации
         }
       },
     }),
 
-    /** Шаг 1 входа через телеграм: получить одноразовую ссылку на бота. */
+    /** Шаг 1 входа через телеграм: получить одноразовую ссылку на бота */
     telegramLoginStart: builder.mutation<TelegramStartDto, void>({
       query: () => ({ url: 'auth/telegram/start', method: 'POST' }),
     }),
 
-    /** Шаг 2: ждём, пока человек нажмёт «Запустить» в боте. */
+    /** Шаг 2: ждём, пока человек нажмёт «Запустить» в боте */
     telegramLoginStatus: builder.query<TelegramStatusResponse, string>({
       query: (nonce) =>
         `auth/telegram/status?nonce=${encodeURIComponent(nonce)}`,
 
       /**
-       *  Подтверждение приходит в ответе опроса — и вход завершается здесь
-       *  же, а не в компоненте.
+       *  Подтверждение приходит в ответе опроса, вход завершается здесь
        */
       async onQueryStarted(_nonce, { dispatch, queryFulfilled }) {
         try {
@@ -208,8 +210,7 @@ export const k30Api = createApi({
           dispatch(signedIn(data as AuthResponse));
           authStorage.write(data.refresh);
         } catch {
-          // Сеть или просроченная заявка: опрос повторится сам, а что
-          // показать — решает экран входа по статусу.
+          // Опрос повторится сам, что показать — решает экран входа
         }
       },
     }),
@@ -229,13 +230,13 @@ export const k30Api = createApi({
       providesTags: ['Orders'],
     }),
 
-    /** Что работает прямо сейчас. */
+    /** Что работает прямо сейчас */
     mySubscriptions: builder.query<SubscriptionDto[], void>({
       query: () => 'me/subscriptions',
       providesTags: ['Orders'],
     }),
 
-    /** История попыток активации. */
+    /** История попыток активации */
     myActivations: builder.query<ActivationDto[], void>({
       query: () => 'me/activations',
       providesTags: ['Activations'],
@@ -248,6 +249,7 @@ export const {
   useSiteSettingsQuery,
   useFaqQuery,
   useAdvantagesQuery,
+  useHowStepsQuery,
   useAuthOptionsQuery,
   useRequestEmailCodeMutation,
   useVerifyEmailCodeMutation,

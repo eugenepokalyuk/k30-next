@@ -16,15 +16,18 @@ import { navLinks } from './navLinks';
 import { useHeaderState } from './useHeaderState';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 
-/** Шапка сайта. */
+/** Шапка сайта */
 export const Header: FC = () => {
   const { isScrolled, isOpen, toggle, close } = useHeaderState();
-  // Контакт поддержки — из админки, без пересборки статики.
+  // Контакт поддержки — из админки, без пересборки статики
   const { telegram_support_url } = useSiteSettings();
 
   return (
     <header
-      className={clsx(classes.header, { [classes.scrolled]: isScrolled })}
+      className={clsx(classes.header, {
+        [classes.scrolled]: isScrolled,
+        [classes.open]: isOpen,
+      })}
     >
       <div className={classes.container}>
         <Logo className={classes.logo} />

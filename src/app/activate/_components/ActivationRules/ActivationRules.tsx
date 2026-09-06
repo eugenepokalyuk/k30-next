@@ -10,12 +10,12 @@ import classes from './ActivationRules.module.scss';
 
 interface Props {
   serviceName: string;
-  /** Текст правил из админки — свой у каждого сервиса. */
+  /** Текст правил из админки — свой у каждого сервиса */
   rules: string;
   onAccept: () => void;
 }
 
-/** Правила активации: последнее окно, где покупателя ещё можно остановить. */
+/** Правила активации: последнее окно, где покупателя ещё можно остановить */
 export const ActivationRules: FC<Props> = ({
   serviceName,
   rules,

@@ -21,12 +21,12 @@ interface Props extends PropsWithChildren {
   className?: string;
   /**
    *  Инлайновые переменные вроде --accent: цвет сервиса приходит из
-   *  админки, и в классах его не выразить.
+   *  админки, и в классах его не выразить
    */
   style?: React.CSSProperties;
 }
 
-/** Список, элементы которого появляются по очереди. */
+/** Список, элементы которого появляются по очереди */
 export const Stagger: FC<Props> = ({
   as = 'div',
   className,
@@ -49,7 +49,7 @@ export const Stagger: FC<Props> = ({
   );
 };
 
-/** Элемент такого списка. */
+/** Элемент такого списка */
 export const StaggerItem: FC<Props> = ({
   as = 'div',
   className,

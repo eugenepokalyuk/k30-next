@@ -9,14 +9,14 @@ import classes from './TargetStep.module.scss';
 
 interface Props {
   account: AccountDto | null;
-  /** Поставщик проверять не умеет — тон и текст меняются целиком. */
+  /** Поставщик проверять не умеет — тон и текст меняются целиком */
   isUnchecked: boolean;
   note: string;
   isStarting: boolean;
   onConfirm: () => void;
 }
 
-/** Последний экран перед активацией: на какой аккаунт пойдёт подписка. */
+/** Последний экран перед активацией: на какой аккаунт пойдёт подписка */
 export const AccountConfirmation: FC<Props> = ({
   account,
   isUnchecked,

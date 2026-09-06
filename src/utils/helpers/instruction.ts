@@ -1,4 +1,4 @@
-/** Разбор шаблона инструкции из админки. */
+/** Разбор шаблона инструкции из админки */
 
 export interface InstructionParagraph {
   type: 'paragraph';
@@ -24,7 +24,7 @@ export function parseInstruction(source: string): InstructionBlock[] {
       const bullets = lines.filter((line) => line.startsWith('- '));
 
       // Блок считаем списком, только если списочные все его строки — иначе
-      // абзац с одним тире посередине развалился бы на пункты.
+      // абзац с одним тире посередине развалился бы на пункты
       if (bullets.length === lines.length) {
         return { type: 'list', items: bullets.map((line) => line.slice(2)) };
       }

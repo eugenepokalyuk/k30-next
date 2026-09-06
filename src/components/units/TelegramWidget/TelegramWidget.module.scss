@@ -15,11 +15,10 @@
   border-radius: 50%;
 
   background: linear-gradient(135deg, s.$primary, s.$primary_light);
-  color: var(--button_primary_text);
+  color: var(--text_on_primary_fill);
   box-shadow: var(--box_shadow_primary);
 
-  // Зона нажатия здесь не добирается миксином `tap_target`: он ставит
-  // `position: relative` и вышиб бы кнопку из угла обратно в поток.
+  // Без миксина tap_target: его position: relative вышибет кнопку из угла
 
   &:focus-visible {
     @include s.focus_ring;
@@ -27,8 +26,7 @@
 }
 
 .icon {
-  // Самолётик в квадратном viewBox визуально смещён вправо-вниз: сдвигаем
-  // обратно, иначе он не в центре круга.
+  // Самолётик в квадратном viewBox смещён вправо-вниз, сдвигаем обратно
   transform: translate(-1px, 1px);
 }
 

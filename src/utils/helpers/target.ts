@@ -1,4 +1,4 @@
-/** Проверка данных активации на стороне витрины. */
+/** Проверка данных активации на стороне витрины */
 
 import type { TargetKind } from '@/store/api/types';
 
@@ -11,7 +11,7 @@ const MIN_TOKEN_LENGTH = 20;
 
 const ID_KINDS: TargetKind[] = ['account_id', 'org_id', 'user_id'];
 
-/** Приводит ввод к тому виду, в котором его ждёт бэкенд. */
+/** Приводит ввод к тому виду, в котором его ждёт бэкенд */
 export function normalizeTarget(kind: TargetKind, raw: string): string {
   const value = (raw ?? '').trim();
   if (!value) return '';
@@ -24,7 +24,7 @@ export function normalizeTarget(kind: TargetKind, raw: string): string {
   }
 
   if (kind === 'access_token') {
-    // Частая ошибка: в поле «токен» вставляют весь JSON сессии.
+    // Частая ошибка: в поле «токен» вставляют весь JSON сессии
     if (value.startsWith('{')) {
       const token = readToken(value);
       if (token) return token;
@@ -35,7 +35,7 @@ export function normalizeTarget(kind: TargetKind, raw: string): string {
   return value;
 }
 
-/** Что не так с введённым. */
+/** Что не так с введённым */
 export function validateTarget(kind: TargetKind, raw: string): string | null {
   const value = normalizeTarget(kind, raw);
   if (!value) return 'Заполните это поле.';
@@ -71,7 +71,7 @@ export function validateTarget(kind: TargetKind, raw: string): string | null {
   return null;
 }
 
-/** Почта из данных, если её видно локально. */
+/** Почта из данных, если её видно локально */
 export function previewEmail(kind: TargetKind, raw: string): string {
   const value = normalizeTarget(kind, raw);
   if (!value) return '';
@@ -133,7 +133,7 @@ function emailFromJwt(token: string): string {
   return '';
 }
 
-/** Почта для показа: «b***r@example.com». */
+/** Почта для показа: «b***r@example.com» */
 export function maskEmail(email: string): string {
   const value = (email ?? '').trim();
   if (!value.includes('@')) return value;

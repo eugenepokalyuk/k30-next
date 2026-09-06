@@ -19,12 +19,12 @@ import { Instruction } from '../Instruction/Instruction';
 interface Props {
   code: string;
   service: ServiceActivationDto;
-  /** Что просит поставщик. */
+  /** Что просит поставщик */
   targets: TargetOptionDto[];
   onStarted: (activation: ActivationDto) => void;
 }
 
-/** Шаг «Аккаунт»: куда выдать подписку. */
+/** Шаг «Аккаунт»: куда выдать подписку */
 export const TargetStep: FC<Props> = ({
   code,
   service,
@@ -72,7 +72,7 @@ export const TargetStep: FC<Props> = ({
         onChange={step.setValue}
         disabled={step.isBusy}
         rows={option.input === 'textarea' ? 8 : undefined}
-        // Секреты и идентификаторы автозаменой только портятся.
+        // Секреты и идентификаторы автозаменой только портятся
         autoCapitalize="none"
         spellCheck={false}
         autoComplete="off"

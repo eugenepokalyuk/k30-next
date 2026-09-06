@@ -15,9 +15,10 @@
 
   background: linear-gradient(135deg, s.$primary, s.$primary_light);
   border-radius: s.$br_2;
-  // Буква лежит на фирменной заливке, а не на фоне страницы: цвет тот
-  // же, что у текста на кнопке, и он тёмный в обеих темах.
-  color: var(--button_primary_text);
+  // Буква лежит на фирменной заливке, а не на фоне страницы, и потому
+  // тёмная в обеих темах. Токен свой, не кнопочный: подпись кнопки на
+  // светлой теме белая, а здесь белым по циану не прочитать
+  color: var(--text_on_primary_fill);
 
   font-family: var(--font-manrope), sans-serif;
   font-weight: s.$bold;

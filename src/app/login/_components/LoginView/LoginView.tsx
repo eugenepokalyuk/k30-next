@@ -13,7 +13,7 @@ import { Routes } from '@/utils/consts';
 
 import classes from './LoginView.module.scss';
 
-/** Вход: код на почту и подтверждение в телеграм-боте. */
+/** Вход: код на почту и подтверждение в телеграм-боте */
 export const LoginView: FC = () => {
   const router = useRouter();
   const isAuthorized = useAppSelector(selectIsAuthorized);
@@ -24,7 +24,7 @@ export const LoginView: FC = () => {
   const mail = useEmailLogin();
 
   // Один переход на три случая: вошедший вернулся кнопкой «назад»,
-  // подтверждение поймал опрос бота, код из письма подошёл.
+  // подтверждение поймал опрос бота, код из письма подошёл
   useEffect(() => {
     if (isAuthorized) router.replace(Routes.Account);
   }, [isAuthorized, router]);
@@ -163,7 +163,7 @@ export const LoginView: FC = () => {
             {telegram.link ? (
               // Кнопка ведёт на ту же заявку: если вкладку с телеграмом
               // закрыли или её съел блокировщик, второй попытке не нужен
-              // новый nonce — старый ещё жив.
+              // новый nonce — старый ещё жив
               <Button
                 fullWidth
                 href={telegram.link.url}

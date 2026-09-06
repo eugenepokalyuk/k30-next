@@ -5,13 +5,13 @@ import { useEffect, useState } from 'react';
 import { useActivationStatusQuery } from '@/store/api/k30Api';
 import type { ActivationDto } from '@/store/api/types';
 
-/** Опрос статуса активации. */
+/** Опрос статуса активации */
 
 const TERMINAL = ['success', 'failed', 'cancelled', 'review'];
 
 interface Result {
   activation: ActivationDto | null;
-  /** Секунд с начала активации — для «ждём дольше обычного». */
+  /** Секунд с начала активации — для «ждём дольше обычного» */
   elapsed: number;
   isPolling: boolean;
 }
@@ -24,13 +24,13 @@ export function useActivationPolling(
 
   const isDone = Boolean(initial && TERMINAL.includes(initial.status));
 
-  // Интервал опроса берём из последнего ответа.
+  // Интервал опроса берём из последнего ответа
   const interval = isDone ? 0 : Math.max(1, initial?.poll_after ?? 3) * 1000;
 
   const { data } = useActivationStatusQuery(id ?? '', {
     skip: !id || isDone,
     pollingInterval: interval,
-    // Вкладку с активацией часто уводят в фон, пока ждут.
+    // Вкладку с активацией часто уводят в фон, пока ждут
     skipPollingIfUnfocused: true,
   });
 
@@ -39,7 +39,7 @@ export function useActivationPolling(
 
   // Отсчёт ведём от начала активации, а не от монтирования компонента:
   // покупатель мог закрыть вкладку и вернуться по ссылке, и «ждём три
-  // секунды» тогда было бы неправдой.
+  // секунды» тогда было бы неправдой
   useEffect(() => {
     if (isDone || !createdAt) return;
 

@@ -11,7 +11,7 @@
   padding: 0 var(--gap_side);
 }
 
-// Ряд, который на узком экране становится колонкой.
+// Ряд, который на узком экране становится колонкой
 @mixin stack_below($breakpoint: md) {
   @include media_down($breakpoint) {
     flex-direction: column;
@@ -68,9 +68,6 @@
 }
 
 // === Typography ===
-
-// Размеры заголовков тянутся вместе с шириной экрана, а не прыгают на
-// брейкпоинте.
 
 @mixin text_display {
   font-family: var(--font-manrope), sans-serif;
@@ -132,7 +129,6 @@
   line-height: 16px;
 }
 
-// Мелкий разряженный капс — надзаголовки секций.
 @mixin text_overline {
   font-family: var(--font-inter), sans-serif;
   font-weight: $medium;
@@ -143,8 +139,7 @@
   text-transform: uppercase;
 }
 
-// Код ключа: моноширинный, чтобы группы символов вставали столбиком и
-// покупателю было проще сверить их с тем, что ему прислали.
+// Моноширинный: группы символов встают столбиком, их проще сверить
 @mixin text_mono {
   font-family: var(--font-mono), 'SF Mono', monospace;
   font-weight: $medium;
@@ -156,7 +151,6 @@
 
 // === Effects ===
 
-// Мягкое свечение фирменным цветом под герой-блоком и активными карточками.
 @mixin glow($size: 480px) {
   position: absolute;
   content: '';
@@ -177,13 +171,12 @@
   border-radius: $br_5;
 }
 
-// Кольцо фокуса.
 @mixin focus_ring($offset: 3px) {
   outline: 2px solid var(--stroke_primary);
   outline-offset: $offset;
 }
 
-// Минимальная зона нажатия 44×44 по гайдлайнам Apple и Google.
+// Минимальная зона нажатия 44×44 по гайдлайнам Apple и Google
 @mixin tap_target($size: 44px) {
   position: relative;
 

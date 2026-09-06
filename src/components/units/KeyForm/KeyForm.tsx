@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, FormEvent, useState } from 'react';
+import React, { FC } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button, Field } from '@/components/ui';
@@ -13,21 +13,18 @@ import { formatKey, isKeyComplete } from '@/utils/helpers';
 
 import classes from './KeyForm.module.scss';
 
-/** Поле ввода ключа — вход во весь сценарий активации. */
 export const KeyForm: FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [verifyKey, { isLoading }] = useVerifyKeyMutation();
 
-  const [value, setValue] = useState('');
-  const [error, setError] = useState('');
+  const [value, setValue] = React.useState('');
+  const [error, setError] = React.useState('');
 
-  const submit = async (event: FormEvent) => {
+  const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError('');
 
-    // Длину проверяем на месте: слать заведомо неполный код на сервер
-    // значит тратить лимит запросов на каждую опечатку.
     if (!isKeyComplete(value)) {
       setError('Код состоит из 15 символов: K30-XXXX-XXXX-XXXXXX-X');
       return;
@@ -46,8 +43,6 @@ export const KeyForm: FC = () => {
           code: response.key.code,
           service: response.service,
           key: response.key,
-          // Состав формы приезжает уже здесь — страница активации откроется
-          // без второго запроса к бэкенду.
           targets: response.targets ?? [],
           canActivate: Boolean(response.can_activate),
           message: response.message ?? '',
@@ -56,8 +51,6 @@ export const KeyForm: FC = () => {
       );
       router.push(activateRoute(response.key.code));
     } catch (exception) {
-      // Сеть или бэкенд отвалились: про ключ мы ничего не узнали — так и
-      // говорим, а не «ключ неверный».
       setError(
         apiErrorMessage(
           exception,
@@ -82,15 +75,13 @@ export const KeyForm: FC = () => {
         inputClassName={classes.input}
         name="key"
         autoComplete="off"
-        // Автозамена выключена: код из букв и цифр iOS охотно правит на
-        // похожее слово, и это видно уже после отправки.
         autoCapitalize="characters"
         spellCheck={false}
         enterKeyHint="go"
       />
 
       <Button type="submit" size="large" loading={isLoading}>
-        Проверить ключ
+        {'Проверить ключ'}
       </Button>
     </form>
   );

@@ -10,19 +10,15 @@ import classes from './ServicesMarquee.module.scss';
 const SECONDS_PER_ITEM = 4;
 
 /**
- *  За цикл лента уезжает ровно на одну копию списка, поэтому остальные
- *  копии обязаны перекрывать всю видимую ширину — иначе за последним
- *  названием появляется пустота до начала следующего круга.
+ *  За цикл лента уезжает на одну копию списка, поэтому копии обязаны
+ *  перекрывать всю видимую ширину — иначе в конце круга зияет пустота
  */
 const MIN_ITEMS = 24;
 
 const repeatCount = (count: number) =>
   Math.min(12, Math.max(4, Math.ceil(MIN_ITEMS / count)));
 
-/**
- *  Список берётся из того же запроса, что и секция «Сервисы» ниже: RTK
- *  Query отдаёт его из кеша, второго обращения к бэкенду нет.
- */
+/** Тот же запрос, что и у секции «Сервисы»: RTK Query отдаёт из кеша */
 export const ServicesMarquee: FC = () => {
   const { data } = useServicesQuery();
 
@@ -37,8 +33,7 @@ export const ServicesMarquee: FC = () => {
         className={classes.track}
         animate={{ x: ['0%', `-${100 / repeats}%`] }}
         transition={{
-          // По одной копии, а не по всей ленте: от числа копий скорость
-          // зависеть не должна.
+          // По одной копии: от их числа скорость зависеть не должна
           duration: data.length * SECONDS_PER_ITEM,
           ease: 'linear',
           repeat: Infinity,

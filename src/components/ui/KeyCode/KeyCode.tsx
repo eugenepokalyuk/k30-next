@@ -11,7 +11,7 @@ interface Props {
   className?: string;
 }
 
-/** Код ключа моноширинным с кнопкой «скопировать». */
+/** Код ключа моноширинным с кнопкой «скопировать» */
 export const KeyCode: FC<Props> = ({ code, className }) => {
   const [copied, setCopied] = useState(false);
 
@@ -27,7 +27,7 @@ export const KeyCode: FC<Props> = ({ code, className }) => {
       setCopied(true);
     } catch {
       // Буфер недоступен (http без localhost, отказ в разрешении) — код всё
-      // равно виден и выделяется мышью.
+      // равно виден и выделяется мышью
     }
   };
 

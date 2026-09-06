@@ -11,15 +11,12 @@ export const store = configureStore({
     activation: activationReducer,
     auth: authReducer,
   },
-  // RTK Query держит на middleware кэш, дедупликацию запросов и статусы
-  // загрузки — без него хуки работать не будут.
   middleware: (getDefault) => getDefault().concat(k30Api.middleware),
   devTools: process.env.NODE_ENV !== 'production',
 });
 
-// Без этого RTK Query не узнаёт, что вкладку увели в фон и вернули обратно,
-// — и `skipPollingIfUnfocused` в опросе активации превращается из паузы в
-// замок.
+// Без этого RTK Query не узнает, что вкладку вернули из фона, и
+// skipPollingIfUnfocused в опросе активации станет из паузы замком
 if (typeof window !== 'undefined') {
   setupListeners(store.dispatch);
 }

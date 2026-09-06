@@ -3,12 +3,9 @@
 .hero {
   position: relative;
 
-  // Отступы тянутся вместе с экраном: на телефоне первый экран должен
-  // начинаться сразу, на большом мониторе — дышать.
   padding: clamp(s.gap(8), 7vw, s.gap(20)) 0 clamp(s.gap(10), 6vw, s.gap(16));
   overflow: hidden;
 
-  // Фиолетовое свечение за заголовком.
   &::before {
     @include s.glow;
 
@@ -31,7 +28,6 @@
   display: grid;
   gap: s.gap(10);
 
-  // Правая колонка появляется только когда под неё есть место.
   @include s.media_up(lg) {
     grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
     gap: s.gap(12);
@@ -55,24 +51,23 @@
 .title {
   @include s.text_display;
 
-  color: var(--text_default);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 
-  // Заголовок из двух строк не должен ломаться на «и подписка / ваша» —
-  // balance выравнивает строки по длине.
+  color: var(--text_default);
   text-wrap: balance;
 }
 
-// Градиент от фирменного к светлому его же оттенку.
-.accent {
-  background: linear-gradient(
-    115deg,
-    s.$primary_dark,
-    s.$primary 45%,
-    s.$primary_light
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+// Берём --primary, а не --text_primary: второй на светлой теме приглушён
+// до $primary_deep, и в заголовке этого кегля он читается как «цвет
+// поехал», а не как акцент
+.highlight {
+  padding: s.gap(1) s.gap(3);
+
+  background: var(--background_primary_10);
+  border-radius: s.$br_4;
+  color: var(--primary);
 }
 
 .description {

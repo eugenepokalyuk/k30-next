@@ -5,7 +5,7 @@ import { useLocalStorageState } from 'react-stateful-hooks';
 
 export type Theme = 'light' | 'dark';
 
-/** Ключ хранения. */
+/** Ключ хранения */
 export const THEME_STORAGE_KEY = 'k30-theme';
 
 export const DEFAULT_THEME: Theme = 'light';
@@ -16,7 +16,7 @@ interface ThemeState {
   set: (next: Theme) => void;
 }
 
-/** Тема оформления: выбор покупателя, сохранённый между заходами. */
+/** Тема оформления: выбор покупателя, сохранённый между заходами */
 export function useTheme(): ThemeState {
   const [theme, setTheme] = useLocalStorageState<Theme>(
     THEME_STORAGE_KEY,

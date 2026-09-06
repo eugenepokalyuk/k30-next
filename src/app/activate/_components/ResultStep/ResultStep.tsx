@@ -16,13 +16,13 @@ interface Props {
   activation: ActivationDto;
   /**
    *  Нужен только на экране успеха: памятка «подписки нет» своя у каждого
-   *  сервиса.
+   *  сервиса
    */
   service?: ServiceActivationDto;
   onRetry: () => void;
 }
 
-/** Чем всё кончилось. */
+/** Чем всё кончилось */
 export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
   if (activation.status === 'success') {
     return (
@@ -37,9 +37,7 @@ export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
             ? `Аккаунт: ${activation.account_email}. `
             : ''}
           {activation.message || ''}
-          {/* Когда у сервиса заведена памятка, тот же совет лежит в ней — и
-              там он подробнее, чем одна строка.
-              */}
+          {/* У сервиса с памяткой тот же совет лежит в ней, подробнее */}
           {service?.missing_subscription_help
             ? ''
             : ' Если сервис ещё не видит подписку — выйдите из аккаунта и зайдите снова.'}
@@ -79,7 +77,7 @@ export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
   }
 
   // «Разбираем вручную» — не провал: карта у поставщика заморожена, и
-  // «попробуйте ещё раз» здесь стоило бы второй карты.
+  // «попробуйте ещё раз» здесь стоило бы второй карты
   if (activation.status === 'review') {
     return (
       <div className={classes.result}>

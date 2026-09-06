@@ -20,7 +20,7 @@
   color: var(--text_default);
 }
 
-// Два поля в ряд на широком экране.
+// Два поля в ряд на широком экране
 .form {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

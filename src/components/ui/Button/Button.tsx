@@ -13,7 +13,7 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
   /**
    *  Внешняя ссылка — рендерим <a> вместо next/link, открываем в новой
-   *  вкладке.
+   *  вкладке
    */
   external?: boolean;
 }
@@ -41,7 +41,7 @@ export const Button: FC<Props> = ({
   );
 
   // Ссылке отдаём только onClick: остальные пропсы типизированы под
-  // <button> и на <a> дают невалидный html.
+  // <button> и на <a> дают невалидный html
   const linkProps = {
     className: cx,
     onClick: onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>,
@@ -69,7 +69,7 @@ export const Button: FC<Props> = ({
       {...rest}
       onClick={onClick}
       // Пока идёт запрос, кнопка выключена: второй клик ушёл бы вторым
-      // запросом к провайдеру, а тот спишет вторую подписку.
+      // запросом к провайдеру, а тот спишет вторую подписку
       disabled={disabled || loading}
       className={cx}
     >

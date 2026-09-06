@@ -25,26 +25,26 @@ import { ProgressStep } from '../ProgressStep/ProgressStep';
 import { ResultStep } from '../ResultStep/ResultStep';
 import { TargetStep } from '../TargetStep/TargetStep';
 
-/** Страница активации: три шага и один источник правды. */
+/** Страница активации: три шага и один источник правды */
 export const ActivateView: FC = () => {
   const params = useSearchParams();
   const dispatch = useAppDispatch();
   const [verifyKey, { isLoading }] = useVerifyKeyMutation();
 
   // Код нормализуем так же, как в поле на главной: ссылку пересылают в
-  // мессенджерах, и оттуда она приходит с чем угодно вокруг.
+  // мессенджерах, и оттуда она приходит с чем угодно вокруг
   const code = formatKey(params.get('key') ?? '');
   const cached = useAppSelector(selectActivationFor(code));
 
   const [error, setError] = useState('');
 
-  // Для какого ключа правила уже приняты.
+  // Для какого ключа правила уже приняты
   const [rulesAcceptedFor, setRulesAcceptedFor] = useState('');
 
-  // Какой код уже спрашивали.
+  // Какой код уже спрашивали
   const requested = useRef<string | null>(null);
 
-  // Прямая ссылка или перезагрузка: стора нет, спрашиваем бэкенд сами.
+  // Прямая ссылка или перезагрузка: стора нет, спрашиваем бэкенд сами
   useEffect(() => {
     if (!code || cached || requested.current === code) return;
     requested.current = code;
@@ -72,7 +72,7 @@ export const ActivateView: FC = () => {
             canActivate: Boolean(response.can_activate),
             message: response.message ?? '',
             // Если по ключу уже что-то идёт, бэкенд пришлёт активацию прямо
-            // здесь — и мы сразу откроем экран ожидания.
+            // здесь — и мы сразу откроем экран ожидания
             activation: response.activation ?? null,
           }),
         );
@@ -97,7 +97,7 @@ export const ActivateView: FC = () => {
   const onRetry = useCallback(() => {
     // Повтор начинается с той же формы, но данные вводятся заново: прошлые
     // мы у себя не держим, и это не оплошность — токен нужен ровно на один
-    // запрос.
+    // запрос
     dispatch(activationRetried());
   }, [dispatch]);
 
@@ -149,18 +149,15 @@ export const ActivateView: FC = () => {
           )}
 
           {/* Ключ найден, но активировать нельзя: уже активирован или
-              поставщик отказал.
-              */}
+              поставщик отказал */}
           {cached && !cached.canActivate && !activation && (
             <Notice tone="error" title="Активация недоступна">
               {cached.message || 'Напишите в поддержку — разберёмся.'}
             </Notice>
           )}
 
-          {/* Форма не рендерится, пока правила не приняты: окно поверх неё
-              покупатель закрыть не может, но и подсматривать поля под ним
-              незачем.
-              */}
+          {/* Пока правила не приняты, форму не рендерим: подсматривать
+              поля под окном незачем */}
           {cached?.service &&
             cached.canActivate &&
             !activation &&
@@ -226,6 +223,6 @@ function currentStep(
   if (!activation) return canActivate ? 'account' : 'key';
   // Законченная активация — тот же третий шаг, только закрытый: успех
   // отмечает галочкой `isComplete`, отказ оставляет шаг текущим, потому что
-  // с него ещё можно повторить попытку.
+  // с него ещё можно повторить попытку
   return 'progress';
 }

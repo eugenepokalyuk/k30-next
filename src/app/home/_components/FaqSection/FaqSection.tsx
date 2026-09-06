@@ -10,7 +10,7 @@ import { useFaqQuery } from '@/store/api/k30Api';
 import classes from './FaqSection.module.scss';
 import { FaqItem } from './FaqItem';
 
-/** Частые вопросы приезжают из админки. */
+/** Частые вопросы приезжают из админки */
 export const FaqSection: FC = () => {
   const { data } = useFaqQuery();
   const { telegram_support_url } = useSiteSettings();

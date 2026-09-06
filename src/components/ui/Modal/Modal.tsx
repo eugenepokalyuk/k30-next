@@ -8,13 +8,13 @@ import classes from './Modal.module.scss';
 interface Props extends PropsWithChildren {
   isOpen: boolean;
   title: string;
-  /** Можно ли закрыть окно мимо кнопок — Escape или щелчком по фону. */
+  /** Можно ли закрыть окно мимо кнопок — Escape или щелчком по фону */
   isDismissible?: boolean;
   onClose?: () => void;
   className?: string;
 }
 
-/** Модальное окно на нативном `<dialog>`. */
+/** Модальное окно на нативном `<dialog>` */
 export const Modal: FC<Props> = ({
   isOpen,
   title,
@@ -33,7 +33,7 @@ export const Modal: FC<Props> = ({
     if (!isOpen && dialog.open) dialog.close();
   }, [isOpen]);
 
-  // Щелчок мимо содержимого попадает в сам <dialog>: это фон.
+  // Щелчок мимо содержимого попадает в сам <dialog>: это фон
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog || !isDismissible) return;
@@ -52,7 +52,7 @@ export const Modal: FC<Props> = ({
       className={clsx(classes.dialog, className)}
       aria-label={title}
       onCancel={(event) => {
-        // Escape и системная кнопка «назад» приходят сюда же.
+        // Escape и системная кнопка «назад» приходят сюда же
         if (!isDismissible) {
           event.preventDefault();
           return;

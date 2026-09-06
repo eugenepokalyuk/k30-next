@@ -12,7 +12,7 @@ import { formatDate } from '@/utils/helpers';
 
 import classes from './OrdersList.module.scss';
 
-/** Коды источника с бэкенда — в понятные покупателю названия. */
+/** Коды источника с бэкенда — в понятные покупателю названия */
 const SOURCES: Record<string, string> = {
   site: 'Активация на сайте',
   telegram: 'Telegram',
@@ -22,7 +22,7 @@ const SOURCES: Record<string, string> = {
 
 /**
  *  Статус активации важнее статуса заказа: покупателя интересует «работает
- *  ли подписка», а не наш внутренний учёт.
+ *  ли подписка», а не наш внутренний учёт
  */
 const activationLabel = (order: OrderDto) => {
   if (order.activation_status === 'activated') return 'Активирован';

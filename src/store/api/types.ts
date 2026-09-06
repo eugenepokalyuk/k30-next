@@ -1,14 +1,12 @@
-/** Контракты бэкенда как есть, в snake_case. */
-
 export type KeyStatus = 'free' | 'issued';
 export type ActivationStatus = 'pending' | 'activated';
 
-/** Состояние ключа. */
+/** Состояние ключа */
 export interface KeyStateDto {
   code: string;
   service: string;
   service_slug: string;
-  /** Тариф внутри сервиса: «Pro», «Max 5x», «Go». */
+  /** Тариф внутри сервиса: «Pro», «Max 5x», «Go» */
   plan: string;
   plan_slug: string;
   status: KeyStatus;
@@ -19,25 +17,25 @@ export interface KeyStateDto {
   activated_at: string | null;
 }
 
-/** Вид данных, которые просит поставщик. */
+/** Вид данных, которые просит поставщик */
 export type TargetKind =
   'access_token' | 'session_json' | 'account_id' | 'org_id' | 'user_id';
 
-/** Описание одного варианта заполнения формы. */
+/** Описание одного варианта заполнения формы */
 export interface TargetOptionDto {
   kind: TargetKind;
   label: string;
   placeholder: string;
   hint: string;
   input: 'text' | 'textarea';
-  /** Страница, с которой копируется значение. */
+  /** Страница, с которой копируется значение */
   how_to_url: string;
   how_to_label: string;
-  /** Секрет доступа к аккаунту: не логируем, не показываем целиком. */
+  /** Секрет доступа к аккаунту: не логируем, не показываем целиком */
   secret: boolean;
 }
 
-/** Кто виноват в ошибке. */
+/** Кто виноват в ошибке */
 export type Blame = 'customer' | 'shop' | 'provider' | '';
 
 export type ActivationState =
@@ -49,7 +47,7 @@ export type ActivationState =
   | 'cancelled'
   | 'unknown';
 
-/** Асинхронная активация: то, что опрашивает экран ожидания. */
+/** Асинхронная активация: то, что опрашивает экран ожидания */
 export interface ActivationDto {
   id: string;
   status: ActivationState;
@@ -63,7 +61,7 @@ export interface ActivationDto {
   account_email: string;
   activation_url: string;
   queue_position: number | null;
-  /** Через сколько секунд спросить снова. */
+  /** Через сколько секунд спросить снова */
   poll_after: number;
   key: KeyStateDto;
   created_at: string;
@@ -72,7 +70,7 @@ export interface ActivationDto {
 
 export type FieldInputType = 'textarea' | 'text' | 'email';
 
-/** Поле из админки сервиса. */
+/** Поле из админки сервиса */
 export interface ServiceFieldDto {
   name: string;
   label: string;
@@ -82,21 +80,20 @@ export interface ServiceFieldDto {
   required: boolean;
 }
 
-/** Тариф внутри сервиса. */
+/** Тариф внутри сервиса */
 export interface PlanDto {
   slug: string;
   short_id: string;
   name: string;
   tagline: string;
   duration_days: number;
-  /** Цена в рублях. */
+  /** Цена в рублях */
   price: string | null;
   /**
-   *  Ни один поставщик не активирует такой тариф по API — выдаёт менеджер
-   *  руками.
+   *  По API такой тариф не активируется: выдаёт менеджер руками
    */
   is_manual: boolean;
-  /** Есть ли свободные ключи прямо сейчас. */
+  /** Есть ли свободные ключи прямо сейчас */
   in_stock: boolean;
 }
 
@@ -107,13 +104,13 @@ export interface ServiceDto {
   logo: string | null;
   accent_color: string;
   source_url: string;
-  /** Тарифы сервиса, уже отсортированные бэкендом. */
+  /** Тарифы сервиса, уже отсортированные бэкендом */
   plans: PlanDto[];
-  /** Есть ли свободные ключи хоть по одному тарифу. */
+  /** Есть ли свободные ключи хоть по одному тарифу */
   in_stock: boolean;
 }
 
-/** Сервис со всем, что нужно странице активации. */
+/** Сервис со всем, что нужно странице активации */
 export interface ServiceActivationDto extends Omit<
   ServiceDto,
   'in_stock' | 'plans'
@@ -123,9 +120,9 @@ export interface ServiceActivationDto extends Omit<
   instruction_url_label: string;
   submit_label: string;
   activation_note: string;
-  /** Правила, которые покупатель подтверждает до ввода данных. */
+  /** Правила, которые покупатель подтверждает до ввода данных */
   activation_rules: string;
-  /** Памятка «ключ активирован, а подписки нет» — своя у каждого сервиса. */
+  /** Памятка «ключ активирован, а подписки нет» — своя у каждого сервиса */
   missing_subscription_help: string;
   fields_schema: ServiceFieldDto[];
 }
@@ -134,7 +131,7 @@ export interface VerifyKeyResponse {
   success: boolean;
   /**
    *  Ключ найден, но активировать по нему нельзя: уже активирован, идёт
-   *  активация или поставщик отказал.
+   *  активация или поставщик отказал
    */
   can_activate?: boolean;
   message?: string;
@@ -142,29 +139,29 @@ export interface VerifyKeyResponse {
   error_code?: string;
   key?: KeyStateDto;
   service?: ServiceActivationDto;
-  /** Тариф из нашего каталога — то, что купили. */
+  /** Тариф из нашего каталога — то, что купили */
   plan?: PlanDto;
-  /** Что спросить у покупателя. */
+  /** Что спросить у покупателя */
   targets?: TargetOptionDto[];
-  /** Остаток у поставщика: 'high' | 'low' | 'none' | число | ''. */
+  /** Остаток у поставщика: 'high' | 'low' | 'none' | число | '' */
   stock?: string;
-  /** Как тариф называет сам поставщик («go», «plus»). */
+  /** Как тариф называет сам поставщик («go», «plus») */
   provider_plan?: string;
   duration_days?: number | null;
-  /** Активация уже идёт — открываем экран ожидания сразу. */
+  /** Активация уже идёт — открываем экран ожидания сразу */
   activation?: ActivationDto | null;
 }
 
 export interface AccountDto {
   email: string;
   account_id: string;
-  /** Что уже есть на аккаунте: «ChatGPT Plus до 2026-09-01». */
+  /** Что уже есть на аккаунте: «ChatGPT Plus до 2026-09-01» */
   subscriptions: string[];
 }
 
 export interface CheckAccountResponse {
   success: boolean;
-  /** Поставщик такой проверки не умеет — шаг просто пропускается. */
+  /** Поставщик такой проверки не умеет — шаг просто пропускается */
   supported?: boolean;
   error?: string;
   error_code?: string;
@@ -176,8 +173,7 @@ export interface ActivateResponse {
   error?: string;
   error_code?: string;
   /**
-   *  Необязательное по той же причине, что и выше: отказ до запуска задачи
-   *  активацией не является, и записи о нём нет.
+   *  Отказ до запуска задачи активацией не является, записи о нём нет
    */
   activation?: ActivationDto;
 }
@@ -199,90 +195,89 @@ export interface AuthResponse {
   access: string;
   refresh: string;
   user: UserDto;
-  /** Сколько прошлых покупок привязалось к кабинету при этом входе. */
+  /** Сколько прошлых покупок привязалось к кабинету при этом входе */
   claimed_orders?: number;
 }
 
-/** Заявка на вход через бота: ссылка, по которой открывается телеграм. */
+/** Заявка на вход через бота: ссылка, по которой открывается телеграм */
 export interface TelegramStartDto {
   nonce: string;
   url: string;
-  /** Сколько секунд заявка ещё годна. */
+  /** Сколько секунд заявка ещё годна */
   expires_in: number;
 }
 
 export type TelegramLoginStatus =
   | 'pending'
   | 'confirmed'
-  /** Бот спросил почту у того, кто пришёл впервые. */
+  /** Бот спросил почту у того, кто пришёл впервые */
   | 'needs_email'
   /**
-   *  Почта названа, и бот ждёт код из письма: без него адрес ничего не
-   *  доказывает — назвать чужой может кто угодно.
+   *  Бот ждёт код из письма: без него адрес ничего не доказывает
    */
   | 'needs_code'
   | 'expired';
 
-/** Ответ опроса заявки. */
+/** Ответ опроса заявки */
 export interface TelegramStatusResponse extends Partial<AuthResponse> {
   status: TelegramLoginStatus;
 }
 
-/** Что показать на экране входа. */
+/** Что показать на экране входа */
 export interface AuthOptionsDto {
   telegram_support_url: string;
   /**
    *  У бота не прописан токен — входить через телеграм нечем, и кнопку
-   *  показывать нельзя.
+   *  показывать нельзя
    */
   telegram_login_enabled: boolean;
   /**
    *  Не «включён ли вход по почте», а «уходят ли письма»: без SMTP код
    *  печатается в журнал сервера, и покупатель будет ждать письмо, которого
-   *  не будет.
+   *  не будет
    */
   email_login_enabled: boolean;
 }
 
-/** Ответ на запрос кода. */
+/** Ответ на запрос кода */
 export interface EmailCodeRequestDto {
   sent: boolean;
-  /** Сколько секунд код годен. */
+  /** Сколько секунд код годен */
   expires_in: number;
   detail: string;
 }
 
-/** Успешный вход по коду. */
+/** Успешный вход по коду */
 export interface EmailLoginResponse extends AuthResponse {
   registered?: boolean;
 }
 
-/** Ссылки и подписи витрины из админки. */
+/** Ссылки и подписи витрины из админки */
 export interface SiteSettingsDto {
   telegram_channel_url: string;
   telegram_support_url: string;
   telegram_bot_url: string;
-  /** Показывать ли круглую кнопку телеграма в углу страницы. */
+  /** Показывать ли круглую кнопку телеграма в углу страницы */
   widget_is_enabled: boolean;
   buy_is_enabled: boolean;
   buy_title: string;
   buy_text: string;
   buy_telegram_url: string;
   buy_yandex_market_url: string;
-  /** Страница отзывов на Маркете — предлагается после успешной активации. */
+  /** Страница отзывов на Маркете — предлагается после успешной активации */
   review_yandex_market_url: string;
 }
 
 export type OrderStatus = 'new' | 'issued' | 'activated' | 'cancelled';
 
-/** Вопрос и ответ из блока «Частые вопросы». */
+/** Вопрос и ответ из блока «Частые вопросы» */
 export interface FaqEntryDto {
   id: number;
   question: string;
   answer: string;
 }
 
-/** Плитка блока «Почему мы». */
+/** Плитка блока «Почему мы» */
 export interface AdvantageDto {
   id: number;
   icon: string;
@@ -290,20 +285,31 @@ export interface AdvantageDto {
   description: string;
 }
 
-/** Живая подписка: то, чем покупатель может пользоваться прямо сейчас. */
+/**
+ *  Шаг блока «Как это работает». Номера здесь нет: витрина нумерует
+ *  список по порядку, в котором он приехал
+ */
+export interface HowStepDto {
+  id: number;
+  icon: string;
+  title: string;
+  description: string;
+}
+
+/** Живая подписка: то, чем покупатель может пользоваться прямо сейчас */
 export interface SubscriptionDto {
   number: number;
   service: string;
   service_slug: string;
-  /** Цвет сервиса из админки — им подсвечивается карточка. */
+  /** Цвет сервиса из админки — им подсвечивается карточка */
   accent_color: string;
   plan: string;
-  /** Срок тарифа целиком: из него и days_left считается полоса. */
+  /** Срок тарифа целиком: из него и days_left считается полоса */
   duration_days: number;
   account_email: string;
   activated_at: string | null;
   expires_at: string | null;
-  /** Ноль — истекает сегодня. */
+  /** Ноль — истекает сегодня */
   days_left: number | null;
 }
 

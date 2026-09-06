@@ -14,11 +14,11 @@ import classes from './AccountHeader.module.scss';
 
 interface Props {
   user: UserDto;
-  /** Сколько подписок работает прямо сейчас — подпись под почтой. */
+  /** Сколько подписок работает прямо сейчас — подпись под почтой */
   active: number;
 }
 
-/** Шапка кабинета: кто вошёл и что отсюда можно сделать. */
+/** Шапка кабинета: кто вошёл и что отсюда можно сделать */
 export const AccountHeader: FC<Props> = ({ user, active }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();

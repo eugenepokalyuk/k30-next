@@ -7,15 +7,15 @@ import classes from './Instruction.module.scss';
 
 interface Props {
   text: string;
-  /** Название сервиса — подпись первой кнопки: «Открыть ChatGPT». */
+  /** Название сервиса — подпись первой кнопки: «Открыть ChatGPT» */
   serviceName: string;
-  /** Сайт сервиса: туда покупатель идёт войти в нужный аккаунт. */
+  /** Сайт сервиса: туда покупатель идёт войти в нужный аккаунт */
   serviceUrl?: string;
   url?: string;
   urlLabel?: string;
 }
 
-/** Инструкция сервиса. */
+/** Инструкция сервиса */
 export const Instruction: FC<Props> = ({
   text,
   serviceName,
@@ -26,7 +26,7 @@ export const Instruction: FC<Props> = ({
   const blocks = parseInstruction(text);
 
   // Вторая кнопка нужна, только если ведёт не туда же, куда первая: у
-  // сервиса без отдельной страницы с данными обе указывали бы на сайт.
+  // сервиса без отдельной страницы с данными обе указывали бы на сайт
   const showSource = Boolean(serviceUrl);
   const showHowTo = Boolean(url) && url !== serviceUrl;
 

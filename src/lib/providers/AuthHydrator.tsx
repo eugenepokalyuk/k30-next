@@ -15,7 +15,7 @@ import {
 const apiUrl =
   process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1';
 
-/** Восстанавливает вход при загрузке вкладки. */
+/** Восстанавливает вход при загрузке вкладки */
 export const AuthHydrator: FC = () => {
   const dispatch = useAppDispatch();
   const started = useRef(false);
@@ -51,7 +51,7 @@ export const AuthHydrator: FC = () => {
         if (profile.ok) dispatch(profileLoaded(await profile.json()));
       } catch {
         // Токен протух или бэкенд недоступен — показываем витрину как
-        // анонимную.
+        // анонимную
         authStorage.write(null);
         dispatch(signedOut());
       } finally {

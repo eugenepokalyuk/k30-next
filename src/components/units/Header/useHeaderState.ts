@@ -4,13 +4,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useScroll } from 'framer-motion';
 
-/**
- *  Поведение шапки: подписка на прокрутку, блокировка скролла, Escape,
- *  закрытие меню при смене адреса.
- */
-
 interface State {
-  /** Отъехали от верха: у прозрачной поверх героя не видно границы. */
+  /** Отъехали от верха: у прозрачной поверх героя не видно границы */
   isScrolled: boolean;
   isOpen: boolean;
   toggle: () => void;
@@ -32,8 +27,7 @@ export function useHeaderState(): State {
   const close = useCallback(() => setIsOpen(false), []);
   const toggle = useCallback(() => setIsOpen((current) => !current), []);
 
-  // Сброс во время рендера, а не в эффекте: эффект дал бы лишний проход с
-  // открытым меню поверх уже новой страницы.
+  // Не в эффекте: он дал бы лишний проход с меню поверх новой страницы
   const [renderedPath, setRenderedPath] = useState(pathname);
 
   if (renderedPath !== pathname) {

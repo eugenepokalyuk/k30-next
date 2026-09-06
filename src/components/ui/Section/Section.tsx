@@ -7,12 +7,12 @@ import classes from './Section.module.scss';
 
 interface Props extends PropsWithChildren {
   id?: string;
-  /** Надзаголовок мелким капсом над основным заголовком. */
+  /** Надзаголовок мелким капсом над основным заголовком */
   overline?: string;
   title?: string;
   description?: string;
   className?: string;
-  /** Заголовок по центру — для секций во всю ширину. */
+  /** Заголовок по центру — для секций во всю ширину */
   centered?: boolean;
 }
 

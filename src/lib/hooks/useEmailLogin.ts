@@ -8,10 +8,10 @@ import {
   useVerifyEmailCodeMutation,
 } from '@/store/api/k30Api';
 
-/** Пауза между письмами. */
+/** Пауза между письмами */
 const RESEND_SECONDS = 60;
 
-/** Что показывает форма: адрес ещё спрашиваем или уже ждём код. */
+/** Что показывает форма: адрес ещё спрашиваем или уже ждём код */
 export type EmailLoginStage = 'email' | 'code';
 
 interface Result {
@@ -20,20 +20,20 @@ interface Result {
   setEmail: (value: string) => void;
   code: string;
   setCode: (value: string) => void;
-  /** Текст бэкенда о том, куда ушло письмо и сколько живёт код. */
+  /** Текст бэкенда о том, куда ушло письмо и сколько живёт код */
   sent: string;
   error: string;
   isSending: boolean;
   isVerifying: boolean;
-  /** Сколько секунд до «отправить ещё раз». */
+  /** Сколько секунд до «отправить ещё раз» */
   resendIn: number;
   requestCode: () => Promise<void>;
   verify: () => Promise<void>;
-  /** Вернуться к адресу: опечатались в почте и ждать код смысла нет. */
+  /** Вернуться к адресу: опечатались в почте и ждать код смысла нет */
   changeEmail: () => void;
 }
 
-/** Вход по коду на почту: запросить письмо и ввести код из него. */
+/** Вход по коду на почту: запросить письмо и ввести код из него */
 export function useEmailLogin(): Result {
   const [requestEmailCode, { isLoading: isSending }] =
     useRequestEmailCodeMutation();
@@ -47,7 +47,7 @@ export function useEmailLogin(): Result {
   const [error, setError] = useState('');
   const [resendIn, setResendIn] = useState(0);
 
-  // Отсчёт до следующего письма.
+  // Отсчёт до следующего письма
   useEffect(() => {
     if (resendIn <= 0) return;
     const timer = window.setTimeout(() => setResendIn(resendIn - 1), 1000);
@@ -70,7 +70,7 @@ export function useEmailLogin(): Result {
       setStage('code');
       setResendIn(RESEND_SECONDS);
       // Код от прошлой попытки в поле больше не годится: письмо новое, а
-      // старый код бэкенд уже погасил.
+      // старый код бэкенд уже погасил
       setCode('');
     } catch (exception) {
       setError(
@@ -108,7 +108,7 @@ export function useEmailLogin(): Result {
     setError('');
     setCode('');
     // Отсчёт не сбрасываем: лимит на бэкенде живёт по адресу и времени, а
-    // не по тому, что мы вернулись на шаг назад.
+    // не по тому, что мы вернулись на шаг назад
   };
 
   return {

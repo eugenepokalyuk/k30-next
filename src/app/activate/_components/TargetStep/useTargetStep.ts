@@ -16,11 +16,11 @@ import { normalizeTarget, previewEmail, validateTarget } from '@/utils/helpers';
 
 /**
  *  Список закрыт бэкендом: опечатка должна ломать сборку, а не активацию у
- *  покупателя.
+ *  покупателя
  */
 type TargetKind = TargetOptionDto['kind'];
 
-/** Запасной текст: связи нет и сказать по существу нечего. */
+/** Запасной текст: связи нет и сказать по существу нечего */
 const NETWORK_ERROR = 'Не получилось связаться с сервером. Попробуйте ещё раз.';
 
 interface Params {
@@ -34,10 +34,10 @@ export interface TargetStepState {
   value: string;
   error: string;
   account: AccountDto | null;
-  /** Поставщик не умеет проверять — подтверждаем тем, что видно локально. */
+  /** Поставщик не умеет проверять — подтверждаем тем, что видно локально */
   isUnchecked: boolean;
   isConfirmed: boolean;
-  /** Почта, вытащенная из самого токена, — до похода к поставщику. */
+  /** Почта, вытащенная из самого токена, — до похода к поставщику */
   localEmail: string;
   isChecking: boolean;
   isStarting: boolean;
@@ -48,7 +48,7 @@ export interface TargetStepState {
   confirm: () => void;
 }
 
-/** Состояние шага «Аккаунт»: два запроса и то, что между ними. */
+/** Состояние шага «Аккаунт»: два запроса и то, что между ними */
 export function useTargetStep({
   code,
   targets,
@@ -76,7 +76,7 @@ export function useTargetStep({
 
   const changeValue = (next: string) => {
     setValue(next);
-    // Данные поменяли — прежняя проверка больше ни о чём не говорит.
+    // Данные поменяли — прежняя проверка больше ни о чём не говорит
     resetCheck();
   };
 
@@ -91,7 +91,7 @@ export function useTargetStep({
     if (!option) return;
 
     // Проверяем формат на месте: у поставщиков жёсткие лимиты, и тратить их
-    // на опечатки нельзя — вернётся 429 вместо подсказки.
+    // на опечатки нельзя — вернётся 429 вместо подсказки
     const complaint = validateTarget(option.kind, value);
     if (complaint) {
       setError(complaint);
@@ -106,7 +106,7 @@ export function useTargetStep({
         value: normalizeTarget(option.kind, value),
       }).unwrap();
 
-      // `success` — первым.
+      // `success` — первым
       if (!response.success) {
         setError(response.error || 'Проверка не прошла. Попробуйте ещё раз.');
         return;
@@ -138,7 +138,7 @@ export function useTargetStep({
       }).unwrap();
 
       // Отказ на запуске — тоже активация со статусом failed: экран
-      // результата покажет её причину и подскажет, что делать дальше.
+      // результата покажет её причину и подскажет, что делать дальше
       if (!response.activation) {
         setError(
           response.error ||

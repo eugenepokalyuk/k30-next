@@ -3,20 +3,15 @@
 
 $marker: 32px;
 
-// Зазор между колонками.
 $gap: s.gap(2);
 
-// Воздух между кружком и линией.
 $line_air: 8px;
 
-// Насколько отрезок линии не доходит до центра колонки: радиус кружка плюс
-// воздух.
+// Недоход отрезка до центра колонки: радиус кружка плюс воздух
 $line_inset: math.div($marker, 2) + $line_air;
 
 .steps {
   display: grid;
-  // Колонок ровно столько, сколько шагов пришло из констант, и все равной
-  // ширины.
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
   gap: $gap;
@@ -29,15 +24,12 @@ $line_inset: math.div($marker, 2) + $line_air;
   align-items: center;
   gap: s.gap(2);
 
-  // Колонка `1fr` — это `minmax(auto, 1fr)`: без этого длинная подпись
-  // («Активация») раздувает свою колонку до min-content, соседние
-  // сжимаются, и на телефоне кружки перестают стоять по равному шагу, а
-  // подписи сходятся вплотную.
+  // 1fr — это minmax(auto, 1fr): иначе длинная подпись раздувает свою
+  // колонку и кружки перестают стоять по равному шагу
   min-width: 0;
 
   text-align: center;
 
-  // Отрезки линии слева и справа от номера.
   &::before,
   &::after {
     content: '';
@@ -50,7 +42,6 @@ $line_inset: math.div($marker, 2) + $line_air;
 
   &::before {
     right: calc(50% + #{$line_inset});
-    // Тянем отрезок влево через зазор сетки — до правого края соседа.
     left: -$gap;
   }
 
@@ -71,8 +62,7 @@ $line_inset: math.div($marker, 2) + $line_air;
   position: relative;
   z-index: 1;
 
-  // Ровно $marker вместе с рамкой — от этого размера отсчитан воздух до
-  // линии, и «плюс два пикселя рамки» сдвинули бы всю полосу.
+  // Ровно $marker вместе с рамкой: от него отсчитан воздух до линии
   box-sizing: border-box;
   flex: none;
   width: $marker;
@@ -102,16 +92,12 @@ $line_inset: math.div($marker, 2) + $line_air;
 }
 
 .title {
-  // На телефоне подпись мельче основного текста: в колонку шириной в
-  // четверть экрана «Активация» в 14px не влезает, и подписи сходятся
-  // вплотную.
+  // В колонку шириной в четверть экрана «Активация» в 14px не влезает
   @include s.text_caption;
 
   color: var(--text_secondary);
   font-weight: s.$semi_bold;
 
-  // Страховка на совсем узкие экраны: пусть слово перенесётся, чем вылезет
-  // из колонки на соседний шаг.
   overflow-wrap: break-word;
 
   @include s.media_up(sm) {
@@ -126,7 +112,6 @@ $line_inset: math.div($marker, 2) + $line_air;
 
   color: var(--text_muted);
 
-  // Подсказка — уточнение, а не содержание.
   display: none;
 
   @include s.media_up(sm) {
@@ -140,9 +125,7 @@ $line_inset: math.div($marker, 2) + $line_air;
     border-color: var(--background_primary);
     color: var(--text_contrast);
 
-    // Свечение без spread: оно не даёт кружку чёткого края, поэтому текущий
-    // шаг заметен, но занимает те же 32px, что и остальные, и воздух вокруг
-    // него такой же.
+    // Без spread: текущий шаг заметен, но занимает те же 32px, что остальные
     box-shadow: 0 0 12px 2px var(--background_primary_20);
   }
 
@@ -152,7 +135,6 @@ $line_inset: math.div($marker, 2) + $line_air;
 }
 
 .done {
-  // Пройденный участок линии закрашен — видно, сколько уже позади.
   &::before,
   &::after {
     background: var(--success);
@@ -169,7 +151,7 @@ $line_inset: math.div($marker, 2) + $line_air;
   }
 }
 
-// Линия слева от текущего шага тоже пройдена.
+// Линия слева от текущего шага тоже пройдена
 .current::before {
   background: var(--success);
 }

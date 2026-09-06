@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 
-interface IconProps {
+export interface IconProps {
   size?: number;
   className?: string;
 }
 
-/** Иконки инлайном. */
+/** Иконки инлайном */
 const base = (size: number) => ({
   width: size,
   height: size,
@@ -112,6 +112,18 @@ export const RefreshIcon: FC<IconProps> = ({ size = 20, className }) => (
 export const SupportIcon: FC<IconProps> = ({ size = 20, className }) => (
   <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
     <path d="M440-80v-80h320v-284q0-117-81.5-198.5T480-724q-117 0-198.5 81.5T200-444v244h-40q-33 0-56.5-23.5T80-280v-80q0-21 10.5-39.5T120-430l3-53q8-68 39.5-126t79-101q47.5-43 109-67T480-801q68 0 129 24t109 66.5Q766-668 797-610t40 126l3 52q19 10 29.5 28t10.5 38v92q0 20-10.5 38T840-208v48q0 33-23.5 56.5T760-80H440Zm-80-280q-17 0-28.5-11.5T320-400q0-17 11.5-28.5T360-440q17 0 28.5 11.5T400-400q0 17-11.5 28.5T360-360Zm240 0q-17 0-28.5-11.5T560-400q0-17 11.5-28.5T600-440q17 0 28.5 11.5T640-400q0 17-11.5 28.5T600-360Z" />
+  </svg>
+);
+
+export const CardIcon: FC<IconProps> = ({ size = 20, className }) => (
+  <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
+      <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-320h640v-160H160v160Z" />
+  </svg>
+);
+
+export const RocketIcon: FC<IconProps> = ({ size = 20, className }) => (
+  <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
+    <path d="m98-537 168-168q14-14 33-20t39-2l52 11q-54 64-85 116t-60 126L98-537Zm205 91q23-72 62.5-136T461-702q88-88 201-131.5T873-860q17 98-26 211T716-448q-55 55-120 95.5T459-289L303-446Zm332.5-97q33.5 0 56.5-23t23-56.5q0-33.5-23-56.5t-56.5-23q-33.5 0-56.5 23t-23 56.5q0 33.5 23 56.5t56.5 23ZM551-85l-64-147q74-29 126.5-60T730-377l10 52q4 20-2 39.5T718-252L551-85ZM162-318q35-35 85-35.5t85 34.5q35 35 35 85t-35 85q-25 25-83.5 43T87-74q14-103 32-161t43-83Z" />
   </svg>
 );
 

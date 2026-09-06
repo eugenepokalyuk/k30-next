@@ -1,4 +1,4 @@
-/** Форматы дат витрины. */
+/** Форматы дат витрины */
 
 function parse(value: string | null): Date | null {
   if (!value) return null;
@@ -6,7 +6,7 @@ function parse(value: string | null): Date | null {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
-/** «14 августа 2026, 21:40» — там, где время что-то значит. */
+/** «14 августа 2026, 21:40» — там, где время что-то значит */
 export function formatDateTime(value: string | null): string {
   const date = parse(value);
   if (!date) return '—';
@@ -20,7 +20,7 @@ export function formatDateTime(value: string | null): string {
   }).format(date);
 }
 
-/** «14 августа 2026» — там, где время лишнее. */
+/** «14 августа 2026» — там, где время лишнее */
 export function formatDate(value: string | null): string {
   const date = parse(value);
   if (!date) return '—';

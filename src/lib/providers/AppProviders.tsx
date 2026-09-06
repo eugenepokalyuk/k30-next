@@ -12,10 +12,8 @@ import { AuthHydrator } from './AuthHydrator';
 export const AppProviders: FC<PropsWithChildren> = ({ children }) => (
   <Provider store={store}>
     <AuthHydrator />
-    {/* reducedMotion="user" — одна настройка на все анимации сразу: при
-        включённом «уменьшить движение» framer-motion сам убирает сдвиги и
-        масштабирование, оставляя проявление.
-        */}
+    {/* reducedMotion="user" — одна настройка на все анимации: сдвиги и
+        масштаб убираются, проявление остаётся */}
     <MotionConfig reducedMotion="user" transition={transition}>
       {children}
     </MotionConfig>

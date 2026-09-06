@@ -14,12 +14,12 @@
   font-weight: s.$medium;
 
   // Раньше стоял nowrap, и длинные подписи («Подтвердить и активировать»)
-  // на узком экране вылезали за пределы карточки.
+  // на узком экране вылезали за пределы карточки
   text-wrap: balance;
   max-width: 100%;
 
   // transform отдельным быстрым переходом — чтобы нажатие «пружинило»
-  // мгновенно, а не плыло вместе с остальными свойствами.
+  // мгновенно, а не плыло вместе с остальными свойствами
   transition:
     s.$transition,
     transform 0.08s s.$ease_out;
@@ -41,7 +41,7 @@
 // === Sizes ===
 
 // Горизонтальные отступы на телефоне меньше: при 320px экрана пара «32px +
-// подпись + 32px» уже не помещалась в контейнер.
+// подпись + 32px» уже не помещалась в контейнер
 
 .large {
   padding: s.gap(4) s.gap(5);
@@ -68,7 +68,7 @@
 .small {
   padding: s.gap(2) s.gap(4);
 
-  // 44px — минимальная зона нажатия по гайдлайнам Apple и Google.
+  // 44px — минимальная зона нажатия по гайдлайнам Apple и Google
   min-height: 44px;
 
   @include s.text_body_2;
@@ -81,7 +81,7 @@
   color: var(--button_primary_text);
   box-shadow: var(--box_shadow_primary);
 
-  // Подсветку усиливаем только там, где есть курсор.
+  // Подсветку усиливаем только там, где есть курсор
   @media (hover: hover) {
     &:hover:not(:disabled) {
       background: var(--button_primary_background_hover);
@@ -108,7 +108,7 @@
   color: var(--text_default);
   box-shadow: none;
 
-  // На наведении меняется только рамка и лёгкая подложка.
+  // На наведении меняется только рамка и лёгкая подложка
   @media (hover: hover) {
     &:hover:not(:disabled) {
       background: var(--background_primary_10);
@@ -148,7 +148,7 @@
   animation: spin 0.7s linear infinite;
 
   // Пользователи с включённым «уменьшить движение» получают статичную дугу:
-  // кнопка всё равно выключена, вращение здесь не несёт смысла.
+  // кнопка всё равно выключена, вращение здесь не несёт смысла
   @media (prefers-reduced-motion: reduce) {
     animation: none;
   }

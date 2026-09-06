@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import { Reveal } from '@/components/motion';
-import { BoltIcon, ShieldIcon } from '@/components/ui';
+import { BoltIcon, ShieldIcon, UserIcon } from '@/components/ui';
 import { KeyForm } from '@/components/units';
 
 import classes from './HeroSection.module.scss';
@@ -9,6 +9,7 @@ import { HeroVisual } from '../HeroVisual/HeroVisual';
 
 const advantages = [
   { icon: <BoltIcon size={18} />, text: 'Активация за пару минут' },
+  { icon: <UserIcon size={18} />, text: 'Подписка на ваш аккаунт' },
   { icon: <ShieldIcon size={18} />, text: 'Пароль от аккаунта не нужен' },
 ];
 
@@ -17,21 +18,20 @@ export const HeroSection: FC = () => (
     <div className={classes.container}>
       <div className={classes.content}>
         <Reveal delay={0}>
-          <p className={classes.overline}>Активация подписок</p>
+          <p className={classes.overline}>{'Активация подписок'}</p>
         </Reveal>
 
         <Reveal delay={0.06}>
           <h1 className={classes.title}>
-            Введите ключ —{' '}
-            <span className={classes.accent}>и подписка ваша</span>
+            <span>{'Подписки'}</span>
+            <span className={classes.highlight}>{'на нейросети'}</span>
+            <span>{'в одном месте'}</span>
           </h1>
         </Reveal>
 
         <Reveal delay={0.12}>
           <p className={classes.description}>
-            ChatGPT, Claude, Gemini, Grok и Perplexity. Ключ приходит сразу
-            после оплаты — вставьте его в поле ниже, и мы подскажем, что делать
-            дальше.
+            {'Подключайте популярные AI-сервисы прямо на свой аккаунт. Быстрая активация без передачи пароля и поддержка на каждом этапе.'}
           </p>
         </Reveal>
 

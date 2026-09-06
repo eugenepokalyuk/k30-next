@@ -7,16 +7,16 @@ import type {
   TargetOptionDto,
 } from '@/store/api/types';
 
-/** Результат проверки ключа, перенесённый с главной на страницу активации. */
+/** Результат проверки ключа, перенесённый с главной на страницу активации */
 export interface ActivationState {
   code: string | null;
   service: ServiceActivationDto | null;
   key: KeyStateDto | null;
   targets: TargetOptionDto[];
   canActivate: boolean;
-  /** Почему активировать нельзя. */
+  /** Почему активировать нельзя */
   message: string;
-  /** Идущая или завершённая активация. */
+  /** Идущая или завершённая активация */
   activation: ActivationDto | null;
 }
 
@@ -57,15 +57,15 @@ export const activationSlice = createSlice({
       state.activation = payload.activation;
     },
 
-    /** Активация запущена или её статус обновился после опроса. */
+    /** Активация запущена или её статус обновился после опроса */
     activationUpdated: (state, { payload }: PayloadAction<ActivationDto>) => {
       state.activation = payload;
       state.key = payload.key;
-      // Пока идёт или уже прошла — форму показывать нечего.
+      // Пока идёт или уже прошла — форму показывать нечего
       state.canActivate = false;
     },
 
-    /** Повтор после неудачи: возвращаем форму, оставляя ключ на месте. */
+    /** Повтор после неудачи: возвращаем форму, оставляя ключ на месте */
     activationRetried: (state) => {
       state.activation = null;
       state.canActivate = true;

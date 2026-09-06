@@ -4,7 +4,6 @@
 :root {
   color-scheme: light;
 
-  // Общее для обеих тем: фирменный цвет и всё, что от него зависит.
   --primary: #{$primary};
   --primary_light: #{$primary_light};
   --background_primary: #{$primary};
@@ -14,17 +13,17 @@
 
   --button_primary_background: #{$primary};
   --button_primary_background_hover: #{$primary_dark};
-  --button_primary_text: #{$text-contrast-on-primary};
 
-  // Светлая тема — значения по умолчанию: она стоит на голом :root, и
-  // страница без единого атрибута открывается именно в ней.
+  --text_on_primary_fill: #{$text-contrast-on-primary};
+
   --background_default: #{$light-background-default};
   --background_secondary: #{$light-background-secondary};
   --background_elevated: #{$light-background-elevated};
   --background_contrast: #{$light-background-contrast};
   --button_default_background: #{$light-background-elevated};
 
-  // Текст и иконки фирменного цвета на светлой теме темнее заливки — см.
+  --button_primary_text: #{$light-text-contrast};
+
   --text_primary: #{$primary_deep};
   --icon_primary: #{$primary_deep};
 
@@ -45,17 +44,12 @@
   --danger_10: #{$danger_10};
   --warning: #{$light-warning};
 
-  // Подложка липкой шапки и затемнение под мобильным меню. Раньше
-  // обе были тёмными константами из прежней палитры — на светлой теме
-  // шапка при прокрутке уезжала в почти чёрный.
   --header_background: #{rgba(255, 255, 255, 0.78)};
   --scrim: #{rgba(16, 20, 28, 0.4)};
 
   --box_shadow: #{$light-box-shadow};
   --box_shadow_primary: 0 8px 32px -8px #{$primary_20};
 
-  // adaptive sizes Мобильный размер — база, широкие экраны добавляют к нему
-  // через media_up.
   --glass: #{$width_lg};
   --gap_side: #{$gap_side_sm};
   --gap: #{$gap_sm};
@@ -76,7 +70,7 @@
   }
 }
 
-// Тёмная тема.
+// Тёмная тема
 :root[data-theme='dark'] {
   color-scheme: dark;
 
@@ -85,6 +79,8 @@
   --background_elevated: #{$dark-background-elevated};
   --background_contrast: #{$dark-background-contrast};
   --button_default_background: #{$dark-background-elevated};
+
+  --button_primary_text: #{$text-contrast-on-primary};
 
   --text_primary: #{$primary};
   --icon_primary: #{$primary};
@@ -119,11 +115,8 @@
 html {
   scroll-behavior: smooth;
 
-  // Якоря в шапке ведут на секции, а шапка липкая и перекрывает их верх.
   scroll-padding-top: calc(var(--header_height) + 16px);
 
-  // Плавную прокрутку и все переходы отключаем целиком, если система просит
-  // уменьшить движение.
   @media (prefers-reduced-motion: reduce) {
     scroll-behavior: auto;
   }
@@ -150,8 +143,6 @@ body {
   font-family: var(--font-inter), sans-serif;
   color: var(--text_default);
 
-  // Переход красит смену темы: без него переключатель выглядит как моргание
-  // страницы.
   transition:
     background-color $transition-duration $transition-ease,
     color $transition-duration $transition-ease;
@@ -159,8 +150,6 @@ body {
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 
-  // iOS подставляет свои значения на экранах с вырезом — без этого контент
-  // в горизонтальной ориентации уезжает под скруглённый угол.
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
 }
@@ -209,7 +198,6 @@ img {
   max-width: 100%;
 }
 
-// ol здесь наравне с ul, и это не косметика.
 ul,
 ol {
   list-style: none;
@@ -217,14 +205,10 @@ ol {
   padding: 0;
 }
 
-// Своё кольцо фокуса вместо браузерного: системный контур почти не читается
-// ни на тёмном фоне, ни на светлом.
 :focus-visible {
   @include focus_ring;
 }
 
-// Подсветка выделения фирменным цветом: покупатель выделяет и копирует код
-// ключа руками, и это самый частый жест на сайте.
 ::selection {
   background: var(--background_primary_20);
 }

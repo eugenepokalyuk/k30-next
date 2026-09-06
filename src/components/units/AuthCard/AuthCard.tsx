@@ -10,7 +10,7 @@ interface Props extends PropsWithChildren {
   footer?: React.ReactNode;
 }
 
-/** Обёртка форм входа и регистрации — они отличаются только полями. */
+/** Обёртка форм входа и регистрации — они отличаются только полями */
 export const AuthCard: FC<Props> = ({
   title,
   description,

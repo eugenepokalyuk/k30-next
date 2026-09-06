@@ -14,7 +14,6 @@ interface Props {
   answer: string;
 }
 
-/** Вопрос с раскрывающимся ответом. */
 export const FaqItem: FC<Props> = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
   const id = useId();
@@ -52,9 +51,7 @@ export const FaqItem: FC<Props> = ({ question, answer }) => {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: duration.base, ease }}
           >
-            {/* Ответ пишет менеджер в админке простым текстом: абзацы
-                разделяются пустой строкой.
-                */}
+            {/* Ответ приходит простым текстом: абзацы через пустую строку */}
             <div className={classes.answer}>
               {answer
                 .split(/\n\s*\n/)

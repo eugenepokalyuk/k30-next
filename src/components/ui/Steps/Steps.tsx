@@ -10,12 +10,12 @@ import { CheckIcon } from '../Icons/Icons';
 
 interface Props {
   current: ActivationStepId;
-  /** Подписка выдана: последний шаг закрывается галочкой, текущего нет. */
+  /** Подписка выдана: последний шаг закрывается галочкой, текущего нет */
   isComplete?: boolean;
   className?: string;
 }
 
-/** Трек-трейс активации: где покупатель сейчас и что впереди. */
+/** Трек-трейс активации: где покупатель сейчас и что впереди */
 export const Steps: FC<Props> = ({ current, isComplete, className }) => {
   const currentIndex = ActivationSteps.findIndex((step) => step.id === current);
 

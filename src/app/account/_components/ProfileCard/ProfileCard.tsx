@@ -14,14 +14,14 @@ interface Props {
   user: UserDto;
 }
 
-/** Как к покупателю обращаться и где его искать в телеграме. */
+/** Как к покупателю обращаться и где его искать в телеграме */
 export const ProfileCard: FC<Props> = ({ user }) => {
   const dispatch = useAppDispatch();
   const [updateMe, { isLoading }] = useUpdateMeMutation();
 
   // Профиль приезжает асинхронно (после обмена refresh на access), но
   // родитель не рендерит карточку, пока его нет, — начальные значения
-  // берутся из пропса один раз, синхронизировать их не нужно.
+  // берутся из пропса один раз, синхронизировать их не нужно
   const [name, setName] = useState(user.name);
   const [telegram, setTelegram] = useState(user.telegram_username);
   const [saved, setSaved] = useState(false);
@@ -43,7 +43,7 @@ export const ProfileCard: FC<Props> = ({ user }) => {
       setSaved(true);
     } catch {
       // Значения в полях остались, кнопка снова активна — повторный клик
-      // обычно проходит.
+      // обычно проходит
     }
   };
 

@@ -19,7 +19,7 @@ import { OrdersList } from '../OrdersList/OrdersList';
 import { ProfileCard } from '../ProfileCard/ProfileCard';
 import { SubscriptionsList } from '../SubscriptionsList/SubscriptionsList';
 
-/** Кабинет: что работает сейчас, что куплено, что пошло не так. */
+/** Кабинет: что работает сейчас, что куплено, что пошло не так */
 export const AccountView: FC = () => {
   const router = useRouter();
   const isReady = useAppSelector(selectIsAuthReady);
@@ -27,14 +27,14 @@ export const AccountView: FC = () => {
   const user = useAppSelector(selectUser);
 
   // Число активных подписок нужно шапке, а запрос всё равно делает блок
-  // подписок ниже: RTK Query отдаёт обоим один ответ из кэша.
+  // подписок ниже: RTK Query отдаёт обоим один ответ из кэша
   const { data: subscriptions } = useMySubscriptionsQuery(undefined, {
     skip: !isAuthorized,
   });
 
   // Уводим на вход только после того, как восстановили сессию из
   // localStorage: до этого «не авторизован» — ещё не ответ, и вошедшего
-  // выкидывало бы отсюда при каждом обновлении страницы.
+  // выкидывало бы отсюда при каждом обновлении страницы
   useEffect(() => {
     if (isReady && !isAuthorized) router.replace(Routes.Login);
   }, [isReady, isAuthorized, router]);

@@ -20,13 +20,13 @@ export type MotionTag = keyof typeof tags;
 interface Props extends PropsWithChildren {
   as?: MotionTag;
   className?: string;
-  /** Задержка в секундах — чтобы соседние блоки не выезжали разом. */
+  /** Задержка в секундах — чтобы соседние блоки не выезжали разом */
   delay?: number;
-  /** Сдвиг снизу. */
+  /** Сдвиг снизу */
   y?: number;
 }
 
-/** Блок, который проявляется, когда доезжает до экрана. */
+/** Блок, который проявляется, когда доезжает до экрана */
 export const Reveal: FC<Props> = ({
   as = 'div',
   className,
@@ -41,7 +41,7 @@ export const Reveal: FC<Props> = ({
       className={className}
       // Метка для запасного стиля в <noscript>: до появления блок отрисован
       // с opacity 0 прямо в html, и без работающего JS он так и остался бы
-      // невидимым.
+      // невидимым
       data-reveal=""
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
