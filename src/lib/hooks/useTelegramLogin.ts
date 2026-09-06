@@ -11,9 +11,7 @@ import {
 import type { TelegramStartDto } from '@/store/api/types';
 import { useAppSelector } from '@/store/hooks';
 
-/** Темп опроса заявки. Три секунды — столько же, сколько на экране
- *  активации: человек в это время переключается в телеграм и жмёт
- *  «Запустить», быстрее он всё равно не успевает. */
+/** Темп опроса заявки. */
 const POLL_MS = 3000;
 
 /** Что показывает экран входа прямо сейчас. */
@@ -34,16 +32,7 @@ interface Result {
   start: () => Promise<void>;
 }
 
-/** Вход через телеграм-бота: заявка и ожидание подтверждения.
- *
- *  Опрос, а не webhook: витрина — статика на GitHub Pages, принимать
- *  входящие ей нечем.
- *
- *  Момент «вошли» здесь не обрабатывается вовсе — токены кладёт в стор
- *  сам эндпоинт (см. `onQueryStarted` в k30Api). Хук отвечает только на
- *  вопрос «что рисовать», и потому обходится без эффектов: всё
- *  состояние выводится из кэша запроса при отрисовке.
- */
+/** Вход через телеграм-бота: заявка и ожидание подтверждения. */
 export function useTelegramLogin(): Result {
   const [startLogin, { isLoading: isStarting }] =
     useTelegramLoginStartMutation();
@@ -52,16 +41,16 @@ export function useTelegramLogin(): Result {
   const [error, setError] = useState('');
   const nonce = link?.nonce ?? '';
 
-  // Кэш читаем селектором, а не результатом хука ниже, ради одного:
-  // темп опроса задаётся до самого опроса, и остановить его нужно тем
-  // же ответом, который сообщил, что ждать больше нечего.
+  // Кэш читаем селектором, а не результатом хука ниже, ради одного: темп
+  // опроса задаётся до самого опроса, и остановить его нужно тем же
+  // ответом, который сообщил, что ждать больше нечего.
   const cached = useAppSelector(
     k30Api.endpoints.telegramLoginStatus.select(nonce),
   );
 
   const status = cached.data?.status;
-  // 404 — заявки нет в базе: бэкенд перезапустили или ссылку открыли
-  // из вкладки, провисевшей полчаса.
+  // 404 — заявки нет в базе: бэкенд перезапустили или ссылку открыли из
+  // вкладки, провисевшей полчаса.
   const isMissing = (cached.error as { status?: number })?.status === 404;
   const isLost = status === 'expired' || isMissing;
   const isSettled = isLost || status === 'confirmed';
@@ -78,9 +67,9 @@ export function useTelegramLogin(): Result {
     try {
       const started = await startLogin().unwrap();
       setLink(started);
-      // Открываем телеграм прямо в обработчике нажатия: вкладку,
-      // открытую после ответа сервера, режет блокировщик всплывающих
-      // окон — а эту браузер считает следствием клика.
+      // Открываем телеграм прямо в обработчике нажатия: вкладку, открытую
+      // после ответа сервера, режет блокировщик всплывающих окон — а эту
+      // браузер считает следствием клика.
       window.open(started.url, '_blank', 'noopener,noreferrer');
     } catch (exception) {
       setError(

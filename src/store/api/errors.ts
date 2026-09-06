@@ -1,9 +1,4 @@
-/** Человеческий текст из ответа DRF.
- *
- *  Django отдаёт ошибки деревом: `{"email": ["…"], "non_field_errors":
- *  ["…"]}`. Под полем нужна одна строка, поэтому берём первую найденную,
- *  а не склеиваем всё подряд — склейка получалась бы длиннее самой формы.
- */
+/** Человеческий текст из ответа DRF. */
 export function apiErrorMessage(error: unknown, fallback: string): string {
   const throttled = throttleMessage(error);
   if (throttled) return throttled;
@@ -15,12 +10,7 @@ export function apiErrorMessage(error: unknown, fallback: string): string {
   return fallback;
 }
 
-/** Отдельный текст на 429.
- *
- *  Общее «не получилось связаться с сервером» здесь врёт: связались, и
- *  проблема не в вводе, а в том, что надо подождать. Покупатель иначе
- *  жмёт кнопку ещё чаще и лимит не отпускает.
- */
+/** Отдельный текст на 429. */
 export function throttleMessage(error: unknown): string | null {
   if ((error as { status?: number })?.status !== 429) return null;
   return 'Слишком много попыток подряд. Подождите минуту и повторите.';

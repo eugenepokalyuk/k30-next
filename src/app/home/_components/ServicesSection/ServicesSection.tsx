@@ -10,8 +10,10 @@ import { formatPrice, formatPriceFrom } from '@/utils/helpers';
 
 import classes from './ServicesSection.module.scss';
 
-/** Список сервисов приходит с бэкенда: их заводит менеджер в админке,
- *  и захардкоженный список разъезжался бы с тем, что реально в продаже. */
+/**
+ *  Список сервисов приходит с бэкенда: их заводит менеджер в админке, и
+ *  захардкоженный список разъезжался бы с тем, что реально в продаже.
+ */
 export const ServicesSection: FC = () => {
   const { data, isLoading, isError } = useServicesQuery();
 
@@ -39,9 +41,10 @@ export const ServicesSection: FC = () => {
             <li key={index} className={classes.skeleton} />
           ))}
 
-        {/* Карточки появляются уже после ответа сервера, поэтому
-            задержка считается от индекса, а не вариантами родителя:
-            на момент его появления детей ещё нет. */}
+        {/* Карточки появляются уже после ответа сервера, поэтому задержка
+            считается от индекса, а не вариантами родителя: на момент его
+            появления детей ещё нет.
+            */}
         <AnimatePresence>
           {data?.map((service, index) => {
             const priceFrom = formatPriceFrom(service.plans);
@@ -79,7 +82,8 @@ export const ServicesSection: FC = () => {
                 )}
 
                 {/* Наличие приходит флагом, а не числом: точный остаток
-                  бэкенд не отдаёт — по нему видны обороты. */}
+                    бэкенд не отдаёт — по нему видны обороты.
+                    */}
                 <ul className={classes.plans}>
                   {service.plans.map((plan) => (
                     <li key={plan.slug} className={classes.plan}>

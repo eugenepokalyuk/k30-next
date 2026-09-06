@@ -8,9 +8,7 @@ import {
   useVerifyEmailCodeMutation,
 } from '@/store/api/k30Api';
 
-/** Пауза между письмами. У ручки входа свой лимит на бэкенде, и без
- *  паузы человек упирается в 429 вместо второго письма — «отправить
- *  ещё раз» должна становиться доступной сама, а не по ошибке. */
+/** Пауза между письмами. */
 const RESEND_SECONDS = 60;
 
 /** Что показывает форма: адрес ещё спрашиваем или уже ждём код. */
@@ -27,7 +25,7 @@ interface Result {
   error: string;
   isSending: boolean;
   isVerifying: boolean;
-  /** Сколько секунд до «отправить ещё раз». Ноль — можно сейчас. */
+  /** Сколько секунд до «отправить ещё раз». */
   resendIn: number;
   requestCode: () => Promise<void>;
   verify: () => Promise<void>;
@@ -35,13 +33,7 @@ interface Result {
   changeEmail: () => void;
 }
 
-/**
- * Вход по коду на почту: запросить письмо и ввести код из него.
- *
- * Момент «вошли» здесь не обрабатывается — токены кладёт в стор сам
- * эндпоинт (см. `onQueryStarted` в k30Api), как и у входа через бота.
- * Хук отвечает только за то, что видно на экране.
- */
+/** Вход по коду на почту: запросить письмо и ввести код из него. */
 export function useEmailLogin(): Result {
   const [requestEmailCode, { isLoading: isSending }] =
     useRequestEmailCodeMutation();
@@ -55,8 +47,7 @@ export function useEmailLogin(): Result {
   const [error, setError] = useState('');
   const [resendIn, setResendIn] = useState(0);
 
-  // Отсчёт до следующего письма. Секунда — самый крупный шаг, при
-  // котором подпись на кнопке не выглядит зависшей.
+  // Отсчёт до следующего письма.
   useEffect(() => {
     if (resendIn <= 0) return;
     const timer = window.setTimeout(() => setResendIn(resendIn - 1), 1000);
@@ -78,8 +69,8 @@ export function useEmailLogin(): Result {
       setSent(answer.detail);
       setStage('code');
       setResendIn(RESEND_SECONDS);
-      // Код от прошлой попытки в поле больше не годится: письмо новое,
-      // а старый код бэкенд уже погасил.
+      // Код от прошлой попытки в поле больше не годится: письмо новое, а
+      // старый код бэкенд уже погасил.
       setCode('');
     } catch (exception) {
       setError(
@@ -116,8 +107,8 @@ export function useEmailLogin(): Result {
     setSent('');
     setError('');
     setCode('');
-    // Отсчёт не сбрасываем: лимит на бэкенде живёт по адресу и времени,
-    // а не по тому, что мы вернулись на шаг назад.
+    // Отсчёт не сбрасываем: лимит на бэкенде живёт по адресу и времени, а
+    // не по тому, что мы вернулись на шаг назад.
   };
 
   return {

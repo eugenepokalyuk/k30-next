@@ -13,10 +13,7 @@ import classes from './SubscriptionsList.module.scss';
 /** За сколько дней до конца срок считается «на исходе». */
 const SOON_DAYS = 7;
 
-/** Активные подписки: срок и остаток считает бэкенд (`days_left`).
- *
- *  Пустого состояния нет — без активных подписок блок не показывается,
- *  а нового покупателя встречает пустой список заказов. */
+/** Активные подписки: срок и остаток считает бэкенд (`days_left`). */
 export const SubscriptionsList: FC = () => {
   const { data } = useMySubscriptionsQuery();
   if (!data?.length) return null;
@@ -64,7 +61,9 @@ export const SubscriptionsList: FC = () => {
             </span>
 
             <p className={classes.meta}>
-              {item.expires_at ? `до ${formatDate(item.expires_at)}` : 'бессрочно'}
+              {item.expires_at
+                ? `до ${formatDate(item.expires_at)}`
+                : 'бессрочно'}
             </p>
 
             {item.account_email && (
@@ -85,8 +84,7 @@ const soon = (item: SubscriptionDto) =>
 const spent = (item: SubscriptionDto) =>
   Math.max(0, item.duration_days - (item.days_left ?? 0));
 
-/** Доля прожитого срока. Минимум процент: в первый день подписки пустая
- *  полоса выглядит как «не работает». */
+/** Доля прожитого срока. */
 function percent(item: SubscriptionDto): number {
   if (!item.duration_days) return 0;
   return Math.min(100, Math.max(1, (spent(item) / item.duration_days) * 100));

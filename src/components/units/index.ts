@@ -4,3 +4,4 @@ export * from './Header/Header';
 export * from './KeyForm/KeyForm';
 export * from './Layout/Layout';
 export * from './TelegramWidget/TelegramWidget';
+export * from './ThemeToggle/ThemeToggle';

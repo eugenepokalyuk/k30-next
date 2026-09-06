@@ -19,14 +19,20 @@ const tags = {
 interface Props extends PropsWithChildren {
   as?: MotionTag;
   className?: string;
-  /** Инлайновые переменные вроде --accent: цвет сервиса приходит из
-   *  админки, и в классах его не выразить. */
+  /**
+   *  Инлайновые переменные вроде --accent: цвет сервиса приходит из
+   *  админки, и в классах его не выразить.
+   */
   style?: React.CSSProperties;
 }
 
-/** Список, элементы которого появляются по очереди. Очередь задаётся
- *  вариантами на родителе: число карточек приходит с бэкенда. */
-export const Stagger: FC<Props> = ({ as = 'div', className, style, children }) => {
+/** Список, элементы которого появляются по очереди. */
+export const Stagger: FC<Props> = ({
+  as = 'div',
+  className,
+  style,
+  children,
+}) => {
   const Tag = tags[as] as typeof motion.div;
 
   return (
@@ -43,8 +49,7 @@ export const Stagger: FC<Props> = ({ as = 'div', className, style, children }) =
   );
 };
 
-/** Элемент такого списка. Своих initial/animate нет намеренно —
- *  состояние наследуется от родителя. */
+/** Элемент такого списка. */
 export const StaggerItem: FC<Props> = ({
   as = 'div',
   className,

@@ -14,9 +14,9 @@ import { AuthButton } from './AuthButton';
 import { MobileMenu } from './MobileMenu';
 import { navLinks } from './navLinks';
 import { useHeaderState } from './useHeaderState';
+import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 
-/** Шапка сайта. Побочные эффекты — в `useHeaderState`, панель для
- *  узких экранов — в `MobileMenu`. */
+/** Шапка сайта. */
 export const Header: FC = () => {
   const { isScrolled, isOpen, toggle, close } = useHeaderState();
   // Контакт поддержки — из админки, без пересборки статики.
@@ -46,6 +46,8 @@ export const Header: FC = () => {
         </nav>
 
         <div className={classes.actions}>
+          <ThemeToggle className={classes.theme} />
+
           <div className={classes.auth}>
             <AuthButton onNavigate={close} />
           </div>

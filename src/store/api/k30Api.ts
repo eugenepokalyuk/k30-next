@@ -18,16 +18,17 @@ import type {
   ActivateResponse,
   ActivationDto,
   ActivationStatusResponse,
+  AdvantageDto,
   AuthOptionsDto,
   AuthResponse,
   CheckAccountResponse,
-  FaqEntryDto,
   EmailCodeRequestDto,
   EmailLoginResponse,
+  FaqEntryDto,
   OrderDto,
   ServiceDto,
-  SubscriptionDto,
   SiteSettingsDto,
+  SubscriptionDto,
   TargetKind,
   TelegramStartDto,
   TelegramStatusResponse,
@@ -47,13 +48,7 @@ const rawBaseQuery = fetchBaseQuery({
   },
 });
 
-/** Обёртка, которая один раз обновляет access по refresh и повторяет запрос.
- *
- *  Access живёт полчаса, а вкладку с кабинетом держат открытой днями —
- *  без этого покупателя выкидывало бы на страницу входа посреди работы.
- *  Повтор ровно один: если и он получил 401, значит refresh мёртв, и
- *  дальше крутиться незачем.
- */
+/** Обёртка, которая один раз обновляет access по refresh и повторяет запрос. */
 const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
@@ -96,15 +91,12 @@ export const k30Api = createApi({
       query: () => 'services/',
     }),
 
-    /** Шаг 1. Мутация, а не запрос: у ввода кода нет смысла в кэше —
-     *  повторная проверка должна идти на сервер, статус ключа меняется. */
+    /** Шаг 1. */
     verifyKey: builder.mutation<VerifyKeyResponse, string>({
       query: (key) => ({ url: 'verify-key', method: 'POST', body: { key } }),
     }),
 
-    /** Шаг 2. Что за аккаунт нам принесли — до того, как карта потрачена.
-     *  Умеют не все поставщики; когда не умеют, приходит
-     *  `supported: false`, и шаг просто пропускается. */
+    /** Шаг 2. */
     checkAccount: builder.mutation<
       CheckAccountResponse,
       { key: string; kind: TargetKind; value: string }
@@ -112,11 +104,7 @@ export const k30Api = createApi({
       query: (body) => ({ url: 'check-account', method: 'POST', body }),
     }),
 
-    /** Шаг 3. Запуск активации.
-     *
-     *  Возвращает не результат, а задачу: у всех поставщиков активация
-     *  асинхронная и занимает до двух минут. Дальше — `activationStatus`.
-     */
+    /** Шаг 3. */
     activate: builder.mutation<
       ActivateResponse,
       { key: string; kind: TargetKind; value: string }
@@ -126,12 +114,7 @@ export const k30Api = createApi({
       invalidatesTags: ['Orders', 'Activations'],
     }),
 
-    /** Шаг 4. Опрос статуса.
-     *
-     *  Запрос, а не мутация: это чтение, и RTK Query сам не даст двум
-     *  открытым вкладкам дублировать его. Темп опроса задаёт бэкенд
-     *  полем `poll_after` — см. useActivationPolling.
-     */
+    /** Шаг 4. */
     activationStatus: builder.query<ActivationStatusResponse, string>({
       query: (id) => `activations/${id}`,
       providesTags: ['Activations'],
@@ -145,32 +128,30 @@ export const k30Api = createApi({
       invalidatesTags: ['Activations'],
     }),
 
-    /** Ссылки и подписи витрины из админки: телеграм, блок покупки,
-     *  круглая кнопка в углу. Читается анонимно — это содержимое
-     *  страницы, такое же публичное, как список сервисов. */
+    /**
+     *  Ссылки и подписи витрины из админки: телеграм, блок покупки, круглая
+     *  кнопка в углу.
+     */
     siteSettings: builder.query<SiteSettingsDto, void>({
       query: () => 'site-settings',
     }),
 
-    /** Частые вопросы с главной. Отдельной ручкой, а не полем в
-     *  настройках витрины: список правят по следам поддержки, чаще
-     *  всего остального. */
+    /** Частые вопросы с главной. */
     faq: builder.query<FaqEntryDto[], void>({
       query: () => 'faq',
     }),
 
-    /** Что показать на экране входа. Отдельно от настроек витрины:
-     *  форме входа не нужен весь блок ссылок и подписей. */
+    /** Плитки блока «Почему мы». */
+    advantages: builder.query<AdvantageDto[], void>({
+      query: () => 'advantages',
+    }),
+
+    /** Что показать на экране входа. */
     authOptions: builder.query<AuthOptionsDto, void>({
       query: () => 'auth/options',
     }),
 
-    /** Шаг 1 входа по почте: отправить код.
-     *
-     *  Ответ одинаков для известного и неизвестного адреса. Разный
-     *  ответ превратил бы форму входа в способ выяснить, кто у нас
-     *  зарегистрирован.
-     */
+    /** Шаг 1 входа по почте: отправить код. */
     requestEmailCode: builder.mutation<EmailCodeRequestDto, string>({
       query: (email) => ({
         url: 'auth/email/request',
@@ -179,17 +160,17 @@ export const k30Api = createApi({
       }),
     }),
 
-    /** Шаг 2: код из письма. Он же регистрация — неизвестный адрес с
-     *  верным кодом заводит кабинет, отдельного экрана для этого нет. */
+    /** Шаг 2: код из письма. */
     verifyEmailCode: builder.mutation<
       EmailLoginResponse,
       { email: string; code: string }
     >({
       query: (body) => ({ url: 'auth/email/verify', method: 'POST', body }),
 
-      /** Токены кладём здесь же, рядом с телеграмным входом: способов
-       *  войти два, а место, где начинается сессия, должно быть одно —
-       *  иначе следующий способ снова забудет записать refresh на диск.
+      /**
+       *  Токены кладём здесь же, рядом с телеграмным входом: способов войти
+       *  два, а место, где начинается сессия, должно быть одно — иначе
+       *  следующий способ снова забудет записать refresh на диск.
        */
       async onQueryStarted(_body, { dispatch, queryFulfilled }) {
         try {
@@ -203,33 +184,19 @@ export const k30Api = createApi({
       },
     }),
 
-    /** Шаг 1 входа через телеграм: получить одноразовую ссылку на бота.
-     *
-     *  Мутация, а не запрос: каждый вызов заводит новую заявку с новым
-     *  nonce, и кэшировать её нельзя — просроченная ссылка ведёт в бота,
-     *  который на неё уже не ответит.
-     */
+    /** Шаг 1 входа через телеграм: получить одноразовую ссылку на бота. */
     telegramLoginStart: builder.mutation<TelegramStartDto, void>({
       query: () => ({ url: 'auth/telegram/start', method: 'POST' }),
     }),
 
-    /** Шаг 2: ждём, пока человек нажмёт «Запустить» в боте.
-     *
-     *  Опрос, а не webhook: витрина — статика на Pages, принимать
-     *  входящие ей нечем. Темп задаёт экран входа через pollingInterval.
-     */
+    /** Шаг 2: ждём, пока человек нажмёт «Запустить» в боте. */
     telegramLoginStatus: builder.query<TelegramStatusResponse, string>({
       query: (nonce) =>
         `auth/telegram/status?nonce=${encodeURIComponent(nonce)}`,
 
-      /** Подтверждение приходит в ответе опроса — и вход завершается
-       *  здесь же, а не в компоненте.
-       *
-       *  Токены выдаются ровно один раз: бэкенд гасит заявку сразу
-       *  после выдачи, и второй опрос по тому же nonce вернёт «не
-       *  найдено». Пропустить этот ответ нельзя, поэтому забираем его
-       *  там, где он гарантированно виден, — а не в эффекте экрана,
-       *  который к этому моменту может уже размонтироваться.
+      /**
+       *  Подтверждение приходит в ответе опроса — и вход завершается здесь
+       *  же, а не в компоненте.
        */
       async onQueryStarted(_nonce, { dispatch, queryFulfilled }) {
         try {
@@ -262,16 +229,13 @@ export const k30Api = createApi({
       providesTags: ['Orders'],
     }),
 
-    /** Что работает прямо сейчас. Считает бэкенд: срок подписки — это
-     *  дата активации плюс длительность тарифа, и складывать это на
-     *  витрине значит держать второе место, где живёт то же правило. */
+    /** Что работает прямо сейчас. */
     mySubscriptions: builder.query<SubscriptionDto[], void>({
       query: () => 'me/subscriptions',
       providesTags: ['Orders'],
     }),
 
-    /** История попыток активации. Отвечает на «почему не заработало» —
-     *  вопрос, с которым чаще всего приходят в поддержку. */
+    /** История попыток активации. */
     myActivations: builder.query<ActivationDto[], void>({
       query: () => 'me/activations',
       providesTags: ['Activations'],
@@ -283,6 +247,7 @@ export const {
   useServicesQuery,
   useSiteSettingsQuery,
   useFaqQuery,
+  useAdvantagesQuery,
   useAuthOptionsQuery,
   useRequestEmailCodeMutation,
   useVerifyEmailCodeMutation,

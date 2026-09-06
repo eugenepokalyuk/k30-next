@@ -8,21 +8,22 @@ import { CheckIcon } from '@/components/ui';
 
 import classes from './HeroVisual.module.scss';
 
-/** Строки разбора ключа. Код и сервис — образец формата, а не реальный
- *  ключ: настоящие коды одноразовые, и печатать их в макете нечего. */
+/** Строки разбора ключа. */
 const rows = [
   { label: 'Провайдер', value: 'найден' },
   { label: 'Сервис', value: 'Claude Pro' },
   { label: 'Аккаунт', value: 'подтверждён' },
 ];
 
-/** Разбор ключа справа от заголовка — объясняет, что происходит после
- *  ввода кода. */
+/**
+ *  Разбор ключа справа от заголовка — объясняет, что происходит после ввода
+ *  кода.
+ */
 export const HeroVisual: FC = () => (
   <motion.div
     className={classes.visual}
-    // Тот же маркер, что у Reveal: карточка тоже приезжает в html с
-    // opacity 0, и без JS её должен вернуть запасной стиль из layout.
+    // Тот же маркер, что у Reveal: карточка тоже приезжает в html с opacity
+    // 0, и без JS её должен вернуть запасной стиль из layout.
     data-reveal=""
     initial={{ opacity: 0, y: 24, rotateX: 6 }}
     animate={{ opacity: 1, y: 0, rotateX: 0 }}

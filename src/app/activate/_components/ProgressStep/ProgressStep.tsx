@@ -17,13 +17,7 @@ interface Props {
   onUpdate: (activation: ActivationDto) => void;
 }
 
-/** Экран ожидания: поставщик выдаёт подписку.
- *
- *  Активация асинхронная — у Claude она занимает около двух минут, и
- *  бэкенд опрашивается по `poll_after`. Вкладку можно закрыть: ссылка
- *  приведёт обратно к этой же активации. Кнопку отмены показывает
- *  только бэкенд флагом `can_cancel` — умеет это не каждый поставщик.
- */
+/** Экран ожидания: поставщик выдаёт подписку. */
 export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
   const { activation: fresh, elapsed } = useActivationPolling(
     activation.id,
@@ -59,8 +53,9 @@ export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
       <div className={classes.head}>
         <span className={classes.spinner} aria-hidden="true" />
         <div className={classes.headings}>
-          {/* Статус читается вслух при смене: покупатель может смотреть
-              в другое окно, пока идёт активация. */}
+          {/* Статус читается вслух при смене: покупатель может смотреть в
+              другое окно, пока идёт активация.
+              */}
           <p className={classes.title} role="status" aria-live="polite">
             {current.status_label}
           </p>

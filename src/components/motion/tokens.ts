@@ -1,7 +1,6 @@
 import type { Transition, Variants } from 'framer-motion';
 
-/** Кривые и длительности анимаций — одни на весь сайт. Кривая
- *  `ease_out` продублирована в tokens.scss для CSS-переходов. */
+/** Кривые и длительности анимаций — одни на весь сайт. */
 export const ease = [0.22, 1, 0.36, 1] as const;
 export const easeInOut = [0.65, 0, 0.35, 1] as const;
 
@@ -16,8 +15,7 @@ export const duration = {
 
 export const transition: Transition = { duration: duration.base, ease };
 
-/** Насколько блок должен войти в экран, чтобы начать появляться.
- *  `once` обязателен: иначе анимация переигрывается на каждом проходе. */
+/** Насколько блок должен войти в экран, чтобы начать появляться. */
 export const viewport = { once: true, amount: 0.2 } as const;
 
 /** Появление снизу вверх — базовый жест всей витрины. */

@@ -9,8 +9,7 @@ import { CompanyLegalName, Routes, SupportEmail } from '@/utils/consts';
 
 import classes from './Footer.module.scss';
 
-/** Подвал. Клиентский компонент ради одного: адреса телеграма приезжают
- *  из админки, и менеджер меняет их сам — без пересборки статики. */
+/** Подвал. */
 export const Footer: FC = () => {
   const { telegram_support_url, telegram_channel_url } = useSiteSettings();
 

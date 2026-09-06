@@ -2,17 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { AuthResponse, UserDto } from '@/store/api/types';
 
-/** Ключ в localStorage. Только refresh: access живёт в памяти и
- *  протухает за полчаса, класть его на диск смысла нет. */
+/** Ключ в localStorage. */
 const STORAGE_KEY = 'k30.refresh';
 
 export interface AuthState {
   access: string | null;
   refresh: string | null;
   user: UserDto | null;
-  /** false, пока не прочитали localStorage и не обменяли refresh на
-   *  access. До этого «не залогинен» — ещё не ответ, и кабинет не должен
-   *  успеть отправить пользователя на страницу входа. */
+  /** false, пока не прочитали localStorage и не обменяли refresh на access. */
   isReady: boolean;
 }
 
@@ -68,11 +65,7 @@ export const {
 
 export const authReducer = authSlice.reducer;
 
-/** Чтение и запись refresh-токена.
- *
- *  Вынесено сюда, а не размазано по компонентам: доступ к localStorage
- *  падает в приватном режиме Safari и в SSR, и проверка нужна одна.
- */
+/** Чтение и запись refresh-токена. */
 export const authStorage = {
   read(): string | null {
     if (typeof window === 'undefined') return null;

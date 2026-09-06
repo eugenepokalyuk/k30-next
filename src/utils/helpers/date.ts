@@ -1,8 +1,4 @@
-/** Форматы дат витрины.
- *
- *  Intl вместо библиотеки: форматов нужно два, а dayjs с локалью — лишние
- *  килобайты в бандле ради них.
- */
+/** Форматы дат витрины. */
 
 function parse(value: string | null): Date | null {
   if (!value) return null;
@@ -10,11 +6,7 @@ function parse(value: string | null): Date | null {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
-/** «14 августа 2026, 21:40» — там, где время что-то значит.
- *
- *  У заказа это момент покупки: по нему сходятся вопрос в поддержку и
- *  запись в админке, и без времени два заказа за один день не различить.
- */
+/** «14 августа 2026, 21:40» — там, где время что-то значит. */
 export function formatDateTime(value: string | null): string {
   const date = parse(value);
   if (!date) return '—';
@@ -28,11 +20,7 @@ export function formatDateTime(value: string | null): string {
   }).format(date);
 }
 
-/** «14 августа 2026» — там, где время лишнее.
- *
- *  Дата регистрации ровно такой случай: минута, в которую человек завёл
- *  кабинет, ему ни о чём не говорит.
- */
+/** «14 августа 2026» — там, где время лишнее. */
 export function formatDate(value: string | null): string {
   const date = parse(value);
   if (!date) return '—';

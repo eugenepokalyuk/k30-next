@@ -4,8 +4,8 @@ import React, { FC } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button, KeyIcon, UserIcon } from '@/components/ui';
-import { useAppDispatch } from '@/store/hooks';
 import type { UserDto } from '@/store/api/types';
+import { useAppDispatch } from '@/store/hooks';
 import { authStorage, signedOut } from '@/store/slices/auth';
 import { Routes } from '@/utils/consts';
 import { formatDate } from '@/utils/helpers';

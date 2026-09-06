@@ -15,7 +15,9 @@
 
   background: linear-gradient(135deg, s.$primary, s.$primary_light);
   border-radius: s.$br_2;
-  color: var(--text_contrast);
+  // Буква лежит на фирменной заливке, а не на фоне страницы: цвет тот
+  // же, что у текста на кнопке, и он тёмный в обеих темах.
+  color: var(--button_primary_text);
 
   font-family: var(--font-manrope), sans-serif;
   font-weight: s.$bold;

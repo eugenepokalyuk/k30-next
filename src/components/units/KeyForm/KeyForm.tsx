@@ -13,11 +13,7 @@ import { formatKey, isKeyComplete } from '@/utils/helpers';
 
 import classes from './KeyForm.module.scss';
 
-/** Поле ввода ключа — вход во весь сценарий активации. Стоит и на
- *  главной, и на /activate, открытой без ключа в адресе.
- *
- *  Проверяет код на бэкенде и уводит на /activate. Результат кладём в
- *  стор — второй запрос там делать незачем. */
+/** Поле ввода ключа — вход во весь сценарий активации. */
 export const KeyForm: FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -50,8 +46,8 @@ export const KeyForm: FC = () => {
           code: response.key.code,
           service: response.service,
           key: response.key,
-          // Состав формы приезжает уже здесь — страница активации
-          // откроется без второго запроса к бэкенду.
+          // Состав формы приезжает уже здесь — страница активации откроется
+          // без второго запроса к бэкенду.
           targets: response.targets ?? [],
           canActivate: Boolean(response.can_activate),
           message: response.message ?? '',
@@ -60,8 +56,8 @@ export const KeyForm: FC = () => {
       );
       router.push(activateRoute(response.key.code));
     } catch (exception) {
-      // Сеть или бэкенд отвалились: про ключ мы ничего не узнали — так
-      // и говорим, а не «ключ неверный».
+      // Сеть или бэкенд отвалились: про ключ мы ничего не узнали — так и
+      // говорим, а не «ключ неверный».
       setError(
         apiErrorMessage(
           exception,

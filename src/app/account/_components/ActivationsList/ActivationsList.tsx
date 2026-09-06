@@ -10,9 +10,7 @@ import { formatDateTime } from '@/utils/helpers';
 
 import classes from './ActivationsList.module.scss';
 
-/** История попыток активации — отвечает на «почему не заработало».
- *
- *  Показываем, только когда попытки были. */
+/** История попыток активации — отвечает на «почему не заработало». */
 export const ActivationsList: FC = () => {
   const { data, isLoading, isError } = useMyActivationsQuery();
 
@@ -72,8 +70,9 @@ export const ActivationsList: FC = () => {
                 </Button>
               )}
 
-              {/* Повтор предлагает бэкенд: у части поставщиков карта
-                  после неудачи заморожена, и вторая попытка опасна. */}
+              {/* Повтор предлагает бэкенд: у части поставщиков карта после
+                  неудачи заморожена, и вторая попытка опасна.
+                  */}
               {activation.can_retry && (
                 <Button
                   href={activateRoute(activation.key.code)}

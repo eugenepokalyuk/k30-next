@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { AdvantagesSection } from './_components/AdvantagesSection/AdvantagesSection';
 import { BuySection } from './_components/BuySection/BuySection';
 import { FaqSection } from './_components/FaqSection/FaqSection';
 import { HeroSection } from './_components/HeroSection/HeroSection';
@@ -13,6 +14,7 @@ export default function HomePage() {
       <HeroSection />
       <ServicesMarquee />
       <ServicesSection />
+      <AdvantagesSection />
       <BuySection />
       <HowSection />
       <FaqSection />

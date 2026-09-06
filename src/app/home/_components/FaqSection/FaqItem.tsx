@@ -52,8 +52,9 @@ export const FaqItem: FC<Props> = ({ question, answer }) => {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: duration.base, ease }}
           >
-            {/* Ответ пишет менеджер в админке простым текстом:
-                абзацы разделяются пустой строкой. */}
+            {/* Ответ пишет менеджер в админке простым текстом: абзацы
+                разделяются пустой строкой.
+                */}
             <div className={classes.answer}>
               {answer
                 .split(/\n\s*\n/)

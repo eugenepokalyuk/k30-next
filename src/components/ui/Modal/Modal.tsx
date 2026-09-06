@@ -8,21 +8,13 @@ import classes from './Modal.module.scss';
 interface Props extends PropsWithChildren {
   isOpen: boolean;
   title: string;
-  /** Можно ли закрыть окно мимо кнопок — Escape или щелчком по фону.
-   *  У окна-заслона это выключено: закрытие означало бы согласие. */
+  /** Можно ли закрыть окно мимо кнопок — Escape или щелчком по фону. */
   isDismissible?: boolean;
   onClose?: () => void;
   className?: string;
 }
 
-/** Модальное окно на нативном `<dialog>`.
- *
- *  Своей реализации на div-ах здесь нет намеренно: `showModal()` сам
- *  запирает фокус внутри, прячет остальную страницу от скринридера и
- *  рисует фон — всё то, что в самодельном окне забывают и что ломает
- *  клавиатуру. Взамен приходится гасить Escape вручную, когда окно
- *  закрывать нельзя.
- */
+/** Модальное окно на нативном `<dialog>`. */
 export const Modal: FC<Props> = ({
   isOpen,
   title,
@@ -41,9 +33,7 @@ export const Modal: FC<Props> = ({
     if (!isOpen && dialog.open) dialog.close();
   }, [isOpen]);
 
-  // Щелчок мимо содержимого попадает в сам <dialog>: это фон. Слушатель
-  // нативный, а не пропом на элементе: клавиатуре он не нужен — оттуда
-  // окно закрывает Escape, — и в JSX его пришлось бы объяснять линтеру.
+  // Щелчок мимо содержимого попадает в сам <dialog>: это фон.
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog || !isDismissible) return;

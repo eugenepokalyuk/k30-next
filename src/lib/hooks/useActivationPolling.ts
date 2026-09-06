@@ -5,18 +5,7 @@ import { useEffect, useState } from 'react';
 import { useActivationStatusQuery } from '@/store/api/k30Api';
 import type { ActivationDto } from '@/store/api/types';
 
-/** Опрос статуса активации.
- *
- *  Темп задаёт бэкенд полем `poll_after`, а не мы. Так и должно быть: у
- *  поставщиков разные лимиты и разные рекомендации (один просит три
- *  секунды, другой два-пять), и знание об этом должно жить в одном
- *  месте — в адаптере поставщика. Витрина просто слушается.
- *
- *  Опрос останавливается сам, когда активация дошла до окончательного
- *  состояния. Отдельная остановка «по таймауту» здесь не нужна: бэкенд
- *  сам переведёт зависшую активацию в «разбираем вручную», и это придёт
- *  очередным ответом.
- */
+/** Опрос статуса активации. */
 
 const TERMINAL = ['success', 'failed', 'cancelled', 'review'];
 
@@ -35,15 +24,13 @@ export function useActivationPolling(
 
   const isDone = Boolean(initial && TERMINAL.includes(initial.status));
 
-  // Интервал опроса берём из последнего ответа. Ноль отключает опрос —
-  // именно так RTK Query понимает «больше не надо».
+  // Интервал опроса берём из последнего ответа.
   const interval = isDone ? 0 : Math.max(1, initial?.poll_after ?? 3) * 1000;
 
   const { data } = useActivationStatusQuery(id ?? '', {
     skip: !id || isDone,
     pollingInterval: interval,
-    // Вкладку с активацией часто уводят в фон, пока ждут. Продолжать
-    // опрос там незачем — вернутся, и первый же запрос покажет итог.
+    // Вкладку с активацией часто уводят в фон, пока ждут.
     skipPollingIfUnfocused: true,
   });
 

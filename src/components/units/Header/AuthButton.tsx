@@ -13,12 +13,7 @@ interface Props {
   onNavigate: () => void;
 }
 
-/** Кнопка «Войти» или «Кабинет».
- *
- *  Пока вход не восстановлен из localStorage, не рисуем ничего: иначе на
- *  долю секунды показывается «Войти» уже вошедшему, и это выглядит как
- *  разлогинивание.
- */
+/** Кнопка «Войти» или «Кабинет». */
 export const AuthButton: FC<Props> = ({ onNavigate }) => {
   const isAuthorized = useAppSelector(selectIsAuthorized);
   const isReady = useAppSelector(selectIsAuthReady);

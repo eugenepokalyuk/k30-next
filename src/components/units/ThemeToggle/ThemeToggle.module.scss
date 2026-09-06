@@ -1,0 +1,28 @@
+@use '@/styles' as s;
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+  padding: 0;
+
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_3;
+  background: transparent;
+  color: var(--icon_secondary);
+  cursor: pointer;
+
+  transition:
+    color s.$transition-duration s.$transition-ease,
+    border-color s.$transition-duration s.$transition-ease,
+    background-color s.$transition-duration s.$transition-ease;
+
+  &:hover {
+    color: var(--text_default);
+    border-color: var(--stroke_strong);
+    background: var(--background_secondary);
+  }
+}

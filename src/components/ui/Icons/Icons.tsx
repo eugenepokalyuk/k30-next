@@ -5,7 +5,7 @@ interface IconProps {
   className?: string;
 }
 
-/** Иконки инлайном. `currentColor` — цвет задаётся стилем родителя. */
+/** Иконки инлайном. */
 const base = (size: number) => ({
   width: size,
   height: size,
@@ -100,5 +100,29 @@ export const TelegramIcon: FC<IconProps> = ({ size = 20, className }) => (
 export const CartIcon: FC<IconProps> = ({ size = 20, className }) => (
   <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
     <path d="M223.5-103.5Q200-127 200-160t23.5-56.5Q247-240 280-240t56.5 23.5Q360-193 360-160t-23.5 56.5Q313-80 280-80t-56.5-23.5Zm400 0Q600-127 600-160t23.5-56.5Q647-240 680-240t56.5 23.5Q760-193 760-160t-23.5 56.5Q713-80 680-80t-56.5-23.5ZM208-800h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Z" />
+  </svg>
+);
+
+export const RefreshIcon: FC<IconProps> = ({ size = 20, className }) => (
+  <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
+    <path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z" />
+  </svg>
+);
+
+export const SupportIcon: FC<IconProps> = ({ size = 20, className }) => (
+  <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
+    <path d="M440-80v-80h320v-284q0-117-81.5-198.5T480-724q-117 0-198.5 81.5T200-444v244h-40q-33 0-56.5-23.5T80-280v-80q0-21 10.5-39.5T120-430l3-53q8-68 39.5-126t79-101q47.5-43 109-67T480-801q68 0 129 24t109 66.5Q766-668 797-610t40 126l3 52q19 10 29.5 28t10.5 38v92q0 20-10.5 38T840-208v48q0 33-23.5 56.5T760-80H440Zm-80-280q-17 0-28.5-11.5T320-400q0-17 11.5-28.5T360-440q17 0 28.5 11.5T400-400q0 17-11.5 28.5T360-360Zm240 0q-17 0-28.5-11.5T560-400q0-17 11.5-28.5T600-440q17 0 28.5 11.5T640-400q0 17-11.5 28.5T600-360Z" />
+  </svg>
+);
+
+export const SunIcon: FC<IconProps> = ({ size = 20, className }) => (
+  <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
+    <path d="M440-800v-120h80v120h-80Zm0 760v-120h80v120h-80Zm360-400v-80h120v80H800Zm-760 0v-80h120v80H40Zm708-252-56-56 70-72 58 58-72 70ZM198-140l-58-58 72-70 56 56-70 72Zm564 0-70-72 56-56 72 70-58 58ZM212-692l-72-70 58-58 70 72-56 56Zm268 492q-117 0-198.5-81.5T200-480q0-117 81.5-198.5T480-760q117 0 198.5 81.5T760-480q0 117-81.5 198.5T480-200Z" />
+  </svg>
+);
+
+export const MoonIcon: FC<IconProps> = ({ size = 20, className }) => (
+  <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
+    <path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z" />
   </svg>
 );

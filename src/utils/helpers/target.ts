@@ -1,16 +1,4 @@
-/** Проверка данных активации на стороне витрины.
- *
- *  Зеркало серверной проверки (k30-api, providers/targets.py). Дубль
- *  здесь оправдан не «на всякий случай», а вполне конкретно: у
- *  поставщиков жёсткие лимиты — у одного из них проверка аккаунта
- *  разрешена раз в десять секунд с адреса. Отправлять туда заведомо
- *  негодный ввод значит тратить эти лимиты на опечатки и получать в
- *  ответ 429 вместо подсказки.
- *
- *  Правда при этом остаётся одна — серверная. Здесь проверяется только
- *  форма значения, и любой отказ отсюда покупатель может обойти,
- *  отправив запрос вручную: сервер всё равно проверит заново.
- */
+/** Проверка данных активации на стороне витрины. */
 
 import type { TargetKind } from '@/store/api/types';
 
@@ -23,13 +11,7 @@ const MIN_TOKEN_LENGTH = 20;
 
 const ID_KINDS: TargetKind[] = ['account_id', 'org_id', 'user_id'];
 
-/** Приводит ввод к тому виду, в котором его ждёт бэкенд.
- *
- *  Не косметика: из буфера обмена идентификатор приезжает то в
- *  кавычках, то с подписью «account id:», а токен — с переносами строк.
- *  Отвергать такое было бы придирками к тому, что человек скопировал
- *  ровно то, что мы просили.
- */
+/** Приводит ввод к тому виду, в котором его ждёт бэкенд. */
 export function normalizeTarget(kind: TargetKind, raw: string): string {
   const value = (raw ?? '').trim();
   if (!value) return '';
@@ -43,7 +25,6 @@ export function normalizeTarget(kind: TargetKind, raw: string): string {
 
   if (kind === 'access_token') {
     // Частая ошибка: в поле «токен» вставляют весь JSON сессии.
-    // Достаём токен сами вместо того, чтобы просить переделать.
     if (value.startsWith('{')) {
       const token = readToken(value);
       if (token) return token;
@@ -54,7 +35,7 @@ export function normalizeTarget(kind: TargetKind, raw: string): string {
   return value;
 }
 
-/** Что не так с введённым. `null` — всё в порядке. */
+/** Что не так с введённым. */
 export function validateTarget(kind: TargetKind, raw: string): string | null {
   const value = normalizeTarget(kind, raw);
   if (!value) return 'Заполните это поле.';
@@ -90,15 +71,7 @@ export function validateTarget(kind: TargetKind, raw: string): string | null {
   return null;
 }
 
-/** Почта из данных, если её видно локально.
- *
- *  Показать покупателю, на какой аккаунт уедет подписка, — самое
- *  полезное, что можно сделать до отправки. Перепутанный аккаунт после
- *  активации уже не отменить.
- *
- *  Подпись JWT не проверяем и проверять не должны: токен не наш, ключа
- *  нет, а нужно отсюда только имя аккаунта для показа.
- */
+/** Почта из данных, если её видно локально. */
 export function previewEmail(kind: TargetKind, raw: string): string {
   const value = normalizeTarget(kind, raw);
   if (!value) return '';
@@ -160,12 +133,7 @@ function emailFromJwt(token: string): string {
   return '';
 }
 
-/** Почта для показа: «b***r@example.com».
- *
- *  Страницу активации открывают с чужого экрана и присылают в
- *  скриншотах поддержке — целиком почту показывать незачем. Бэкенд
- *  маскирует так же.
- */
+/** Почта для показа: «b***r@example.com». */
 export function maskEmail(email: string): string {
   const value = (email ?? '').trim();
   if (!value.includes('@')) return value;

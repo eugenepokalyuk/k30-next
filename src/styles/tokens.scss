@@ -6,54 +6,70 @@
 
 // === Colors ===
 
-// Тёмная тема как единственная: витрину открывают, чтобы ввести ключ и
-// уйти, а тёмный фон меньше бьёт по глазам ночью — а именно ночью чаще
-// всего и активируют подписку.
-//
-// Фирменный цвет золотой. На тёмном фоне он светлее подложки, поэтому
-// текст на заливке — тёмный ($text-contrast), а не белый: белый по
-// золоту не проходит по контрасту.
+// Две темы, светлая по умолчанию.
 
-$primary: #e2a93a; // золотой — фирменный цвет
-$primary_light: #f3c969; // светлый оттенок для градиентов и ховера
-$primary_hover: $primary_light;
-$primary_10: rgba(226, 169, 58, 0.1);
-$primary_20: rgba(226, 169, 58, 0.2);
+$primary: #18bce8;
+$primary_light: #5fd3f2;
+$primary_dark: #0f8fb4; // ховер на светлой теме: заливка должна темнеть
+// Текст и иконки фирменного цвета на светлом фоне.
+$primary_deep: #0b7490;
+$primary_10: rgba(24, 188, 232, 0.1);
+$primary_20: rgba(24, 188, 232, 0.2);
 
-$success: #34d399; // проверка прошла
-$success_10: rgba(52, 211, 153, 0.1);
-$danger: #f87171; // ошибка под полем
-$danger_10: rgba(248, 113, 113, 0.1);
+$success: #10a37f;
+$success_10: rgba(16, 163, 127, 0.12);
+$danger: #dc2626;
+$danger_10: rgba(220, 38, 38, 0.1);
+$warning: #d97706;
 
-// Оранжевый, а не жёлтый: жёлтый теперь фирменный цвет, и предупреждение
-// в том же тоне читалось бы как обычный акцент.
-$warning: #fb923c;
+// Текст на фирменной заливке — тёмный в обеих темах.
+$text-contrast-on-primary: #04222b;
 
-$text-default: #edeef2;
-$text-secondary: #9ba1b0;
-$text-muted: #6b7280;
-$text-primary: $primary;
-$text-contrast: #0a0b0f;
+// --- светлая тема ---
 
-$icon-default: #edeef2;
-$icon-secondary: #9ba1b0;
-$icon-primary: $primary;
+$light-text-default: #10141c;
+$light-text-secondary: #5a6474;
+$light-text-muted: #8a93a3;
+$light-text-contrast: #ffffff;
 
-$background-default: #0a0b0f;
-$background-secondary: #12141b; // карточки
-$background-elevated: #1a1d26; // поля ввода, поповеры
-$background-primary: $primary;
-$background-contrast: #edeef2;
+$light-background-default: #ffffff;
+$light-background-secondary: #f5f7fa; // карточки
+$light-background-elevated: #eef1f6; // поля ввода, поповеры
+$light-background-contrast: #10141c;
 
-$stroke-default: #22252f;
-$stroke-strong: #2f3340;
-$stroke-primary: $primary;
+$light-stroke-default: #e3e7ee;
+$light-stroke-strong: #cdd4e0;
+
+$light-success: #0f8a6c;
+$light-danger: #c81e1e;
+$light-warning: #b45309;
+
+$light-box-shadow: 0 4px 24px 0 rgba(16, 20, 28, 0.08);
+
+// --- тёмная тема ---
+
+$dark-text-default: #edeef2;
+$dark-text-secondary: #9ba1b0;
+$dark-text-muted: #6b7280;
+$dark-text-contrast: #0a0b0f;
+
+$dark-background-default: #0a0b0f;
+$dark-background-secondary: #12141b;
+$dark-background-elevated: #1a1d26;
+$dark-background-contrast: #edeef2;
+
+$dark-stroke-default: #22252f;
+$dark-stroke-strong: #2f3340;
+
+$dark-success: #34d399;
+$dark-danger: #f87171;
+$dark-warning: #fb923c;
+
+$dark-box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.4);
 
 $transition-duration: 0.2s;
 $transition-ease: ease;
 $transition: all $transition-duration $transition-ease;
-$box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.4);
-$box-shadow-primary: 0 8px 32px -8px rgba(226, 169, 58, 0.4);
 
 // Одна кривая на CSS-переходы и на framer-motion (там же значениями в
 // motion/tokens.ts): иначе одинаковые на вид движения приезжают с разной
@@ -63,10 +79,7 @@ $ease_in_out: cubic-bezier(0.65, 0, 0.35, 1);
 
 // === Widths ===
 
-// Ширина контента. Полосу задаёт только максимум: до него контейнер
-// тянется на все 100% минус боковой отступ. Раньше на узких экранах
-// стояла фиксированная ширина, и на 500–767px страница висела колонкой
-// посреди пустого экрана.
+// Ширина контента.
 $width_lg: 1120px;
 $width_narrow: 720px; // формы и текстовые страницы
 $width_reading: 640px; // строка текста, за которой читать неудобно

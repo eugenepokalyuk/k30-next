@@ -8,8 +8,7 @@ import { useSiteSettings } from '@/lib/hooks';
 
 import classes from './TelegramWidget.module.scss';
 
-/** Круглая кнопка телеграм-канала. И ссылка, и сам факт показа
- *  приезжают из админки: нет настроек — нет кнопки. */
+/** Круглая кнопка телеграм-канала. */
 export const TelegramWidget: FC = () => {
   const { widget_is_enabled, telegram_channel_url } = useSiteSettings();
 

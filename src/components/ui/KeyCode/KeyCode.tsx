@@ -26,8 +26,8 @@ export const KeyCode: FC<Props> = ({ code, className }) => {
       await navigator.clipboard.writeText(code);
       setCopied(true);
     } catch {
-      // Буфер недоступен (http без localhost, отказ в разрешении) —
-      // код всё равно виден и выделяется мышью.
+      // Буфер недоступен (http без localhost, отказ в разрешении) — код всё
+      // равно виден и выделяется мышью.
     }
   };
 

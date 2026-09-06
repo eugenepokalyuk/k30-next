@@ -1,8 +1,11 @@
 import React from 'react';
+import { getColorSchemeScript } from 'react-stateful-hooks';
 import type { Metadata } from 'next';
+import Script from 'next/script';
 
 import { Layout } from '@/components/units';
 import { getFonts } from '@/lib/helpers';
+import { DEFAULT_THEME, THEME_STORAGE_KEY } from '@/lib/hooks/useTheme';
 import { AppProviders } from '@/lib/providers';
 import { CompanyName } from '@/utils/consts';
 
@@ -47,16 +50,34 @@ export const metadata: Metadata = {
   },
 };
 
+// Тема стоит на <html> до первой отрисовки.
+const themeScript = getColorSchemeScript({
+  key: THEME_STORAGE_KEY,
+  attribute: 'data-theme',
+  defaultScheme: DEFAULT_THEME,
+});
+
 type Props = Readonly<React.PropsWithChildren>;
 
 export default function RootLayout({ children }: Props) {
   return (
-    <html lang="ru">
+    // suppressHydrationWarning — про тему и только про неё: скрипт ниже
+    // меняет data-theme и color-scheme на <html> до гидрации, и React
+    // честно жалуется на расхождение с разметкой сервера.
+    <html lang="ru" data-theme={DEFAULT_THEME} suppressHydrationWarning>
       <body className={getFonts()}>
+        {/* Через next/script, а не голым <script>: обычный тег React при
+            клиентском рендере не исполняет и пишет об этом в консоль, а
+            `beforeInteractive` кладёт код в разметку до гидрации — ровно
+            туда, где он и должен сработать.
+            */}
+        <Script id="theme" strategy="beforeInteractive">
+          {themeScript}
+        </Script>
+
         {/* Блоки с анимацией появления приезжают в html уже с opacity 0 —
-            их показывает framer-motion после гидрации. Если скрипты не
-            выполнились, страница осталась бы пустой, поэтому запасной
-            стиль возвращает их на место. */}
+            их показывает framer-motion после гидрации.
+            */}
         <noscript>
           <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
         </noscript>

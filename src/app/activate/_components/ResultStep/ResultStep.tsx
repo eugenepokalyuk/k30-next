@@ -14,20 +14,15 @@ import classes from './ResultStep.module.scss';
 
 interface Props {
   activation: ActivationDto;
-  /** Нужен только на экране успеха: памятка «подписки нет» своя у
-   *  каждого сервиса. На прямой ссылке его может не оказаться. */
+  /**
+   *  Нужен только на экране успеха: памятка «подписки нет» своя у каждого
+   *  сервиса.
+   */
   service?: ServiceActivationDto;
   onRetry: () => void;
 }
 
-/** Чем всё кончилось.
- *
- *  Тон и предлагаемое действие выбираются по полю `blame` с бэкенда, а
- *  не по тексту ошибки. Кнопку «Повторить» показываем только когда
- *  бэкенд разрешил (`can_retry`): у одного из поставщиков карта после
- *  неудачи заморожена до ручной сверки, и вторая попытка либо вернёт ту
- *  же ошибку, либо будет стоить второй карты.
- */
+/** Чем всё кончилось. */
 export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
   if (activation.status === 'success') {
     return (
@@ -42,8 +37,9 @@ export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
             ? `Аккаунт: ${activation.account_email}. `
             : ''}
           {activation.message || ''}
-          {/* Когда у сервиса заведена памятка, тот же совет лежит в ней —
-              и там он подробнее, чем одна строка. */}
+          {/* Когда у сервиса заведена памятка, тот же совет лежит в ней — и
+              там он подробнее, чем одна строка.
+              */}
           {service?.missing_subscription_help
             ? ''
             : ' Если сервис ещё не видит подписку — выйдите из аккаунта и зайдите снова.'}
@@ -135,13 +131,6 @@ export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
   );
 };
 
-/** Что предлагаем покупателю сразу после выдачи.
- *
- *  Просьбы об отзыве и подписке стоят до кнопок «Мои заказы» и «На
- *  главную» намеренно: после них покупатель уходит со страницы, и
- *  просить уже некого. Каждый блок исчезает вместе со своей ссылкой —
- *  пустых кнопок здесь быть не должно.
- */
 const SuccessExtras: FC<{ service?: ServiceActivationDto }> = ({ service }) => {
   const settings = useSiteSettings();
   const [isHelpOpen, setHelpOpen] = useState(false);

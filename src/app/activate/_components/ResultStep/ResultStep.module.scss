@@ -62,8 +62,6 @@
   color: var(--text_secondary);
 }
 
-// Ссылка, а не кнопка: это не действие с подпиской, а объяснение —
-// и выглядеть наравне с «Мои заказы» оно не должно.
 .help_link {
   @include s.text_body_2;
 
@@ -71,15 +69,11 @@
   border: 0;
   background: none;
   color: var(--text_secondary);
-  text-decoration: underline;
-  text-underline-offset: 3px;
   cursor: pointer;
 
   &:hover {
     color: var(--text_default);
   }
-
-  @include s.focus_ring;
 }
 
 .help_title {

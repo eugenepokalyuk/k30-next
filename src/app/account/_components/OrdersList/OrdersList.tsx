@@ -20,8 +20,10 @@ const SOURCES: Record<string, string> = {
   manual: 'Заведён вручную',
 };
 
-/** Статус активации важнее статуса заказа: покупателя интересует
- *  «работает ли подписка», а не наш внутренний учёт. */
+/**
+ *  Статус активации важнее статуса заказа: покупателя интересует «работает
+ *  ли подписка», а не наш внутренний учёт.
+ */
 const activationLabel = (order: OrderDto) => {
   if (order.activation_status === 'activated') return 'Активирован';
   if (order.activation_status === 'pending') return 'Ожидает активации';
