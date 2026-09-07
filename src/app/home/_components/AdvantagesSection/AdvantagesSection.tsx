@@ -3,7 +3,7 @@
 import React, { FC } from 'react';
 
 import { Reveal } from '@/components/motion';
-import { getBlockIcon } from '@/components/ui';
+import { getBlockIcon, Section } from '@/components/ui';
 import { useAdvantagesQuery } from '@/store/api/k30Api';
 
 import classes from './AdvantagesSection.module.scss';
@@ -14,32 +14,30 @@ export const AdvantagesSection: FC = () => {
   if (!data?.length) return null;
 
   return (
-    <section className={classes.section}>
-      <div className={classes.container}>
-        <ul className={classes.grid}>
-          {data.map((item, index) => {
-            const Icon = getBlockIcon(item.icon);
+    <Section overline="Преимущества" title="Почему выбирают нас">
+      <ul className={classes.grid}>
+        {data.map((item, index) => {
+          const Icon = getBlockIcon(item.icon);
 
-            return (
-              <Reveal
-                as="li"
-                key={item.id}
-                className={classes.item}
-                delay={Math.min(index * 0.06, 0.24)}
-              >
-                <span className={classes.icon}>
-                  <Icon size={22} />
-                </span>
+          return (
+            <Reveal
+              as="li"
+              key={item.id}
+              className={classes.item}
+              delay={Math.min(index * 0.06, 0.24)}
+            >
+              <span className={classes.icon}>
+                <Icon size={22} />
+              </span>
 
-                <div className={classes.text}>
-                  <p className={classes.title}>{item.title}</p>
-                  <p className={classes.description}>{item.description}</p>
-                </div>
-              </Reveal>
-            );
-          })}
-        </ul>
-      </div>
-    </section>
+              <div className={classes.text}>
+                <p className={classes.title}>{item.title}</p>
+                <p className={classes.description}>{item.description}</p>
+              </div>
+            </Reveal>
+          );
+        })}
+      </ul>
+    </Section>
   );
 };

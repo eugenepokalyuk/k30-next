@@ -7,7 +7,6 @@ $gap: s.gap(2);
 
 $line_air: 8px;
 
-// Недоход отрезка до центра колонки: радиус кружка плюс воздух
 $line_inset: math.div($marker, 2) + $line_air;
 
 .steps {
@@ -24,8 +23,6 @@ $line_inset: math.div($marker, 2) + $line_air;
   align-items: center;
   gap: s.gap(2);
 
-  // 1fr — это minmax(auto, 1fr): иначе длинная подпись раздувает свою
-  // колонку и кружки перестают стоять по равному шагу
   min-width: 0;
 
   text-align: center;
@@ -62,7 +59,6 @@ $line_inset: math.div($marker, 2) + $line_air;
   position: relative;
   z-index: 1;
 
-  // Ровно $marker вместе с рамкой: от него отсчитан воздух до линии
   box-sizing: border-box;
   flex: none;
   width: $marker;
@@ -92,7 +88,6 @@ $line_inset: math.div($marker, 2) + $line_air;
 }
 
 .title {
-  // В колонку шириной в четверть экрана «Активация» в 14px не влезает
   @include s.text_caption;
 
   color: var(--text_secondary);
@@ -125,7 +120,6 @@ $line_inset: math.div($marker, 2) + $line_air;
     border-color: var(--background_primary);
     color: var(--text_contrast);
 
-    // Без spread: текущий шаг заметен, но занимает те же 32px, что остальные
     box-shadow: 0 0 12px 2px var(--background_primary_20);
   }
 
@@ -151,7 +145,6 @@ $line_inset: math.div($marker, 2) + $line_air;
   }
 }
 
-// Линия слева от текущего шага тоже пройдена
 .current::before {
   background: var(--success);
 }

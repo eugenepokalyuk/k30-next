@@ -30,8 +30,8 @@
 
   @include s.media_up(lg) {
     grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
-    gap: s.gap(12);
-    align-items: center;
+    gap: s.gap(8) s.gap(12);
+    align-items: start;
   }
 }
 
@@ -42,10 +42,14 @@
   min-width: 0;
 }
 
-.overline {
+.badge {
   @include s.text_overline;
+  display: inline-block;
+  padding: s.gap(1.5) s.gap(3);
 
-  color: var(--text_primary);
+  background: var(--background_primary_10);
+  border-radius: s.$br_4;
+  color: var(--primary);
 }
 
 .title {
@@ -59,9 +63,6 @@
   text-wrap: balance;
 }
 
-// Берём --primary, а не --text_primary: второй на светлой теме приглушён
-// до $primary_deep, и в заголовке этого кегля он читается как «цвет
-// поехал», а не как акцент
 .highlight {
   padding: s.gap(1) s.gap(3);
 
@@ -80,14 +81,26 @@
 
 .form {
   margin-top: s.gap(2);
+
+  @include s.media_up(lg) {
+    grid-column: 1 / -1;
+    margin-top: s.gap(2);
+  }
 }
 
 .advantages {
-  display: flex;
-  flex-wrap: wrap;
-  gap: s.gap(3) s.gap(6);
+  display: grid;
+  gap: s.gap(3);
+  grid-template-columns: 1fr;
 
-  margin-top: s.gap(3);
+  @include s.media_up(sm) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: s.gap(4);
+  }
+
+  @include s.media_up(lg) {
+    grid-column: 1 / -1;
+  }
 }
 
 .advantage {

@@ -31,8 +31,6 @@
 
   animation: spin 0.9s linear infinite;
 
-  // Крутящиеся элементы — частая причина дурноты при вестибулярных
-  // расстройствах
   @media (prefers-reduced-motion: reduce) {
     animation: pulse 1.6s ease-in-out infinite;
     border-top-color: var(--stroke_strong);

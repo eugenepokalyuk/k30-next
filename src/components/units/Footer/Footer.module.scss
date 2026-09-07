@@ -6,7 +6,6 @@
   border-top: 1px solid var(--stroke_default);
   background: var(--background_secondary);
 
-  // На телефоне под подвалом ещё есть системная панель жестов
   padding-bottom: calc(#{s.gap(6)} + env(safe-area-inset-bottom));
 }
 
@@ -16,7 +15,6 @@
   display: grid;
   gap: s.gap(7);
 
-  // В одну колонку подвал растягивался на два экрана
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
   @include s.media_up(md) {

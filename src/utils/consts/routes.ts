@@ -4,6 +4,7 @@ export const Routes = {
   Login: '/login',
   Account: '/account',
   Services: '/#services',
+  AllServices: '/services',
   How: '/#how',
   Faq: '/#faq',
 };

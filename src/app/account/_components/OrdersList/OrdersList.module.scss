@@ -12,9 +12,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  // Крупнее между смысловыми блоками, теснее внутри: заголовок со статусом
-  // и строка «номер — дата — источник» относятся друг к другу, а код ключа
-  // и ссылка активации — уже отдельные вещи
+
   gap: s.gap(3);
   padding: s.gap(5);
 }
@@ -30,6 +28,11 @@
 
 .service {
   @include s.text_header_3;
+
+  display: flex;
+  align-items: center;
+  gap: s.gap(2);
+  min-width: 0;
 
   color: var(--text_default);
 }
@@ -68,9 +71,6 @@
   white-space: nowrap;
 }
 
-// Код тянется на всю карточку: у элементов списка align-items: flex-start,
-// и без этого поле с кнопкой «скопировать» сжималось до ширины кода,
-// оставляя справа пустоту
 .code {
   width: 100%;
 }
@@ -88,7 +88,6 @@
   color: var(--text_secondary);
 }
 
-// Пустой список — не ошибка, а нормальное состояние нового кабинета
 .empty {
   @include s.card;
 

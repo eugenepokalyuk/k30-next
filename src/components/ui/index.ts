@@ -7,4 +7,5 @@ export * from './Logo/Logo';
 export * from './Modal/Modal';
 export * from './Notice/Notice';
 export * from './Section/Section';
+export * from './ServiceMark/ServiceMark';
 export * from './Steps/Steps';

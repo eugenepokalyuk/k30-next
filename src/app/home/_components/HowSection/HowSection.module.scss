@@ -50,8 +50,6 @@ $gap_to_marker: 12px;
   }
 
   @include s.media_up(md) {
-    // Карточка забирает остаток высоты: соседние шаги кончаются на одной
-    // линии, сколько бы строк ни занял текст
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
     gap: s.gap(4);
@@ -66,7 +64,7 @@ $gap_to_marker: 12px;
     &:not(:last-child)::after {
       content: '';
       position: absolute;
-      // Полпикселя вверх: иначе линия в 1px ложится целиком ниже кружка
+
       top: calc(#{math.div($marker, 2)} - 0.5px);
       left: calc(#{$marker} + #{$gap_to_marker});
       right: calc(#{$gap_to_marker} - #{$column_gap});
@@ -92,7 +90,6 @@ $gap_to_marker: 12px;
   width: $marker;
   height: $marker;
 
-  // Непрозрачная заливка: линия проходит за номером и не просвечивает
   background: var(--background_default);
   border: 1px solid var(--stroke_primary);
   border-radius: 50%;
@@ -123,7 +120,7 @@ $gap_to_marker: 12px;
 
 .head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: s.gap(2.5);
   min-width: 0;
 }

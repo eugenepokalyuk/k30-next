@@ -20,13 +20,10 @@
   }
 }
 
-// Над героем шапка прозрачная и не режет первый экран
 .scrolled::before {
   opacity: 1;
 }
 
-// С открытым меню шапка — кромка панели, поэтому берёт её фон. Своя
-// подложка полупрозрачна и у верха страницы пропускала затемнение оверлея
 .open::before {
   @include s.media_down(lg) {
     opacity: 1;
@@ -96,7 +93,6 @@
   align-items: center;
   gap: s.gap(2);
 
-  // Кнопка появляется после чтения localStorage: без резерва вёрстка дёргается
   min-width: 108px;
   justify-content: flex-end;
 }
@@ -105,7 +101,6 @@
   flex-shrink: 0;
 }
 
-// Рядом с бургером она оставляла логотипу меньше половины ширины
 .auth {
   display: none;
 
@@ -172,7 +167,6 @@
   border-bottom: 1px solid var(--stroke_default);
   box-shadow: var(--box_shadow);
 
-  // Пунктов станет больше — панель прокрутится, а не уедет под кромку
   max-height: calc(100dvh - var(--header_height));
   overflow-y: auto;
 

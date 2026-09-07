@@ -1,17 +1,11 @@
-// === Gap function ===
-
 @function gap($size) {
   @return #{$size * 4}px;
 }
 
-// === Colors ===
-
-// Две темы, светлая по умолчанию
-
 $primary: #18bce8;
 $primary_light: #5fd3f2;
-$primary_dark: #0f8fb4; // ховер на светлой теме: заливка должна темнеть
-// Текст и иконки фирменного цвета на светлом фоне
+$primary_dark: #0f8fb4;
+
 $primary_deep: #0b7490;
 $primary_10: rgba(24, 188, 232, 0.1);
 $primary_20: rgba(24, 188, 232, 0.2);
@@ -22,10 +16,7 @@ $danger: #dc2626;
 $danger_10: rgba(220, 38, 38, 0.1);
 $warning: #d97706;
 
-// Текст на фирменной заливке — тёмный в обеих темах
 $text-contrast-on-primary: #04222b;
-
-// --- светлая тема ---
 
 $light-text-default: #10141c;
 $light-text-secondary: #5a6474;
@@ -33,8 +24,8 @@ $light-text-muted: #8a93a3;
 $light-text-contrast: #ffffff;
 
 $light-background-default: #ffffff;
-$light-background-secondary: #f5f7fa; // карточки
-$light-background-elevated: #eef1f6; // поля ввода, поповеры
+$light-background-secondary: #f5f7fa;
+$light-background-elevated: #eef1f6;
 $light-background-contrast: #10141c;
 
 $light-stroke-default: #e3e7ee;
@@ -45,8 +36,6 @@ $light-danger: #c81e1e;
 $light-warning: #b45309;
 
 $light-box-shadow: 0 4px 24px 0 rgba(16, 20, 28, 0.08);
-
-// --- тёмная тема ---
 
 $dark-text-default: #edeef2;
 $dark-text-secondary: #9ba1b0;
@@ -71,31 +60,21 @@ $transition-duration: 0.2s;
 $transition-ease: ease;
 $transition: all $transition-duration $transition-ease;
 
-// Дублируется значениями в motion/tokens.ts: одна кривая на CSS-переходы
-// и на framer-motion
 $ease_out: cubic-bezier(0.22, 1, 0.36, 1);
 $ease_in_out: cubic-bezier(0.65, 0, 0.35, 1);
 
-// === Widths ===
-
 $width_lg: 1120px;
-$width_narrow: 720px; // формы и текстовые страницы
-$width_reading: 640px; // строка текста, за которой читать неудобно
+$width_narrow: 720px;
+$width_reading: 640px;
 $width_xs: 320px;
-
-// === Side gaps ===
 
 $gap_side_lg: 32px;
 $gap_side_md: 24px;
 $gap_side_sm: 16px;
 
-// === Gaps ===
-
 $gap_lg: 20px;
 $gap_md: 16px;
 $gap_sm: 12px;
-
-// === Border radius ===
 
 $br_full: 99999px;
 $br_6: 24px;
@@ -105,22 +84,14 @@ $br_3: 12px;
 $br_2: 8px;
 $br_1: 4px;
 
-// === Z-index ===
-
-// Кнопка телеграма ниже шапки: иначе она всплывает поверх затемнения
-// мобильного меню
 $zi_widget: 15;
 $zi_header: 20;
 $zi_modal: 40;
-
-// === Font weights ===
 
 $bold: 700;
 $semi_bold: 600;
 $medium: 500;
 $regular: 400;
-
-// === Breakpoints ===
 
 $breakpoints: (
   xs: 0,

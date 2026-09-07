@@ -10,7 +10,6 @@ import { useFaqQuery } from '@/store/api/k30Api';
 import classes from './FaqSection.module.scss';
 import { FaqItem } from './FaqItem';
 
-/** Частые вопросы приезжают из админки */
 export const FaqSection: FC = () => {
   const { data } = useFaqQuery();
   const { telegram_support_url } = useSiteSettings();
@@ -21,9 +20,10 @@ export const FaqSection: FC = () => {
     <Section id="faq" overline="Вопросы" title="Частые вопросы">
       <div className={classes.layout}>
         <Reveal as="ul" className={classes.list}>
-          {data.map((item) => (
+          {data.map((item, index) => (
             <FaqItem
               key={item.id}
+              index={index}
               question={item.question}
               answer={item.answer}
             />
@@ -34,18 +34,20 @@ export const FaqSection: FC = () => {
           <span className={classes.support_icon}>
             <ChatIcon size={22} />
           </span>
+
           <p className={classes.support_title}>Не нашли ответ?</p>
+
           <p className={classes.support_text}>
-            Напишите в телеграм — отвечаем и помогаем довести активацию до
-            конца.
+            {'Напишите в телеграм — отвечаем и помогаем довести активацию до конца'}
           </p>
+
           <Button
             href={telegram_support_url}
             external
             variant="outlined"
             size="small"
           >
-            Написать в поддержку
+            {'Написать в поддержку'}
           </Button>
         </Reveal>
       </div>

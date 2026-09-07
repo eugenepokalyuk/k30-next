@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useId, useState } from 'react';
+import React, { FC } from 'react';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -12,11 +12,12 @@ import classes from './FaqSection.module.scss';
 interface Props {
   question: string;
   answer: string;
+  index: number;
 }
 
-export const FaqItem: FC<Props> = ({ question, answer }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const id = useId();
+export const FaqItem: FC<Props> = ({ question, answer, index }) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const id = React.useId();
 
   return (
     <li className={clsx(classes.item, { [classes.item_open]: isOpen })}>
@@ -28,7 +29,12 @@ export const FaqItem: FC<Props> = ({ question, answer }) => {
           aria-expanded={isOpen}
           aria-controls={id}
         >
-          <span>{question}</span>
+          <span className={classes.number} aria-hidden>
+            {String(index + 1).padStart(2, '0')}
+          </span>
+
+          <span className={classes.text}>{question}</span>
+
           <motion.span
             className={classes.chevron}
             animate={{ rotate: isOpen ? 180 : 0 }}
@@ -51,7 +57,6 @@ export const FaqItem: FC<Props> = ({ question, answer }) => {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: duration.base, ease }}
           >
-            {/* Ответ приходит простым текстом: абзацы через пустую строку */}
             <div className={classes.answer}>
               {answer
                 .split(/\n\s*\n/)

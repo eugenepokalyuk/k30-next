@@ -12,8 +12,8 @@ interface Props extends PropsWithChildren {
   title?: string;
   description?: string;
   className?: string;
-  /** Заголовок по центру — для секций во всю ширину */
   centered?: boolean;
+  action?: React.ReactNode;
 }
 
 export const Section: FC<Props> = ({
@@ -23,6 +23,7 @@ export const Section: FC<Props> = ({
   description,
   className,
   centered,
+  action,
   children,
 }) => (
   <section id={id} className={clsx(classes.section, className)}>
@@ -30,10 +31,20 @@ export const Section: FC<Props> = ({
       {(overline || title || description) && (
         <Reveal
           as="header"
-          className={clsx(classes.header, { [classes.centered]: centered })}
+          className={clsx(classes.header, {
+            [classes.centered]: centered,
+            [classes.wide]: Boolean(action),
+          })}
         >
           {overline && <p className={classes.overline}>{overline}</p>}
-          {title && <h2 className={classes.title}>{title}</h2>}
+
+          {(title || action) && (
+            <div className={classes.title_row}>
+              {title && <h2 className={classes.title}>{title}</h2>}
+              {action}
+            </div>
+          )}
+
           {description && <p className={classes.description}>{description}</p>}
         </Reveal>
       )}

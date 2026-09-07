@@ -33,6 +33,24 @@
   font: inherit;
 }
 
+.number {
+  flex-shrink: 0;
+  padding: s.gap(0.5) s.gap(2);
+
+  background: var(--background_primary_10);
+  border-radius: s.$br_2;
+  color: var(--primary);
+
+  @include s.text_caption;
+
+  font-variant-numeric: tabular-nums;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+}
+
 .question {
   display: flex;
   align-items: center;
@@ -69,8 +87,6 @@
   color: var(--icon_secondary);
 }
 
-// Высоту анимирует framer-motion: свои вертикальные отступы не схлопнутся
-// в 0 и оставят щель у закрытого вопроса
 .answer_wrapper {
   overflow: hidden;
 }

@@ -8,17 +8,11 @@
   display: grid;
   gap: s.gap(3);
 
-  // minmax(240px, 1fr) при контенте 288px давал прокрутку на экране 320px
   grid-template-columns: 1fr;
 
   @include s.media_up(sm) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: s.gap(4);
-  }
-
-  // auto-fit, не auto-fill: на трёх сервисах иначе висит пустая колонка
-  @include s.media_up(lg) {
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   }
 }
 
@@ -37,7 +31,6 @@
     border-color s.$transition-duration s.$ease_out,
     transform s.$transition-duration s.$ease_out;
 
-  // Цвет приезжает с бэкенда (Service.accent_color)
   --accent: #{s.$primary};
 
   &::before {
@@ -68,8 +61,6 @@
   }
 }
 
-// Открывает окно с тарифами. Растянута поверх карточки: перехватывать
-// внутри нечего, зато фокус получает вся карточка
 .opener {
   position: absolute;
   inset: 0;
@@ -85,8 +76,6 @@
   }
 }
 
-// Только для скринридера. Не display: none — он выкинул бы её и из дерева
-// доступности
 .opener_label {
   position: absolute;
   width: 1px;
@@ -98,42 +87,9 @@
   white-space: nowrap;
 }
 
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 16px var(--accent);
-
-  flex-shrink: 0;
-}
-
-// Слот под логотип. Без логотипов ужимается до кружка
-.mark {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-}
-
-// Слот одинаковый у всех карточек ряда: иначе высоту строки задаёт
-// картинка, и название на карточке с логотипом уезжает вниз
-.with_logos .mark {
-  width: 48px;
-  height: 48px;
-}
-
-// contain: логотипы приходят разной пропорции, обрезать их нельзя
-.logo {
-  width: 100%;
-  height: 100%;
-
-  border-radius: s.$br_2;
-  object-fit: contain;
-}
-
 .head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: s.gap(2);
   min-width: 0;
 }
@@ -145,19 +101,17 @@
 .head_text {
   display: flex;
   flex: 1;
+  flex-direction: column;
+  gap: s.gap(1);
   min-width: 0;
-
-  align-items: center;
-  justify-content: space-between;
-  gap: s.gap(2);
 }
 
-// Рядом с логотипом на строку не хватает места: «Perplexity» и цена
-// наезжали друг на друга, поэтому столбиком
-.with_logos .head_text {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: s.gap(0.5);
+.title_row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: s.gap(2);
+  min-width: 0;
 }
 
 .name {
@@ -174,6 +128,28 @@
   white-space: nowrap;
 }
 
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: s.gap(1.5);
+  flex-shrink: 0;
+
+  @include s.text_body_2;
+
+  color: var(--text_primary);
+  transition: gap s.$transition-duration s.$ease_out;
+
+  @media (hover: hover) {
+    &:hover {
+      gap: s.gap(2.5);
+    }
+  }
+
+  &:focus-visible {
+    @include s.focus_ring;
+  }
+}
+
 .tagline {
   @include s.text_body_2;
 
@@ -181,7 +157,6 @@
   text-wrap: pretty;
 }
 
-// Прижат к низу: подписи разной длины, иначе тарифы пляшут по вертикали
 .plans {
   display: flex;
   flex-direction: column;

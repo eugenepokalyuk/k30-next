@@ -6,7 +6,11 @@
   gap: s.gap(3);
 
   width: 100%;
-  max-width: 560px;
+
+  > :first-child {
+    flex: 1;
+    min-width: 0;
+  }
 
   > :last-child {
     margin-top: 26px;
@@ -26,13 +30,59 @@
 .input {
   @include s.text_mono;
 
-  // Только визуально: значение в состоянии уже нормализовано
   text-transform: uppercase;
 
-  // Ниже 16px Safari на iOS зумит страницу при фокусе
   font-size: 16px;
 
   @include s.media_up(md) {
     font-size: 15px;
+  }
+}
+
+.submit {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -60%;
+
+    width: 40%;
+    background: linear-gradient(
+      100deg,
+      transparent,
+      rgb(255 255 255 / 30%),
+      transparent
+    );
+    transform: skewX(-20deg);
+    pointer-events: none;
+
+    animation: shine 4s s.$ease_out infinite;
+  }
+
+  &:disabled::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      animation: none;
+      opacity: 0;
+    }
+  }
+}
+
+@keyframes shine {
+  0% {
+    left: -60%;
+  }
+
+  25%,
+  100% {
+    left: 120%;
   }
 }

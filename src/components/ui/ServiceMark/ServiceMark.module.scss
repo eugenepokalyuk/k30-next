@@ -1,0 +1,24 @@
+@use '@/styles/index' as s;
+
+.mark {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.logo {
+  width: 100%;
+  height: 100%;
+
+  border-radius: s.$br_2;
+  object-fit: contain;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+  background: var(--accent, #{s.$primary});
+  box-shadow: 0 0 16px var(--accent, #{s.$primary});
+}

@@ -1,24 +1,17 @@
 @use '@/styles' as s;
 
-.section {
-  padding-bottom: var(--section_gap);
-}
-
-.container {
-  @include s.glass;
-}
-
 .grid {
   @include s.card;
 
   display: grid;
-  gap: s.gap(5);
+  gap: s.gap(4);
   grid-template-columns: 1fr;
-  padding: clamp(s.gap(5), 4vw, s.gap(8));
+  padding: s.gap(4);
 
   @include s.media_up(sm) {
     grid-template-columns: repeat(2, 1fr);
-    gap: s.gap(6);
+    gap: s.gap(5);
+    padding: s.gap(5);
   }
 
   @include s.media_up(lg) {

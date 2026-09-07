@@ -18,6 +18,21 @@
   max-width: s.$width_reading;
 }
 
+.wide {
+  max-width: none;
+
+  .description {
+    max-width: s.$width_reading;
+  }
+}
+
+.title_row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: s.gap(4);
+}
+
 .centered {
   margin-left: auto;
   margin-right: auto;

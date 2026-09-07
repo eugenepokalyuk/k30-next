@@ -53,24 +53,21 @@
   --glass: #{$width_lg};
   --gap_side: #{$gap_side_sm};
   --gap: #{$gap_sm};
-  --section_gap: 64px;
+  --section_gap: 32px;
   --header_height: 60px;
 
   @include media_up(md) {
     --gap_side: #{$gap_side_md};
     --gap: #{$gap_md};
-    --section_gap: 88px;
     --header_height: 72px;
   }
 
   @include media_up(lg) {
     --gap_side: #{$gap_side_lg};
     --gap: #{$gap_lg};
-    --section_gap: 112px;
   }
 }
 
-// Тёмная тема
 :root[data-theme='dark'] {
   color-scheme: dark;
 

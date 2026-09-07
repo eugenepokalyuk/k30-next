@@ -2,8 +2,6 @@
 @use 'sass:map';
 @use 'tokens' as *;
 
-// === Layout ===
-
 @mixin glass($width: $width_lg) {
   width: 100%;
   max-width: #{$width};
@@ -11,15 +9,12 @@
   padding: 0 var(--gap_side);
 }
 
-// Ряд, который на узком экране становится колонкой
 @mixin stack_below($breakpoint: md) {
   @include media_down($breakpoint) {
     flex-direction: column;
     align-items: stretch;
   }
 }
-
-// === Media ===
 
 @mixin media_up($breakpoint) {
   @if map.has-key($breakpoints, $breakpoint) {
@@ -66,8 +61,6 @@
     @warn "Invalid breakpoint '#{$breakpoint}'.";
   }
 }
-
-// === Typography ===
 
 @mixin text_display {
   font-family: var(--font-manrope), sans-serif;
@@ -139,7 +132,6 @@
   text-transform: uppercase;
 }
 
-// Моноширинный: группы символов встают столбиком, их проще сверить
 @mixin text_mono {
   font-family: var(--font-mono), 'SF Mono', monospace;
   font-weight: $medium;
@@ -148,8 +140,6 @@
   font-size: 15px;
   line-height: 22px;
 }
-
-// === Effects ===
 
 @mixin glow($size: 480px) {
   position: absolute;
@@ -176,7 +166,6 @@
   outline-offset: $offset;
 }
 
-// Минимальная зона нажатия 44×44 по гайдлайнам Apple и Google
 @mixin tap_target($size: 44px) {
   position: relative;
 

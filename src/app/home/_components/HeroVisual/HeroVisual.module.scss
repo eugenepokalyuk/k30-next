@@ -4,7 +4,6 @@
   position: relative;
   perspective: 1000px;
 
-  // На телефоне она только отодвигает форму ввода ниже сгиба
   display: none;
 
   @include s.media_up(lg) {

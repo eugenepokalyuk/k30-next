@@ -18,15 +18,12 @@
   color: var(--text_on_primary_fill);
   box-shadow: var(--box_shadow_primary);
 
-  // Без миксина tap_target: его position: relative вышибет кнопку из угла
-
   &:focus-visible {
     @include s.focus_ring;
   }
 }
 
 .icon {
-  // Самолётик в квадратном viewBox смещён вправо-вниз, сдвигаем обратно
   transform: translate(-1px, 1px);
 }
 

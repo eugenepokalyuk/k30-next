@@ -8,10 +8,6 @@
   width: 100%;
 }
 
-// === Выбор вида данных ===
-// Показывается, только когда поставщик принимает больше одного варианта (у
-// ChatGPT это JSON сессии либо один account_id)
-
 .choice {
   display: flex;
   flex-direction: column;
@@ -58,8 +54,6 @@
     background: var(--background_primary_10);
   }
 
-  // Клавиатурный фокус живёт на скрытом input — подсвечиваем обёртку, иначе
-  // при табуляции не видно, где ты
   &:focus-within {
     @include s.focus_ring(2px);
   }
@@ -77,8 +71,6 @@
 .choice_label {
   @include s.text_body_2;
 }
-
-// === Подтверждение ===
 
 .preview {
   @include s.text_body_2;

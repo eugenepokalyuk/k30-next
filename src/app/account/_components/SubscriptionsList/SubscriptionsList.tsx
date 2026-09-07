@@ -4,19 +4,20 @@ import React, { FC } from 'react';
 import clsx from 'clsx';
 
 import { Stagger, StaggerItem } from '@/components/motion';
+import { ServiceMark } from '@/components/ui';
 import { useMySubscriptionsQuery } from '@/store/api/k30Api';
 import type { SubscriptionDto } from '@/store/api/types';
 import { formatDate } from '@/utils/helpers';
 
 import classes from './SubscriptionsList.module.scss';
 
-/** За сколько дней до конца срок считается «на исходе» */
 const SOON_DAYS = 7;
 
-/** Активные подписки: срок и остаток считает бэкенд (`days_left`) */
 export const SubscriptionsList: FC = () => {
   const { data } = useMySubscriptionsQuery();
   if (!data?.length) return null;
+
+  const hasLogos = data.some((item) => item.logo);
 
   return (
     <section className={classes.section}>
@@ -36,7 +37,11 @@ export const SubscriptionsList: FC = () => {
           >
             <div className={classes.head}>
               <p className={classes.service}>
-                <span className={classes.dot} aria-hidden />
+                <ServiceMark
+                  logo={item.logo}
+                  accentColor={item.accent_color}
+                  size={hasLogos ? 48 : null}
+                />
                 {item.service}
               </p>
               <span className={clsx(classes.left, soon(item) && classes.soon)}>
@@ -84,7 +89,6 @@ const soon = (item: SubscriptionDto) =>
 const spent = (item: SubscriptionDto) =>
   Math.max(0, item.duration_days - (item.days_left ?? 0));
 
-/** Доля прожитого срока */
 function percent(item: SubscriptionDto): number {
   if (!item.duration_days) return 0;
   return Math.min(100, Math.max(1, (spent(item) / item.duration_days) * 100));

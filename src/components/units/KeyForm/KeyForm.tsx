@@ -15,6 +15,7 @@ import classes from './KeyForm.module.scss';
 
 export const KeyForm: FC = () => {
   const router = useRouter();
+
   const dispatch = useAppDispatch();
   const [verifyKey, { isLoading }] = useVerifyKeyMutation();
 
@@ -80,7 +81,12 @@ export const KeyForm: FC = () => {
         enterKeyHint="go"
       />
 
-      <Button type="submit" size="large" loading={isLoading}>
+      <Button
+        type="submit"
+        size="large"
+        loading={isLoading}
+        className={classes.submit}
+      >
         {'Проверить ключ'}
       </Button>
     </form>
