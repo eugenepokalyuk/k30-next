@@ -18,8 +18,6 @@ const PARALLAX = 120;
 
 const GridColor = { dark: '#0dcaf7', light: '#0dcaf7' };
 
-const GRID_OPACITY = 0.8;
-
 export const PageBackground: FC = () => {
   const { theme } = useTheme();
   const reducedMotion = useReducedMotion();
@@ -42,11 +40,11 @@ export const PageBackground: FC = () => {
         gridColor={light ? GridColor.light : GridColor.dark}
         rippleIntensity={0.02}
         gridSize={15}
-        gridThickness={28}
+        gridThickness={5}
         fadeDistance={0.5}
         vignetteStrength={4.5}
         glowIntensity={0.1}
-        opacity={GRID_OPACITY}
+        opacity={0.8}
         gridRotation={169}
         mouseInteraction
         mouseInteractionRadius={0.6}
