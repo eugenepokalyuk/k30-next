@@ -40,10 +40,10 @@ export const PageBackground: FC = () => {
         gridColor={light ? GridColor.light : GridColor.dark}
         rippleIntensity={0.02}
         gridSize={15}
-        gridThickness={5}
+        gridThickness={32}
         fadeDistance={0.5}
         vignetteStrength={4.5}
-        glowIntensity={0.1}
+        glowIntensity={0.95}
         opacity={0.8}
         gridRotation={169}
         mouseInteraction

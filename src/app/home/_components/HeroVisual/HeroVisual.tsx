@@ -13,8 +13,7 @@ import { CheckIcon, TiltCard } from '@/components/ui';
 
 import classes from './HeroVisual.module.scss';
 
-const PARALLAX_FROM = 40;
-const PARALLAX_TO = -120;
+const PARALLAX = 120;
 
 const rows = [
   { label: 'Провайдер', value: 'найден' },
@@ -28,10 +27,10 @@ export const HeroVisual: FC = () => {
 
   const { scrollYProgress } = useScroll({
     target: visualRef,
-    offset: ['start end', 'end start'],
+    offset: ['start start', 'end start'],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [PARALLAX_FROM, PARALLAX_TO]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, -PARALLAX]);
 
   return (
     <motion.div
