@@ -39,6 +39,10 @@ export const HeroSection: FC = () => (
 
       <HeroVisual />
 
+      <Reveal delay={0.18} className={classes.form}>
+        <KeyForm />
+      </Reveal>
+
       <Reveal as="ul" delay={0.24} className={classes.advantages}>
         {advantages.map((item) => (
           <li key={item.text} className={classes.advantage}>
@@ -46,10 +50,6 @@ export const HeroSection: FC = () => (
             {item.text}
           </li>
         ))}
-      </Reveal>
-
-      <Reveal delay={0.18} className={classes.form}>
-        <KeyForm />
       </Reveal>
     </div>
   </section>
