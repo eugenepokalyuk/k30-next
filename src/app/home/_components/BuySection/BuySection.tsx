@@ -4,42 +4,35 @@ import React, { FC } from 'react';
 
 import { Reveal } from '@/components/motion';
 import { Button, CartIcon, Section, TelegramIcon } from '@/components/ui';
-import { useSiteSettings } from '@/lib/hooks';
+import { useBuyBlockQuery } from '@/store/api/k30Api';
 
 import classes from './BuySection.module.scss';
 
-/** Своей оплаты у витрины нет: ключи продаются на Маркете и в телеграме */
 export const BuySection: FC = () => {
-  const {
-    buy_is_enabled,
-    buy_title,
-    buy_text,
-    buy_telegram_url,
-    buy_yandex_market_url,
-  } = useSiteSettings();
+  const { data } = useBuyBlockQuery();
 
-  const hasLinks = Boolean(buy_telegram_url || buy_yandex_market_url);
-  if (!buy_is_enabled || !hasLinks) return null;
+  const hasLinks = Boolean(data?.telegram_url || data?.yandex_market_url);
+  if (!data?.is_enabled || !hasLinks) return null;
 
   return (
     <Section id="buy">
       <Reveal className={classes.card}>
         <div className={classes.text}>
-          <h2 className={classes.title}>{buy_title}</h2>
-          {buy_text && <p className={classes.description}>{buy_text}</p>}
+          <h2 className={classes.title}>{data.title}</h2>
+          {data.text && <p className={classes.description}>{data.text}</p>}
         </div>
 
         <div className={classes.actions}>
-          {buy_yandex_market_url && (
-            <Button href={buy_yandex_market_url} external size="large">
+          {data.yandex_market_url && (
+            <Button href={data.yandex_market_url} external size="large">
               <CartIcon size={18} />
               Яндекс Маркет
             </Button>
           )}
 
-          {buy_telegram_url && (
+          {data.telegram_url && (
             <Button
-              href={buy_telegram_url}
+              href={data.telegram_url}
               external
               size="large"
               variant="outlined"

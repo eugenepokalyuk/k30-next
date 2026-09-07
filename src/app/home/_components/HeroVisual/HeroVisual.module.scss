@@ -2,13 +2,20 @@
 
 .visual {
   position: relative;
-  perspective: 1000px;
 
   display: none;
 
   @include s.media_up(lg) {
     display: block;
   }
+}
+
+.appear {
+  perspective: 1000px;
+}
+
+.scene {
+  position: relative;
 }
 
 .card {

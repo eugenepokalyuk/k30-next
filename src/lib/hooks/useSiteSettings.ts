@@ -10,11 +10,6 @@ const fallback: SiteSettingsDto = {
   telegram_support_url: SupportTelegram,
   telegram_bot_url: '',
   widget_is_enabled: false,
-  buy_is_enabled: false,
-  buy_title: 'Купить ключ',
-  buy_text: '',
-  buy_telegram_url: '',
-  buy_yandex_market_url: '',
   review_yandex_market_url: '',
 };
 

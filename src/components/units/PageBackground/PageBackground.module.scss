@@ -1,0 +1,12 @@
+@use '@/styles/index' as s;
+
+.background {
+  position: fixed;
+  top: -60px;
+  right: 0;
+  bottom: -60px;
+  left: 0;
+  z-index: -1;
+
+  pointer-events: none;
+}

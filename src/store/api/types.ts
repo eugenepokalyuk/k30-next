@@ -201,12 +201,30 @@ export interface SiteSettingsDto {
   telegram_support_url: string;
   telegram_bot_url: string;
   widget_is_enabled: boolean;
-  buy_is_enabled: boolean;
-  buy_title: string;
-  buy_text: string;
-  buy_telegram_url: string;
-  buy_yandex_market_url: string;
   review_yandex_market_url: string;
+}
+
+export interface BuyBlockDto {
+  is_enabled: boolean;
+  title: string;
+  text: string;
+  telegram_url: string;
+  yandex_market_url: string;
+}
+
+export interface TelegramBlockItemDto {
+  id: number;
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface TelegramBlockDto {
+  is_enabled: boolean;
+  title: string;
+  text: string;
+  url: string;
+  items: TelegramBlockItemDto[];
 }
 
 export type OrderStatus = 'new' | 'issued' | 'activated' | 'cancelled';

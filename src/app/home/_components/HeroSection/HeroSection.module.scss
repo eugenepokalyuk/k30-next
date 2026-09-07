@@ -64,11 +64,35 @@
 }
 
 .highlight {
+  position: relative;
+
   padding: s.gap(1) s.gap(3);
 
-  background: var(--background_primary_10);
+  background: var(--highlight_background);
   border-radius: s.$br_4;
-  color: var(--primary);
+
+  color: #ffffff;
+}
+
+.label {
+  background-image: linear-gradient(
+    100deg,
+    #ffffff 42%,
+    var(--primary_light) 49%,
+    var(--primary) 53%,
+    #ffffff 60%
+  );
+  background-repeat: no-repeat;
+  background-size: 260% 100%;
+  background-position: var(--sweep_x, 100%) 0;
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .label {
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 }
 
 .description {

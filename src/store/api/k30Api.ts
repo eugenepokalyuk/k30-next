@@ -21,6 +21,7 @@ import type {
   AdvantageDto,
   AuthOptionsDto,
   AuthResponse,
+  BuyBlockDto,
   CheckAccountResponse,
   EmailCodeRequestDto,
   EmailLoginResponse,
@@ -31,6 +32,7 @@ import type {
   SiteSettingsDto,
   SubscriptionDto,
   TargetKind,
+  TelegramBlockDto,
   TelegramStartDto,
   TelegramStatusResponse,
   UserDto,
@@ -151,6 +153,16 @@ export const k30Api = createApi({
       query: () => 'how-steps',
     }),
 
+    /** Секция «Купить ключ»: тексты и ссылки на площадки */
+    buyBlock: builder.query<BuyBlockDto, void>({
+      query: () => 'buy-block',
+    }),
+
+    /** Секция телеграм-канала: тексты, ссылка и пункты списка */
+    telegramBlock: builder.query<TelegramBlockDto, void>({
+      query: () => 'telegram-block',
+    }),
+
     /** Что показать на экране входа */
     authOptions: builder.query<AuthOptionsDto, void>({
       query: () => 'auth/options',
@@ -250,6 +262,8 @@ export const {
   useFaqQuery,
   useAdvantagesQuery,
   useHowStepsQuery,
+  useBuyBlockQuery,
+  useTelegramBlockQuery,
   useAuthOptionsQuery,
   useRequestEmailCodeMutation,
   useVerifyEmailCodeMutation,

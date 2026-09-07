@@ -7,6 +7,7 @@ import { HeroSection } from './_components/HeroSection/HeroSection';
 import { HowSection } from './_components/HowSection/HowSection';
 import { ServicesMarquee } from './_components/ServicesMarquee/ServicesMarquee';
 import { ServicesSection } from './_components/ServicesSection/ServicesSection';
+import { TelegramSection } from './_components/TelegramSection/TelegramSection';
 
 export default function HomePage() {
   return (
@@ -18,6 +19,7 @@ export default function HomePage() {
       <BuySection />
       <HowSection />
       <FaqSection />
+      <TelegramSection />
     </>
   );
 }
