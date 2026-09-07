@@ -18,7 +18,6 @@ const rows = [
 export const HeroVisual: FC = () => (
   <motion.div
     className={classes.visual}
-    // Тот же маркер, что у Reveal: без JS opacity возвращает стиль из layout
     data-reveal=""
     initial={{ opacity: 0, y: 24, rotateX: 6 }}
     animate={{ opacity: 1, y: 0, rotateX: 0 }}
@@ -32,10 +31,10 @@ export const HeroVisual: FC = () => (
           <i />
           <i />
         </span>
-        <span className={classes.status}>Проверка ключа</span>
+        <span className={classes.status}>{'Проверка ключа'}</span>
       </div>
 
-      <p className={classes.code}>K30-8SHA-8W0P-7WTQRD-N</p>
+      <p className={classes.code}>{'K30-8SHA-8W0P-7WTQRD-N'}</p>
 
       <ul className={classes.rows}>
         {rows.map((row, index) => (
@@ -53,7 +52,9 @@ export const HeroVisual: FC = () => (
             <span className={classes.check}>
               <CheckIcon size={14} />
             </span>
+
             <span className={classes.label}>{row.label}</span>
+
             <span className={classes.value}>{row.value}</span>
           </motion.li>
         ))}
@@ -65,7 +66,7 @@ export const HeroVisual: FC = () => (
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: duration.base, ease, delay: 1.2 }}
       >
-        Подписка активна
+        {'Подписка активна'}
       </motion.p>
     </div>
   </motion.div>

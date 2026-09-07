@@ -108,8 +108,7 @@
   align-items: center;
   gap: s.gap(2);
 
-  @include s.text_body_2;
-
+  @include s.text_body_1;
   color: var(--text_secondary);
 }
 
