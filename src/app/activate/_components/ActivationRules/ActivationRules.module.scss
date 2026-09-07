@@ -1,9 +1,16 @@
 @use '@/styles/index' as s;
 
+.heading {
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+}
+
 .title {
   @include s.text_header_3;
 
   color: var(--text_default);
+  text-wrap: balance;
 }
 
 .rules {
@@ -22,25 +29,30 @@
   display: flex;
   flex-direction: column;
   gap: s.gap(2.5);
+
+  counter-reset: rule;
 }
 
 .item {
   @include s.text_body_1;
 
   position: relative;
-  padding-left: s.gap(6);
+  padding-left: s.gap(7);
   color: var(--text_default);
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 10px;
-    left: s.gap(2);
+  counter-increment: rule;
 
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--background_primary);
+  &::before {
+    content: counter(rule) '.';
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    min-width: s.gap(5);
+
+    color: var(--primary);
+    font-weight: s.$medium;
+    text-align: right;
   }
 }
 

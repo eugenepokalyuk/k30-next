@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import { KeyCode, Notice, Steps } from '@/components/ui';
@@ -25,27 +25,21 @@ import { ProgressStep } from '../ProgressStep/ProgressStep';
 import { ResultStep } from '../ResultStep/ResultStep';
 import { TargetStep } from '../TargetStep/TargetStep';
 
-/** Страница активации: три шага и один источник правды */
 export const ActivateView: FC = () => {
   const params = useSearchParams();
   const dispatch = useAppDispatch();
   const [verifyKey, { isLoading }] = useVerifyKeyMutation();
 
-  // Код нормализуем так же, как в поле на главной: ссылку пересылают в
-  // мессенджерах, и оттуда она приходит с чем угодно вокруг
   const code = formatKey(params.get('key') ?? '');
   const cached = useAppSelector(selectActivationFor(code));
 
-  const [error, setError] = useState('');
+  const [error, setError] = React.useState('');
 
-  // Для какого ключа правила уже приняты
-  const [rulesAcceptedFor, setRulesAcceptedFor] = useState('');
+  const [rulesAcceptedFor, setRulesAcceptedFor] = React.useState('');
 
-  // Какой код уже спрашивали
-  const requested = useRef<string | null>(null);
+  const requested = React.useRef<string | null>(null);
 
-  // Прямая ссылка или перезагрузка: стора нет, спрашиваем бэкенд сами
-  useEffect(() => {
+  React.useEffect(() => {
     if (!code || cached || requested.current === code) return;
     requested.current = code;
 
@@ -71,8 +65,6 @@ export const ActivateView: FC = () => {
             targets: response.targets ?? [],
             canActivate: Boolean(response.can_activate),
             message: response.message ?? '',
-            // Если по ключу уже что-то идёт, бэкенд пришлёт активацию прямо
-            // здесь — и мы сразу откроем экран ожидания
             activation: response.activation ?? null,
           }),
         );
@@ -87,19 +79,16 @@ export const ActivateView: FC = () => {
     };
 
     void load();
-  }, [code, cached, verifyKey, dispatch]);
+  }, [code, cached, verifyKey]);
 
-  const onActivation = useCallback(
+  const onActivation = React.useCallback(
     (activation: ActivationDto) => dispatch(activationUpdated(activation)),
-    [dispatch],
+    [],
   );
 
-  const onRetry = useCallback(() => {
-    // Повтор начинается с той же формы, но данные вводятся заново: прошлые
-    // мы у себя не держим, и это не оплошность — токен нужен ровно на один
-    // запрос
+  const onRetry = React.useCallback(() => {
     dispatch(activationRetried());
-  }, [dispatch]);
+  }, []);
 
   const activation = cached?.activation ?? null;
   const step = currentStep(activation, cached?.canActivate);
@@ -148,22 +137,20 @@ export const ActivateView: FC = () => {
             <p className={classes.loading}>Проверяем ключ…</p>
           )}
 
-          {/* Ключ найден, но активировать нельзя: уже активирован или
-              поставщик отказал */}
           {cached && !cached.canActivate && !activation && (
             <Notice tone="error" title="Активация недоступна">
               {cached.message || 'Напишите в поддержку — разберёмся.'}
             </Notice>
           )}
 
-          {/* Пока правила не приняты, форму не рендерим: подсматривать
-              поля под окном незачем */}
           {cached?.service &&
             cached.canActivate &&
             !activation &&
             (needsRules ? (
               <ActivationRules
                 serviceName={cached.service.name}
+                logo={cached.service.logo}
+                accentColor={cached.service.accent_color}
                 rules={rules}
                 onAccept={() => setRulesAcceptedFor(code)}
               />
@@ -221,8 +208,6 @@ function currentStep(
   canActivate?: boolean,
 ): ActivationStepId {
   if (!activation) return canActivate ? 'account' : 'key';
-  // Законченная активация — тот же третий шаг, только закрытый: успех
-  // отмечает галочкой `isComplete`, отказ оставляет шаг текущим, потому что
-  // с него ещё можно повторить попытку
+
   return 'progress';
 }

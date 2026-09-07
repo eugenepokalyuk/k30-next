@@ -1,31 +1,31 @@
 'use client';
 
-import React, { FC, PropsWithChildren, useEffect, useRef } from 'react';
+import React, { FC } from 'react';
 import clsx from 'clsx';
 
 import classes from './Modal.module.scss';
 
-interface Props extends PropsWithChildren {
+interface Props extends React.PropsWithChildren {
   isOpen: boolean;
   title: string;
-  /** Можно ли закрыть окно мимо кнопок — Escape или щелчком по фону */
   isDismissible?: boolean;
+  size?: 'default' | 'wide';
   onClose?: () => void;
   className?: string;
 }
 
-/** Модальное окно на нативном `<dialog>` */
 export const Modal: FC<Props> = ({
   isOpen,
   title,
   isDismissible = true,
+  size = 'default',
   onClose,
   className,
   children,
 }) => {
-  const ref = useRef<HTMLDialogElement>(null);
+  const ref = React.useRef<HTMLDialogElement>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
 
@@ -33,8 +33,7 @@ export const Modal: FC<Props> = ({
     if (!isOpen && dialog.open) dialog.close();
   }, [isOpen]);
 
-  // Щелчок мимо содержимого попадает в сам <dialog>: это фон
-  useEffect(() => {
+  React.useEffect(() => {
     const dialog = ref.current;
     if (!dialog || !isDismissible) return;
 
@@ -49,10 +48,13 @@ export const Modal: FC<Props> = ({
   return (
     <dialog
       ref={ref}
-      className={clsx(classes.dialog, className)}
+      className={clsx(
+        classes.dialog,
+        size === 'wide' && classes.wide,
+        className,
+      )}
       aria-label={title}
       onCancel={(event) => {
-        // Escape и системная кнопка «назад» приходят сюда же
         if (!isDismissible) {
           event.preventDefault();
           return;

@@ -16,6 +16,10 @@
   }
 }
 
+.wide {
+  width: min(640px, calc(100vw - #{s.gap(8)}));
+}
+
 .body {
   display: flex;
   flex-direction: column;

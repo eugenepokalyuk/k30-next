@@ -2,7 +2,7 @@
 
 import React, { FC } from 'react';
 
-import { Button, Modal } from '@/components/ui';
+import { Button, Modal, ServiceMark } from '@/components/ui';
 import { SupportTelegram } from '@/utils/consts';
 import { parseInstruction } from '@/utils/helpers';
 
@@ -10,14 +10,16 @@ import classes from './ActivationRules.module.scss';
 
 interface Props {
   serviceName: string;
-  /** Текст правил из админки — свой у каждого сервиса */
+  logo: string | null;
+  accentColor?: string;
   rules: string;
   onAccept: () => void;
 }
 
-/** Правила активации: последнее окно, где покупателя ещё можно остановить */
 export const ActivationRules: FC<Props> = ({
   serviceName,
+  logo,
+  accentColor,
   rules,
   onAccept,
 }) => {
@@ -28,19 +30,28 @@ export const ActivationRules: FC<Props> = ({
       isOpen
       title={`Правила активации ${serviceName}`}
       isDismissible={false}
+      size="wide"
     >
-      <h2 className={classes.title}>Правила активации {serviceName}</h2>
+      <div className={classes.heading}>
+        <ServiceMark
+          logo={logo}
+          accentColor={accentColor}
+          size={logo ? 48 : null}
+        />
+
+        <h2 className={classes.title}>Правила активации {serviceName}</h2>
+      </div>
 
       <div className={classes.rules}>
         {blocks.map((block, index) =>
           block.type === 'list' ? (
-            <ul key={index} className={classes.list}>
+            <ol key={index} className={classes.list}>
               {block.items.map((item, itemIndex) => (
                 <li key={itemIndex} className={classes.item}>
                   {item}
                 </li>
               ))}
-            </ul>
+            </ol>
           ) : (
             <p key={index} className={classes.paragraph}>
               {block.text}
