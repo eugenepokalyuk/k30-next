@@ -26,6 +26,9 @@ export interface TargetOptionDto {
   how_to_url: string;
   how_to_label: string;
   secret: boolean;
+  /** Свой пример для этого вида данных; пусто — берётся общий у сервиса */
+  example_image: string;
+  example_caption: string;
 }
 
 export type Blame = 'customer' | 'shop' | 'provider' | '';
@@ -50,6 +53,11 @@ export interface ActivationDto {
   can_retry: boolean;
   can_cancel: boolean;
   account_email: string;
+  /** Вид присланных данных и они же в замаскированном виде */
+  target_kind: string;
+  target_hint: string;
+  /** chatgpt, claude, grok, perplexity — чем подписать аккаунт на успехе */
+  platform: string;
   activation_url: string;
   queue_position: number | null;
   poll_after: number;
@@ -99,6 +107,8 @@ export interface ServiceActivationDto extends Omit<
   instruction: string;
   instruction_url: string;
   instruction_url_label: string;
+  example_image: string | null;
+  example_caption: string;
   submit_label: string;
   activation_note: string;
   activation_rules: string;

@@ -54,3 +54,26 @@
   border-color: var(--danger);
   color: var(--danger);
 }
+
+// Галочка успеха слегка дышит: подтверждение заметно боковым зрением и
+// не тянет внимание с текста
+@keyframes notice_glow {
+  0%,
+  100% {
+    opacity: 0.7;
+    filter: drop-shadow(0 0 0 transparent);
+  }
+
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px var(--success));
+  }
+}
+
+.success .icon {
+  animation: notice_glow 2.6s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}

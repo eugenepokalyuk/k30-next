@@ -2,84 +2,38 @@
 
 import React, { FC } from 'react';
 
-import { Button, Notice, UserIcon } from '@/components/ui';
-import type { AccountDto } from '@/store/api/types';
+import { Button } from '@/components/ui';
 
 import classes from './TargetStep.module.scss';
 
 interface Props {
-  account: AccountDto | null;
-  /** Поставщик проверять не умеет — тон и текст меняются целиком */
-  isUnchecked: boolean;
+  /** Примечание сервиса из админки — единственное, чем экраны различаются */
   note: string;
   isStarting: boolean;
   onConfirm: () => void;
 }
 
-/** Последний экран перед активацией: на какой аккаунт пойдёт подписка */
+/**
+ *  Последний экран перед активацией. Намеренно без итогов проверки: одни
+ *  поставщики умеют предпроверку, другие нет, и раньше страницы Claude,
+ *  ChatGPT и Grok расходились в этом месте до неузнаваемости
+ */
 export const AccountConfirmation: FC<Props> = ({
-  account,
-  isUnchecked,
   note,
   isStarting,
   onConfirm,
 }) => (
   <div className={classes.account}>
-    <Notice
-      tone={isUnchecked ? 'info' : 'success'}
-      title={
-        isUnchecked
-          ? 'Мы не можем проверить аккаунт заранее'
-          : 'Аккаунт подтверждён'
-      }
-    >
-      {isUnchecked ? (
-        <>
-          {account?.email ? (
-            <>
-              По данным видно аккаунт <strong>{account.email}</strong>.{' '}
-            </>
-          ) : null}
-          Убедитесь, что указали данные именно того аккаунта, на который нужна
-          подписка. После активации изменить или отменить её будет невозможно.
-        </>
-      ) : (
-        <>
-          Подписка будет оформлена на <strong>{account?.email}</strong>. Если
-          это не тот аккаунт, измените данные выше.
-        </>
-      )}
-    </Notice>
-
-    {Boolean(account?.subscriptions?.length) && (
-      <Notice tone="info" title="На аккаунте уже есть подписка">
-        <ul className={classes.subscriptions}>
-          {account?.subscriptions.map((line) => (
-            <li key={line}>{line}</li>
-          ))}
-        </ul>
-        Поверх действующей подписки она обычно не начисляется — проверьте, точно
-        ли нужен этот аккаунт.
-      </Notice>
-    )}
-
     {note && <p className={classes.note}>{note}</p>}
 
-    <div className={classes.actions}>
-      {account?.email && (
-        <span className={classes.user}>
-          <UserIcon size={18} />
-          {account.email}
-        </span>
-      )}
-      <Button
-        type="button"
-        size="large"
-        onClick={onConfirm}
-        loading={isStarting}
-      >
-        Подтвердить и активировать
-      </Button>
-    </div>
+    <Button
+      type="button"
+      size="large"
+      onClick={onConfirm}
+      loading={isStarting}
+      className={classes.button}
+    >
+      Подтвердить и активировать
+    </Button>
   </div>
 );

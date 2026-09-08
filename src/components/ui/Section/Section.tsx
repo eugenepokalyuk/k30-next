@@ -7,7 +7,6 @@ import classes from './Section.module.scss';
 
 interface Props extends PropsWithChildren {
   id?: string;
-  /** Надзаголовок мелким капсом над основным заголовком */
   overline?: string;
   title?: string;
   description?: string;

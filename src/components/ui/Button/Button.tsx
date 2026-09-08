@@ -11,10 +11,6 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
   loading?: boolean;
   href?: string;
-  /**
-   *  Внешняя ссылка — рендерим <a> вместо next/link, открываем в новой
-   *  вкладке
-   */
   external?: boolean;
 }
 

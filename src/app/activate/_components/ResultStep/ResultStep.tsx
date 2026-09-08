@@ -8,7 +8,8 @@ import { Button, KeyCode, Modal, Notice } from '@/components/ui';
 import { useSiteSettings } from '@/lib/hooks/useSiteSettings';
 import type { ActivationDto, ServiceActivationDto } from '@/store/api/types';
 import { Routes, SupportTelegram } from '@/utils/consts';
-import { parseInstruction } from '@/utils/helpers';
+import { maskEmail, parseInstruction } from '@/utils/helpers';
+import { TelegramSection } from '@/app/home/_components/TelegramSection/TelegramSection';
 
 import classes from './ResultStep.module.scss';
 
@@ -25,6 +26,8 @@ interface Props {
 /** Чем всё кончилось */
 export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
   if (activation.status === 'success') {
+    const account = accountLine(activation);
+
     return (
       <motion.div
         className={classes.result}
@@ -33,15 +36,17 @@ export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
         transition={{ duration: duration.slow, ease }}
       >
         <Notice tone="success" title="Подписка активирована">
-          {activation.account_email
-            ? `Аккаунт: ${activation.account_email}. `
-            : ''}
-          {activation.message || ''}
-          {/* У сервиса с памяткой тот же совет лежит в ней, подробнее */}
           {service?.missing_subscription_help
             ? ''
-            : ' Если сервис ещё не видит подписку — выйдите из аккаунта и зайдите снова.'}
+            : 'Если сервис ещё не видит подписку — выйдите из аккаунта и зайдите снова.'}
         </Notice>
+
+        {account && (
+          <dl className={classes.account}>
+            <dt className={classes.account_label}>{account.label}</dt>
+            <dd className={classes.account_value}>{account.value}</dd>
+          </dl>
+        )}
 
         {activation.activation_url && (
           <Button href={activation.activation_url} external size="large">
@@ -137,6 +142,9 @@ const SuccessExtras: FC<{ service?: ServiceActivationDto }> = ({ service }) => {
 
   return (
     <>
+      {/* Тот же блок, что на главной: и текст, и пункты правит админка */}
+      <TelegramSection className={classes.telegram} />
+
       {settings.review_yandex_market_url && (
         <div className={classes.offer}>
           <p className={classes.offer_text}>
@@ -154,22 +162,6 @@ const SuccessExtras: FC<{ service?: ServiceActivationDto }> = ({ service }) => {
         </div>
       )}
 
-      {settings.telegram_channel_url && (
-        <div className={classes.offer}>
-          <p className={classes.offer_text}>
-            Будьте в курсе новостей, акций и обновлений сервиса.
-          </p>
-          <Button
-            href={settings.telegram_channel_url}
-            external
-            variant="outlined"
-            size="small"
-          >
-            Подписаться на Telegram
-          </Button>
-        </div>
-      )}
-
       {help && (
         <>
           <button
@@ -177,7 +169,7 @@ const SuccessExtras: FC<{ service?: ServiceActivationDto }> = ({ service }) => {
             className={classes.help_link}
             onClick={() => setHelpOpen(true)}
           >
-            Ключ активирован, но подписки нет
+            Ключ активирован, но подписки нет?
           </button>
 
           <Modal
@@ -239,3 +231,24 @@ const Support: FC<{ code: string }> = ({ code }) => (
     </Button>
   </div>
 );
+
+
+/**
+ *  Чем подписан выданный аккаунт. У ChatGPT это почта, и показывать её
+ *  целиком незачем — хватит узнать свою. У Claude и Grok почты нет вовсе,
+ *  там опознают по идентификатору, который покупатель сам и вводил
+ */
+function accountLine(
+  activation: ActivationDto,
+): { label: string; value: string } | null {
+  const email = (activation.account_email || '').trim();
+  const hint = (activation.target_hint || '').trim();
+
+  if (activation.platform === 'chatgpt') {
+    if (email) return { label: 'Почта аккаунта', value: maskEmail(email) };
+    return hint ? { label: 'Аккаунт', value: hint } : null;
+  }
+
+  if (hint) return { label: 'ID аккаунта', value: hint };
+  return email ? { label: 'Почта аккаунта', value: maskEmail(email) } : null;
+}

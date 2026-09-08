@@ -4,18 +4,16 @@ import { Button } from '@/components/ui';
 import { parseInstruction } from '@/utils/helpers';
 
 import classes from './Instruction.module.scss';
+import { Reveal } from '@/components/motion';
 
 interface Props {
   text: string;
-  /** Название сервиса — подпись первой кнопки: «Открыть ChatGPT» */
   serviceName: string;
-  /** Сайт сервиса: туда покупатель идёт войти в нужный аккаунт */
   serviceUrl?: string;
   url?: string;
   urlLabel?: string;
 }
 
-/** Инструкция сервиса */
 export const Instruction: FC<Props> = ({
   text,
   serviceName,
@@ -25,46 +23,51 @@ export const Instruction: FC<Props> = ({
 }) => {
   const blocks = parseInstruction(text);
 
-  // Вторая кнопка нужна, только если ведёт не туда же, куда первая: у
-  // сервиса без отдельной страницы с данными обе указывали бы на сайт
   const showSource = Boolean(serviceUrl);
   const showHowTo = Boolean(url) && url !== serviceUrl;
 
   if (!blocks.length && !showSource && !showHowTo) return null;
 
   return (
-    <div className={classes.instruction}>
-      {blocks.map((block, index) =>
-        block.type === 'list' ? (
-          <ul key={index} className={classes.list}>
-            {block.items.map((item, itemIndex) => (
-              <li key={itemIndex} className={classes.item}>
-                {item}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p key={index} className={classes.paragraph}>
-            {block.text}
-          </p>
-        ),
-      )}
+    <Reveal className={classes.card}>
+      <div className={classes.instruction}>
+        {blocks.map((block, index) =>
+          block.type === 'list' ? (
+            <ul key={index} className={classes.list}>
+              {block.items.map((item, itemIndex) => (
+                <li key={itemIndex} className={classes.item}>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p key={index} className={classes.paragraph}>
+              {block.text}
+            </p>
+          ),
+        )}
 
-      {(showSource || showHowTo) && (
-        <div className={classes.actions}>
-          {showSource && (
-            <Button href={serviceUrl} external variant="outlined" size="small">
-              Открыть {serviceName}
-            </Button>
-          )}
+        {(showSource || showHowTo) && (
+          <div className={classes.actions}>
+            {showSource && (
+              <Button
+                href={serviceUrl}
+                external
+                variant="outlined"
+                size="small"
+              >
+                Открыть {serviceName}
+              </Button>
+            )}
 
-          {showHowTo && (
-            <Button href={url} external variant="outlined" size="small">
-              {urlLabel || 'Получить токен'}
-            </Button>
-          )}
-        </div>
-      )}
-    </div>
+            {showHowTo && (
+              <Button href={url} external variant="outlined" size="small" >
+                {urlLabel || 'Получить токен'}
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+    </Reveal>
   );
 };

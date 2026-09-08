@@ -1,5 +1,17 @@
 @use '@/styles/index' as s;
 
+.card {
+  @include s.card;
+
+  display: grid;
+  gap: s.gap(6);
+  grid-template-columns: 1fr;
+
+  width: 100%;
+
+  padding: s.gap(5) s.gap(4);
+}
+
 .instruction {
   display: flex;
   flex-direction: column;

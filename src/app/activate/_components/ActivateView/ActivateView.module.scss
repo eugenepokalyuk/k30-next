@@ -27,7 +27,15 @@
 .subtitle {
   @include s.text_body_1;
 
+  display: flex;
+  align-items: center;
+  gap: s.gap(2);
+
   color: var(--text_primary);
+}
+
+.subtitle_logo {
+  flex-shrink: 0;
 }
 
 .steps {

@@ -18,7 +18,12 @@ import classes from './TelegramSection.module.scss';
 
 const SHIMMER_SECONDS = 8;
 
-export const TelegramSection: FC = () => {
+interface Props {
+  /** Страница активации гасит им внешние отступы секции */
+  className?: string;
+}
+
+export const TelegramSection: FC<Props> = ({ className }) => {
   const { data } = useTelegramBlockQuery();
 
   const angle = useMotionValue(0);
@@ -40,7 +45,7 @@ export const TelegramSection: FC = () => {
   if (!data?.is_enabled || !data.url) return null;
 
   return (
-    <Section id="telegram">
+    <Section id="telegram" className={className}>
       <Reveal className={classes.card}>
         {!reducedMotion && (
           <motion.span

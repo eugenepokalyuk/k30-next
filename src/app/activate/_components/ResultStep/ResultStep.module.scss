@@ -99,3 +99,33 @@
   padding-left: s.gap(5);
   list-style: disc;
 }
+
+.account {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: s.gap(1) s.gap(2);
+
+  margin: 0;
+}
+
+.account_label {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+}
+
+.account_value {
+  @include s.text_body_1;
+
+  margin: 0;
+  color: var(--text_default);
+  font-weight: s.$semi_bold;
+  overflow-wrap: anywhere;
+}
+
+// Блок с главной приходит со своими отступами под целую страницу —
+// внутри узкой карточки активации они лишние
+.telegram {
+  padding: 0;
+}

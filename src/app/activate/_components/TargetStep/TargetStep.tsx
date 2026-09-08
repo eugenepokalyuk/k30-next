@@ -13,6 +13,7 @@ import { maskEmail } from '@/utils/helpers';
 import classes from './TargetStep.module.scss';
 import { AccountConfirmation } from './AccountConfirmation';
 import { KindChooser } from './KindChooser';
+import { TargetExample } from './TargetExample';
 import { useTargetStep } from './useTargetStep';
 import { Instruction } from '../Instruction/Instruction';
 
@@ -84,10 +85,15 @@ export const TargetStep: FC<Props> = ({
         </p>
       )}
 
+      <TargetExample
+        image={option.example_image || service.example_image || ''}
+        caption={option.example_caption || service.example_caption}
+        label={option.label}
+        isOwn={Boolean(option.example_image)}
+      />
+
       {step.isConfirmed ? (
         <AccountConfirmation
-          account={step.account}
-          isUnchecked={step.isUnchecked}
           note={service.activation_note}
           isStarting={step.isStarting}
           onConfirm={step.confirm}
@@ -98,6 +104,7 @@ export const TargetStep: FC<Props> = ({
           size="large"
           loading={step.isChecking}
           className={classes.button}
+          fullWidth
         >
           {service.submit_label || 'Проверить данные'}
         </Button>

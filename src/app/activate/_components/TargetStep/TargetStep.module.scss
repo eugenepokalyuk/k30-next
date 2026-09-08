@@ -125,3 +125,51 @@
     width: 100%;
   }
 }
+
+.example_link {
+  @include s.text_body_2;
+
+  cursor: pointer;
+
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text_secondary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  transition: s.$transition;
+
+  &:hover {
+    color: var(--text_default);
+  }
+
+  &:focus-visible {
+    @include s.focus_ring(2px);
+  }
+}
+
+.example_title {
+  @include s.text_header_3;
+
+  color: var(--text_default);
+}
+
+.example_image {
+  width: 100%;
+  height: auto;
+
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_3;
+}
+
+.example_caption {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+}
+
+.example_actions {
+  display: flex;
+  justify-content: flex-end;
+}

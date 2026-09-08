@@ -16,7 +16,7 @@ import classes from './HeroVisual.module.scss';
 const PARALLAX = 120;
 
 const rows = [
-  { label: 'Провайдер', value: 'найден' },
+  { label: 'Ключ', value: 'найден' },
   { label: 'Сервис', value: 'Claude Pro' },
   { label: 'Аккаунт', value: 'подтверждён' },
 ];

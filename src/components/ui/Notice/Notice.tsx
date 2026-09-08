@@ -18,8 +18,6 @@ export const Notice: FC<Props> = ({
 }) => (
   <div
     className={clsx(classes.notice, classes[tone], className)}
-    // Ошибку и успех проверки скринридер должен произнести сам: они
-    // появляются после нажатия кнопки, фокус при этом никуда не уходит
     role={tone === 'error' ? 'alert' : 'status'}
   >
     <span className={classes.icon}>

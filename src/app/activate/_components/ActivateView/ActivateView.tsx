@@ -3,7 +3,7 @@
 import React, { FC } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-import { KeyCode, Notice, Steps } from '@/components/ui';
+import { KeyCode, Notice, ServiceMark, Steps } from '@/components/ui';
 import { KeyForm } from '@/components/units';
 import { apiErrorMessage } from '@/store/api/errors';
 import { useVerifyKeyMutation } from '@/store/api/k30Api';
@@ -104,6 +104,12 @@ export const ActivateView: FC = () => {
           <h1 className={classes.title}>Активация подписки</h1>
           {cached?.key && (
             <p className={classes.subtitle}>
+              <ServiceMark
+                logo={cached.service?.logo ?? null}
+                accentColor={cached.service?.accent_color}
+                size={28}
+                className={classes.subtitle_logo}
+              />
               {[cached.key.service, cached.key.plan].filter(Boolean).join(' ')}
             </p>
           )}
@@ -115,7 +121,9 @@ export const ActivateView: FC = () => {
           className={classes.steps}
         />
 
-        {code && <KeyCode code={code} className={classes.key} />}
+        {code && !isComplete && (
+          <KeyCode code={code} className={classes.key} />
+        )}
 
         <div className={classes.body}>
           {!code && (
