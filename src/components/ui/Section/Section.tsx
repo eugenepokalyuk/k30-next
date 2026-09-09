@@ -1,11 +1,11 @@
-import React, { FC, PropsWithChildren } from 'react';
+import React, { FC } from 'react';
 import clsx from 'clsx';
 
 import { Reveal } from '@/components/motion';
 
 import classes from './Section.module.scss';
 
-interface Props extends PropsWithChildren {
+interface Props extends React.PropsWithChildren {
   id?: string;
   overline?: string;
   title?: string;

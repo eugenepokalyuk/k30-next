@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import Image from 'next/image';
 
 import { Button, Modal } from '@/components/ui';
@@ -8,22 +8,14 @@ import { Button, Modal } from '@/components/ui';
 import classes from './TargetStep.module.scss';
 
 interface Props {
-  /** Свой пример вида данных, иначе запасной по сервису */
   image: string;
   caption: string;
-  /** Подпись поля — ею называем окно, когда снимок именно про него */
   label: string;
-  /**
-   *  Снимок заведён под этот вариант ввода. Запасной не подписываем
-   *  вариантом: у Claude их два, и одна картинка под заголовками «где
-   *  взять SessionKey» и «где взять Organization ID» вводит в заблуждение
-   */
   isOwn: boolean;
 }
 
-/** Скриншот «где это лежит» — под полем ввода, по ссылке */
 export const TargetExample: FC<Props> = ({ image, caption, label, isOwn }) => {
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = React.useState(false);
 
   if (!image) return null;
 
@@ -36,7 +28,7 @@ export const TargetExample: FC<Props> = ({ image, caption, label, isOwn }) => {
         className={classes.example_link}
         onClick={() => setOpen(true)}
       >
-        Посмотреть пример
+        {'Посмотреть пример'}
       </button>
 
       <Modal
@@ -50,8 +42,6 @@ export const TargetExample: FC<Props> = ({ image, caption, label, isOwn }) => {
         <Image
           src={image}
           alt={caption || title}
-          // Настоящий размер скриншота неизвестен, поэтому числа здесь —
-          // только подсказка о пропорциях, а ширину задаёт вёрстка
           width={1200}
           height={800}
           className={classes.example_image}
@@ -66,7 +56,7 @@ export const TargetExample: FC<Props> = ({ image, caption, label, isOwn }) => {
             size="small"
             onClick={() => setOpen(false)}
           >
-            Понятно
+            {'Понятно'}
           </Button>
         </div>
       </Modal>

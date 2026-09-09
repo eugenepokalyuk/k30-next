@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useRef } from 'react';
+import React, { FC } from 'react';
 import {
   motion,
   useReducedMotion,
@@ -22,7 +22,7 @@ const rows = [
 ];
 
 export const HeroVisual: FC = () => {
-  const visualRef = useRef<HTMLDivElement>(null);
+  const visualRef = React.useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({

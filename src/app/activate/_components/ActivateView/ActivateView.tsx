@@ -3,8 +3,7 @@
 import React, { FC } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-import { KeyCode, Notice, ServiceMark, Steps } from '@/components/ui';
-import { KeyForm } from '@/components/units';
+import { Notice, ServiceMark, Steps } from '@/components/ui';
 import { apiErrorMessage } from '@/store/api/errors';
 import { useVerifyKeyMutation } from '@/store/api/k30Api';
 import type { ActivationDto } from '@/store/api/types';
@@ -21,6 +20,7 @@ import { formatKey, isKeyComplete } from '@/utils/helpers';
 
 import classes from './ActivateView.module.scss';
 import { ActivationRules } from '../ActivationRules/ActivationRules';
+import { KeySection, type KeyStatus } from '../KeySection/KeySection';
 import { ProgressStep } from '../ProgressStep/ProgressStep';
 import { ResultStep } from '../ResultStep/ResultStep';
 import { TargetStep } from '../TargetStep/TargetStep';
@@ -93,6 +93,7 @@ export const ActivateView: FC = () => {
   const activation = cached?.activation ?? null;
   const step = currentStep(activation, cached?.canActivate);
   const isComplete = activation?.status === 'success';
+  const keyStatus = currentKeyStatus(cached, activation);
 
   const rules = cached?.service?.activation_rules ?? '';
   const needsRules = Boolean(rules) && rulesAcceptedFor !== code;
@@ -121,20 +122,16 @@ export const ActivateView: FC = () => {
           className={classes.steps}
         />
 
-        {code && !isComplete && (
-          <KeyCode code={code} className={classes.key} />
+        {!isComplete && (
+          <KeySection
+            code={code}
+            status={keyStatus}
+            message={keyStatus === 'rejected' ? cached?.message : ''}
+            className={classes.key}
+          />
         )}
 
         <div className={classes.body}>
-          {!code && (
-            <div className={classes.prompt}>
-              <p className={classes.prompt_text}>
-                Введите код из письма — проверим его и откроем активацию.
-              </p>
-              <KeyForm />
-            </div>
-          )}
-
           {error && (
             <Notice tone="error" title="Не получилось открыть активацию">
               {error}
@@ -143,12 +140,6 @@ export const ActivateView: FC = () => {
 
           {isLoading && !cached && (
             <p className={classes.loading}>Проверяем ключ…</p>
-          )}
-
-          {cached && !cached.canActivate && !activation && (
-            <Notice tone="error" title="Активация недоступна">
-              {cached.message || 'Напишите в поддержку — разберёмся.'}
-            </Notice>
           )}
 
           {cached?.service &&
@@ -218,4 +209,21 @@ function currentStep(
   if (!activation) return canActivate ? 'account' : 'key';
 
   return 'progress';
+}
+
+/**
+ *  Что показывает карточка статуса. «Принят» держится до конца: ключ,
+ *  открывший форму, остаётся принятым и на ожидании, и на успехе —
+ *  меняется шаг, а не судьба ключа
+ */
+function currentKeyStatus(
+  cached: { canActivate: boolean; message: string } | null,
+  activation: ActivationDto | null,
+): KeyStatus {
+  if (activation) return 'accepted';
+  if (!cached) return 'waiting';
+  if (cached.canActivate) return 'accepted';
+  // Пустое сообщение при `canActivate: false` — это ещё не отказ, а
+  // непроверенный ключ: так выглядит состояние до ответа сервера
+  return cached.message ? 'rejected' : 'waiting';
 }

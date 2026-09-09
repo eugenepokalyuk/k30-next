@@ -13,7 +13,16 @@ import { formatKey, isKeyComplete } from '@/utils/helpers';
 
 import classes from './KeyForm.module.scss';
 
-export const KeyForm: FC = () => {
+interface Props {
+  /**
+   *  Своя подпись над полем. На главной она нужна, в секции ключа —
+   *  нет: там ровно тот же текст стоит заголовком карточки, и два
+   *  «Ключ активации» подряд читаются как разные поля
+   */
+  label?: string;
+}
+
+export const KeyForm: FC<Props> = ({ label = 'Ключ активации' }) => {
   const router = useRouter();
 
   const dispatch = useAppDispatch();
@@ -64,7 +73,7 @@ export const KeyForm: FC = () => {
   return (
     <form className={classes.form} onSubmit={submit} noValidate>
       <Field
-        label="Ключ активации"
+        label={label}
         placeholder="K30-XXXX-XXXX-XXXXXX-X"
         value={value}
         onChange={(next) => {

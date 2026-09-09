@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, PropsWithChildren } from 'react';
+import React, { FC } from 'react';
 import { motion } from 'framer-motion';
 
 import { duration, ease, viewport } from './tokens';
@@ -17,16 +17,13 @@ const tags = {
 
 export type MotionTag = keyof typeof tags;
 
-interface Props extends PropsWithChildren {
+interface Props extends React.PropsWithChildren {
   as?: MotionTag;
   className?: string;
-  /** Задержка в секундах — чтобы соседние блоки не выезжали разом */
   delay?: number;
-  /** Сдвиг снизу */
   y?: number;
 }
 
-/** Блок, который проявляется, когда доезжает до экрана */
 export const Reveal: FC<Props> = ({
   as = 'div',
   className,
@@ -39,9 +36,6 @@ export const Reveal: FC<Props> = ({
   return (
     <Tag
       className={className}
-      // Метка для запасного стиля в <noscript>: до появления блок отрисован
-      // с opacity 0 прямо в html, и без работающего JS он так и остался бы
-      // невидимым
       data-reveal=""
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}

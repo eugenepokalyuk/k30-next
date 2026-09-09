@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useMemo, useState } from 'react';
+import React from 'react';
 
 import { apiErrorMessage } from '@/store/api/errors';
 import {
@@ -14,13 +14,8 @@ import type {
 } from '@/store/api/types';
 import { normalizeTarget, previewEmail, validateTarget } from '@/utils/helpers';
 
-/**
- *  Список закрыт бэкендом: опечатка должна ломать сборку, а не активацию у
- *  покупателя
- */
 type TargetKind = TargetOptionDto['kind'];
 
-/** Запасной текст: связи нет и сказать по существу нечего */
 const NETWORK_ERROR = 'Не получилось связаться с сервером. Попробуйте ещё раз.';
 
 interface Params {
@@ -34,21 +29,18 @@ export interface TargetStepState {
   value: string;
   error: string;
   account: AccountDto | null;
-  /** Поставщик не умеет проверять — подтверждаем тем, что видно локально */
   isUnchecked: boolean;
   isConfirmed: boolean;
-  /** Почта, вытащенная из самого токена, — до похода к поставщику */
   localEmail: string;
   isChecking: boolean;
   isStarting: boolean;
   isBusy: boolean;
   setValue: (next: string) => void;
   setKind: (next: TargetKind) => void;
-  check: (event: FormEvent) => void;
+  check: (event: React.FormEvent) => void;
   confirm: () => void;
 }
 
-/** Состояние шага «Аккаунт»: два запроса и то, что между ними */
 export function useTargetStep({
   code,
   targets,
@@ -57,13 +49,13 @@ export function useTargetStep({
   const [checkAccount, { isLoading: isChecking }] = useCheckAccountMutation();
   const [activate, { isLoading: isStarting }] = useActivateMutation();
 
-  const [kind, setKind] = useState(targets[0]?.kind);
-  const [value, setValue] = useState('');
-  const [error, setError] = useState('');
-  const [account, setAccount] = useState<AccountDto | null>(null);
-  const [isUnchecked, setUnchecked] = useState(false);
+  const [kind, setKind] = React.useState(targets[0]?.kind);
+  const [value, setValue] = React.useState('');
+  const [error, setError] = React.useState('');
+  const [account, setAccount] = React.useState<AccountDto | null>(null);
+  const [isUnchecked, setUnchecked] = React.useState(false);
 
-  const option = useMemo(
+  const option = React.useMemo(
     () => targets.find((item) => item.kind === kind) ?? targets[0],
     [targets, kind],
   );
@@ -76,7 +68,6 @@ export function useTargetStep({
 
   const changeValue = (next: string) => {
     setValue(next);
-    // Данные поменяли — прежняя проверка больше ни о чём не говорит
     resetCheck();
   };
 
@@ -86,12 +77,10 @@ export function useTargetStep({
     resetCheck();
   };
 
-  const check = async (event: FormEvent) => {
+  const check = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!option) return;
 
-    // Проверяем формат на месте: у поставщиков жёсткие лимиты, и тратить их
-    // на опечатки нельзя — вернётся 429 вместо подсказки
     const complaint = validateTarget(option.kind, value);
     if (complaint) {
       setError(complaint);
@@ -137,8 +126,6 @@ export function useTargetStep({
         value: normalizeTarget(option.kind, value),
       }).unwrap();
 
-      // Отказ на запуске — тоже активация со статусом failed: экран
-      // результата покажет её причину и подскажет, что делать дальше
       if (!response.activation) {
         setError(
           response.error ||

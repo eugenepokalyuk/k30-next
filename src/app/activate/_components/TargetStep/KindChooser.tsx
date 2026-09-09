@@ -24,7 +24,7 @@ export const KindChooser: FC<Props> = ({
 
   return (
     <fieldset className={classes.choice} disabled={disabled}>
-      <legend className={classes.choice_title}>Чем подтвердить аккаунт</legend>
+      <legend className={classes.choice_title}>{'Чем подтвердить аккаунт'}</legend>
 
       <div className={classes.choice_options}>
         {targets.map((item) => (
@@ -41,6 +41,7 @@ export const KindChooser: FC<Props> = ({
               onChange={() => onSelect(item.kind)}
               className={classes.choice_input}
             />
+
             <span className={classes.choice_label}>{item.label}</span>
           </label>
         ))}

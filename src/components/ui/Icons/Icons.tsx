@@ -88,6 +88,18 @@ export const AlertIcon: FC<IconProps> = ({ size = 20, className }) => (
   </svg>
 );
 
+export const HomeIcon: FC<IconProps> = ({ size = 20, className }) => (
+  <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
+    <path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Z" />
+  </svg>
+);
+
+export const StarIcon: FC<IconProps> = ({ size = 20, className }) => (
+  <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
+    <path d="m233-80 65-281L80-550l288-25 112-265 112 265 288 25-218 189 65 281-247-149L233-80Z" />
+  </svg>
+);
+
 export const TelegramIcon: FC<IconProps> = ({ size = 20, className }) => (
   <svg {...base(size)} className={className}>
     <path
@@ -136,5 +148,17 @@ export const SunIcon: FC<IconProps> = ({ size = 20, className }) => (
 export const MoonIcon: FC<IconProps> = ({ size = 20, className }) => (
   <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
     <path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z" />
+  </svg>
+);
+
+export const LinkIcon: FC<IconProps> = ({ size = 20, className }) => (
+  <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
+      <path d="M318-120q-82 0-140-58t-58-140q0-40 15-76t43-64l134-133 56 56-134 134q-17 17-25.5 38.5T200-318q0 49 34.5 83.5T318-200q23 0 45-8.5t39-25.5l133-134 57 57-134 133q-28 28-64 43t-76 15Zm79-220-57-57 223-223 57 57-223 223Zm251-28-56-57 134-133q17-17 25-38t8-44q0-50-34-85t-84-35q-23 0-44.5 8.5T558-726L425-592l-57-56 134-134q28-28 64-43t76-15q82 0 139.5 58T839-641q0 39-14.5 75T782-502L648-368Z" />
+  </svg>
+);
+
+export const OpenInNewIcon: FC<IconProps> = ({ size = 20, className }) => (
+  <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
+      <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z" />
   </svg>
 );

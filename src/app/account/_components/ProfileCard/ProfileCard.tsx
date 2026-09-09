@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, FormEvent, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 
 import { Button, Field } from '@/components/ui';
 import { useUpdateMeMutation } from '@/store/api/k30Api';
@@ -22,17 +22,17 @@ export const ProfileCard: FC<Props> = ({ user }) => {
   // Профиль приезжает асинхронно (после обмена refresh на access), но
   // родитель не рендерит карточку, пока его нет, — начальные значения
   // берутся из пропса один раз, синхронизировать их не нужно
-  const [name, setName] = useState(user.name);
-  const [telegram, setTelegram] = useState(user.telegram_username);
-  const [saved, setSaved] = useState(false);
+  const [name, setName] = React.useState(user.name);
+  const [telegram, setTelegram] = React.useState(user.telegram_username);
+  const [saved, setSaved] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!saved) return;
     const timer = window.setTimeout(() => setSaved(false), 2000);
     return () => window.clearTimeout(timer);
   }, [saved]);
 
-  const save = async (event: FormEvent) => {
+  const save = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
       const updated = await updateMe({
@@ -49,7 +49,7 @@ export const ProfileCard: FC<Props> = ({ user }) => {
 
   return (
     <section className={classes.card}>
-      <h2 className={classes.title}>Профиль</h2>
+      <h2 className={classes.title}>{'Профиль'}</h2>
 
       <form className={classes.form} onSubmit={save}>
         <Field label="Имя" name="name" value={name} onChange={setName} />

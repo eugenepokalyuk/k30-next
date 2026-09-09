@@ -17,6 +17,7 @@ import type { RootState } from '@/store/store';
 import type {
   ActivateResponse,
   ActivationDto,
+  ActivationPromoDto,
   ActivationStatusResponse,
   AdvantageDto,
   AuthOptionsDto,
@@ -158,6 +159,11 @@ export const k30Api = createApi({
       query: () => 'buy-block',
     }),
 
+    /** Карточки «Телеграм» и «Отзыв» под экраном успеха активации */
+    activationPromo: builder.query<ActivationPromoDto, void>({
+      query: () => 'activation-promo',
+    }),
+
     /** Секция телеграм-канала: тексты, ссылка и пункты списка */
     telegramBlock: builder.query<TelegramBlockDto, void>({
       query: () => 'telegram-block',
@@ -264,6 +270,7 @@ export const {
   useHowStepsQuery,
   useBuyBlockQuery,
   useTelegramBlockQuery,
+  useActivationPromoQuery,
   useAuthOptionsQuery,
   useRequestEmailCodeMutation,
   useVerifyEmailCodeMutation,

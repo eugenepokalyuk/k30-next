@@ -43,39 +43,6 @@
   width: 100%;
 }
 
-.offer {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: s.gap(3);
-  width: 100%;
-
-  padding: s.gap(4);
-  background: var(--background_secondary);
-  border: 1px solid var(--stroke_default);
-  border-radius: s.$br_3;
-}
-
-.offer_text {
-  @include s.text_body_2;
-
-  color: var(--text_secondary);
-}
-
-.help_link {
-  @include s.text_body_2;
-
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--text_secondary);
-  cursor: pointer;
-
-  &:hover {
-    color: var(--text_default);
-  }
-}
-
 .help_title {
   @include s.text_header_3;
 
@@ -124,8 +91,109 @@
   overflow-wrap: anywhere;
 }
 
-// Блок с главной приходит со своими отступами под целую страницу —
-// внутри узкой карточки активации они лишние
-.telegram {
-  padding: 0;
+// Шапка успеха: слева галочка с заголовком, справа — «а подписки нет?».
+// Одна карточка на обе половины, как у секции ключа выше: те же
+// пропорции 2fr/1fr и та же линия вместо промежутка
+.done {
+  @include s.card;
+
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  align-items: center;
+
+  width: 100%;
+  padding: s.gap(5) s.gap(4);
+}
+
+.done_head {
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+  min-width: 0;
+
+  padding-right: s.gap(5);
+}
+
+.done_text {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(1);
+  min-width: 0;
+}
+
+.done_title {
+  @include s.text_header_3;
+
+  color: var(--text_default);
+}
+
+.done_account {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+  overflow-wrap: anywhere;
+}
+
+.help_card {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(1);
+  align-self: stretch;
+  justify-content: center;
+
+  padding: 0 0 0 s.gap(5);
+  border: 0;
+  border-left: 1px solid var(--stroke_default);
+  background: none;
+  text-align: left;
+  cursor: pointer;
+
+  transition: s.$transition;
+
+  &:hover .help_card_title {
+    color: var(--text_primary);
+  }
+}
+
+.help_card_title {
+  @include s.text_body_2;
+
+  color: var(--text_default);
+  font-weight: s.$semi_bold;
+}
+
+.help_card_hint {
+  @include s.text_body_2;
+
+  color: var(--text_primary);
+}
+
+// Кнопки под всем экраном стоят по центру, а не по левому краю: под
+// ними ничего нет, и прижатая влево пара читается как продолжение
+// списка
+.actions_centered {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: s.gap(3);
+
+  width: 100%;
+}
+
+@include s.media_down(md) {
+  .done {
+    grid-template-columns: 1fr;
+    gap: s.gap(4);
+    align-items: flex-start;
+  }
+
+  .done_head {
+    padding-right: 0;
+  }
+
+  .help_card {
+    padding: s.gap(4) 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--stroke_default);
+  }
 }

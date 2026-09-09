@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useId } from 'react';
+import React, { FC } from 'react';
 import clsx from 'clsx';
 
 import classes from './Field.module.scss';
@@ -8,7 +8,6 @@ import classes from './Field.module.scss';
 interface Props {
   label?: string;
   hint?: string;
-  /** Текст ошибки под полем */
   error?: string;
   placeholder?: string;
   value: string;
@@ -20,14 +19,10 @@ interface Props {
   rows?: number;
   className?: string;
   inputClassName?: string;
-  /** Правый угол поля: кнопка «вставить», счётчик, иконка */
   addon?: React.ReactNode;
-  /** Раскладка клавиатуры на телефоне */
   inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'];
-  /** Автозаглавные на мобильной клавиатуре: 'characters' для кодов */
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   spellCheck?: boolean;
-  /** Подпись на клавише ввода: 'go', 'send', 'next' */
   enterKeyHint?: React.HTMLAttributes<HTMLInputElement>['enterKeyHint'];
 }
 
@@ -51,7 +46,7 @@ export const Field: FC<Props> = ({
   spellCheck,
   enterKeyHint,
 }) => {
-  const id = useId();
+  const id = React.useId();
   const hintId = `${id}-hint`;
 
   const shared = {

@@ -13,10 +13,33 @@
 }
 
 .instruction {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: s.gap(4);
+
+  @include s.media_down(lg) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.left, .right {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: s.gap(4);
+}
+
+// Инструкцию и кнопки делит линия: на широком экране между колонками
+// иначе просто пустота, и глаз читает их как два отдельных блока.
+// На узком колонки встают друг под друга, и линия убирается — там их
+// уже разделяет порядок
+.right {
+  @include s.media_up(lg) {
+    padding-left: s.gap(5);
+    border-left: 1px solid var(--stroke_default);
+    justify-content: center;
+    height: 100%;
+  }
 }
 
 .actions {
@@ -39,6 +62,15 @@
   @include s.text_body_1;
 
   color: var(--text_secondary);
+}
+
+.paragraph_icon {
+  flex-shrink: 0;
+
+  // Иконка внутри абзаца: `float` держит её у первой строки, а текст
+  // обтекает — flex здесь разорвал бы абзац на строки
+  float: left;
+  margin: 2px s.gap(2) 0 0;
 }
 
 .list {

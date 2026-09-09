@@ -53,6 +53,8 @@ export interface ActivationDto {
   can_retry: boolean;
   can_cancel: boolean;
   account_email: string;
+  /** Идентификатор аккаунта, если он у нас есть: сам ввод или разбор JSON */
+  account_id: string;
   /** Вид присланных данных и они же в замаскированном виде */
   target_kind: string;
   target_hint: string;
@@ -227,6 +229,17 @@ export interface TelegramBlockItemDto {
   icon: string;
   title: string;
   description: string;
+}
+export interface ActivationPromoDto {
+  is_enabled: boolean;
+  telegram_icon: string | null;
+  telegram_text: string;
+  telegram_button_label: string;
+  telegram_url: string;
+  review_icon: string | null;
+  review_text: string;
+  review_button_label: string;
+  review_url: string;
 }
 
 export interface TelegramBlockDto {

@@ -1,16 +1,15 @@
-import React, { FC, PropsWithChildren } from 'react';
+import React, { FC } from 'react';
 
 import { Reveal } from '@/components/motion';
 
 import classes from './AuthCard.module.scss';
 
-interface Props extends PropsWithChildren {
+interface Props extends React.PropsWithChildren {
   title: string;
   description?: string;
   footer?: React.ReactNode;
 }
 
-/** Обёртка форм входа и регистрации — они отличаются только полями */
 export const AuthCard: FC<Props> = ({
   title,
   description,

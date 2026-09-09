@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, PropsWithChildren } from 'react';
+import React, { FC } from 'react';
 import { motion } from 'framer-motion';
 
 import type { MotionTag } from './Reveal';
@@ -16,17 +16,12 @@ const tags = {
   aside: motion.aside,
 } as const;
 
-interface Props extends PropsWithChildren {
+interface Props extends React.PropsWithChildren {
   as?: MotionTag;
   className?: string;
-  /**
-   *  Инлайновые переменные вроде --accent: цвет сервиса приходит из
-   *  админки, и в классах его не выразить
-   */
   style?: React.CSSProperties;
 }
 
-/** Список, элементы которого появляются по очереди */
 export const Stagger: FC<Props> = ({
   as = 'div',
   className,
@@ -49,7 +44,6 @@ export const Stagger: FC<Props> = ({
   );
 };
 
-/** Элемент такого списка */
 export const StaggerItem: FC<Props> = ({
   as = 'div',
   className,

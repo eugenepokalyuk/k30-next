@@ -1,0 +1,98 @@
+@use '@/styles/index' as s;
+
+//: Жёлтый Яндекс Маркета. Цвет площадки, а не темы: он одинаков и в
+//: светлой, и в тёмной — по нему кнопку и узнают
+$market: #fc0;
+$market_hover: #ffd633;
+
+.promo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: s.gap(4);
+
+  width: 100%;
+
+  @include s.media_down(md) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  @include s.card;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: s.gap(4);
+
+  padding: s.gap(5) s.gap(4);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+}
+
+.mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 44px;
+  height: 44px;
+  border-radius: s.$br_2;
+}
+
+.uploaded {
+  // Картинка из админки приходит со своим фоном и формой: круг здесь
+  // только обрезает её по общему размеру
+  overflow: hidden;
+  background: var(--background_elevated);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.telegram_mark {
+  // Тот же градиент, что у круглой кнопки телеграма на главной
+  background: linear-gradient(135deg, s.$primary, s.$primary_light);
+  color: var(--text_on_primary_fill);
+}
+
+// У знака телеграма «хвост» уводит центр вправо-вниз — как и в виджете,
+// возвращаем его на место
+.telegram_glyph {
+  transform: translate(-1px, 1px);
+}
+
+.market_mark {
+  background: $market;
+  color: #1a1a1a;
+}
+
+.text {
+  @include s.text_body_1;
+
+  color: var(--text_default);
+}
+
+// Кнопка площадки: цвет её, а не темы. Текст тёмный — на жёлтом белый
+// не читается ни в одной теме
+.market_button {
+  background: $market;
+  color: #1a1a1a;
+  border-color: transparent;
+  box-shadow: none;
+
+  @media (hover: hover) {
+    &:hover {
+      background: $market_hover;
+      box-shadow: none;
+    }
+  }
+}

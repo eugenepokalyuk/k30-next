@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 
-import { Button } from '@/components/ui';
+import { Reveal } from '@/components/motion';
+import { AlertIcon, Button, LinkIcon, OpenInNewIcon } from '@/components/ui';
 import { parseInstruction } from '@/utils/helpers';
 
 import classes from './Instruction.module.scss';
-import { Reveal } from '@/components/motion';
 
 interface Props {
   text: string;
@@ -31,42 +31,57 @@ export const Instruction: FC<Props> = ({
   return (
     <Reveal className={classes.card}>
       <div className={classes.instruction}>
-        {blocks.map((block, index) =>
-          block.type === 'list' ? (
-            <ul key={index} className={classes.list}>
-              {block.items.map((item, itemIndex) => (
-                <li key={itemIndex} className={classes.item}>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p key={index} className={classes.paragraph}>
-              {block.text}
-            </p>
-          ),
-        )}
+        <div className={classes.left}>
+          {blocks.map((block, index) =>
+            block.type === 'list' ? (
+              <ul key={index} className={classes.list}>
+                {block.items.map((item, itemIndex) => (
+                  <li key={itemIndex} className={classes.item}>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p key={index} className={classes.paragraph}>
+                {/*
+                  Знак внимания — только у первого абзаца: он и есть то,
+                  что надо сделать, остальные блоки его поясняют. Цвет
+                  наследуется от текста: это не предупреждение об ошибке,
+                  а указатель, с чего начать
+                */}
+                {index === 0 && <AlertIcon size={18} className={classes.paragraph_icon} />}
+                {block.text}
+              </p>
+            ),
+          )}
+        </div>
 
-        {(showSource || showHowTo) && (
-          <div className={classes.actions}>
-            {showSource && (
-              <Button
-                href={serviceUrl}
-                external
-                variant="outlined"
-                size="small"
-              >
-                Открыть {serviceName}
-              </Button>
-            )}
+        <div className={classes.right}>
+          {(showSource || showHowTo) && (
+            <div className={classes.actions}>
+              {showSource && (
+                <Button
+                  href={serviceUrl}
+                  external
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                >
+                  <OpenInNewIcon size={18} />
+                  Открыть {serviceName}
+                </Button>
+              )}
 
-            {showHowTo && (
-              <Button href={url} external variant="outlined" size="small" >
-                {urlLabel || 'Получить токен'}
-              </Button>
-            )}
-          </div>
-        )}
+              {showHowTo && (
+                <Button href={url} external size="small" fullWidth>
+                  <LinkIcon size={18} />
+
+                  {urlLabel || 'Получить токен'}
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </Reveal>
   );

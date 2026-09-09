@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import clsx from 'clsx';
 
 import classes from './KeyCode.module.scss';
@@ -11,11 +11,10 @@ interface Props {
   className?: string;
 }
 
-/** Код ключа моноширинным с кнопкой «скопировать» */
 export const KeyCode: FC<Props> = ({ code, className }) => {
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!copied) return;
     const timer = window.setTimeout(() => setCopied(false), 2000);
     return () => window.clearTimeout(timer);
@@ -25,15 +24,13 @@ export const KeyCode: FC<Props> = ({ code, className }) => {
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
-    } catch {
-      // Буфер недоступен (http без localhost, отказ в разрешении) — код всё
-      // равно виден и выделяется мышью
-    }
+    } catch {}
   };
 
   return (
     <div className={clsx(classes.wrapper, className)}>
       <code className={classes.code}>{code}</code>
+
       <button
         type="button"
         className={classes.copy}

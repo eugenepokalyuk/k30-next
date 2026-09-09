@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC } from 'react';
+import React, { FC } from 'react';
 import Image from 'next/image';
 import clsx from 'clsx';
 
@@ -20,7 +20,7 @@ export const ServiceMark: FC<Props> = ({
   const style = {
     ...(size ? { width: size, height: size } : null),
     ...(accentColor ? { '--accent': accentColor } : null),
-  } as CSSProperties;
+  } as React.CSSProperties;
 
   return (
     <span className={clsx(classes.mark, className)} style={style}>

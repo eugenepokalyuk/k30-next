@@ -1,0 +1,17 @@
+@use '@/styles/index' as s;
+
+.mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 44px;
+  height: 44px;
+  border-radius: s.$br_full;
+
+  background: var(--success);
+  // Цвет галочки задан явно: на светлой теме наследованный текст
+  // сливается с заливкой круга
+  color: #fff;
+}

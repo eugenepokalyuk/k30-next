@@ -4,8 +4,12 @@
   padding: clamp(s.gap(6), 5vw, s.gap(12)) 0;
 }
 
+// Страница шире, чем была: секция ключа и итог активации стоят
+// сетками в две колонки, и в прежние 720 они не помещаются. Ширина у
+// всех блоков страницы одна — контейнер: разъехавшиеся края читаются
+// как разные страницы, сшитые вместе
 .container {
-  @include s.glass(s.$width_narrow);
+  @include s.glass(s.$width_lg);
 
   display: flex;
   flex-direction: column;
@@ -49,19 +53,10 @@
 .body {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   gap: s.gap(6);
-}
 
-.prompt {
-  display: flex;
-  flex-direction: column;
-  gap: s.gap(4);
-}
-
-.prompt_text {
-  @include s.text_body_1;
-
-  color: var(--text_secondary);
+  width: 100%;
 }
 
 .loading {
@@ -76,6 +71,7 @@
   padding-top: s.gap(4);
   border-top: 1px solid var(--stroke_default);
   color: var(--text_muted);
+  text-align: center;
 }
 
 .support_link {

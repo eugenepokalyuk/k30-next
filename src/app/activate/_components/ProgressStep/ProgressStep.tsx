@@ -4,9 +4,8 @@ import React, { FC, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 import { duration, ease } from '@/components/motion';
-import { Button, Notice } from '@/components/ui';
+import { Notice } from '@/components/ui';
 import { useActivationPolling } from '@/lib/hooks';
-import { useCancelActivationMutation } from '@/store/api/k30Api';
 import type { ActivationDto } from '@/store/api/types';
 import { ActivationLongWaitSeconds, SupportTelegram } from '@/utils/consts';
 
@@ -23,7 +22,15 @@ export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
     activation.id,
     activation,
   );
+
+  /*
+    Отмена скрыта по просьбе дизайна — вместе с ней спит и её обвязка.
+    Оставлена целиком, а не удалена: поставщик отмену умеет, ручка
+    `activations/<id>/cancel` жива, и вернуть кнопку — это снять три
+    комментария, а не писать заново
+
   const [cancel, { isLoading: isCancelling }] = useCancelActivationMutation();
+  */
 
   useEffect(() => {
     if (fresh && fresh !== activation) onUpdate(fresh);
@@ -33,6 +40,7 @@ export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
   const isQueued = current.status === 'pending';
   const isLong = elapsed > ActivationLongWaitSeconds;
 
+  /*
   const onCancel = async () => {
     try {
       const response = await cancel(current.id).unwrap();
@@ -42,6 +50,7 @@ export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
       // очередным опросом
     }
   };
+  */
 
   return (
     <motion.div
@@ -87,6 +96,7 @@ export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
         ничего не потеряется: активация идёт на сервере.
       </p>
 
+      {/*
       {current.can_cancel && (
         <Button
           type="button"
@@ -98,6 +108,7 @@ export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
           Отменить, пока не началось
         </Button>
       )}
+      */}
     </motion.div>
   );
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -18,7 +18,7 @@ import { ServiceModal } from './ServiceModal';
 export const ServicesSection: FC = () => {
   const { data, isLoading, isError } = useServicesQuery();
 
-  const [opened, setOpened] = useState<ServiceDto | null>(null);
+  const [opened, setOpened] = React.useState<ServiceDto | null>(null);
 
   const hasLogos = Boolean(data?.some((service) => service.logo));
 

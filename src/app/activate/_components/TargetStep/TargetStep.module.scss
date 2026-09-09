@@ -44,14 +44,12 @@
 
   background: var(--background_elevated);
   border: 1px solid var(--stroke_default);
-  border-radius: s.$br_full;
+  border-radius: s.$br_2;
 
   transition: s.$transition;
 
   &[data-selected='true'] {
-    color: var(--text_primary);
     border-color: var(--stroke_primary);
-    background: var(--background_primary_10);
   }
 
   &:focus-within {

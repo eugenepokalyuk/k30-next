@@ -10,4 +10,5 @@ export * from './RippleGrid/RippleGrid';
 export * from './Section/Section';
 export * from './ServiceMark/ServiceMark';
 export * from './Steps/Steps';
+export * from './SuccessMark/SuccessMark';
 export * from './TiltCard/TiltCard';
