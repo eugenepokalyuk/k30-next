@@ -32,7 +32,6 @@ import type {
   ServiceDto,
   SiteSettingsDto,
   SubscriptionDto,
-  SupportBlockDto,
   TargetKind,
   TelegramBlockDto,
   TelegramStartDto,
@@ -170,11 +169,6 @@ export const k30Api = createApi({
       query: () => 'telegram-block',
     }),
 
-    /** Секция поддержки на странице активации: тексты, ссылка и пункты */
-    supportBlock: builder.query<SupportBlockDto, void>({
-      query: () => 'support-block',
-    }),
-
     /** Что показать на экране входа */
     authOptions: builder.query<AuthOptionsDto, void>({
       query: () => 'auth/options',
@@ -276,7 +270,6 @@ export const {
   useHowStepsQuery,
   useBuyBlockQuery,
   useTelegramBlockQuery,
-  useSupportBlockQuery,
   useActivationPromoQuery,
   useAuthOptionsQuery,
   useRequestEmailCodeMutation,
