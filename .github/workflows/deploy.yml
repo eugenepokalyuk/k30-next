@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Основная витрина: к30маркет.com на своём сервере.
+  # Основная витрина: k30market.ru на своём сервере.
   # Собираем здесь, а не на сервере: там 2 ГБ памяти и нет node, а экспорт
   # всё равно статический — на сервер едут готовые файлы
   server:
@@ -28,10 +28,8 @@ jobs:
 
       - name: Собрать статику
         env:
-          # Домен кириллический, в переменных держим punycode: так его видят
-          # nginx, сертификат и сам браузер после нормализации имени
-          NEXT_PUBLIC_API_URL: https://xn--30-8kcuvdm7au.com/api/v1
-          NEXT_PUBLIC_APP_URL: https://xn--30-8kcuvdm7au.com
+          NEXT_PUBLIC_API_URL: https://k30market.ru/api/v1
+          NEXT_PUBLIC_APP_URL: https://k30market.ru
           # Пусто: со своим доменом сайт лежит в корне, а не в подкаталоге
           NEXT_PUBLIC_BASE_PATH: ''
         run: npm run build
@@ -68,7 +66,7 @@ jobs:
           # Проверяем настоящей страницей, а не только кодом ответа: симлинк
           # мог указать на пустой каталог, и nginx отдал бы бодрый 404
           for i in $(seq 1 10); do
-            code=$(curl -sS -o /tmp/index.html -w '%{http_code}' https://xn--30-8kcuvdm7au.com/ || echo 000)
+            code=$(curl -sS -o /tmp/index.html -w '%{http_code}' https://k30market.ru/ || echo 000)
             if [ "$code" = "200" ] && grep -q '_next/static' /tmp/index.html; then
               echo "ОК: витрина отвечает и отдаёт свою сборку"
               exit 0
@@ -101,7 +99,7 @@ jobs:
 
       - name: Собрать статику
         env:
-          NEXT_PUBLIC_API_URL: https://xn--30-8kcuvdm7au.com/api/v1
+          NEXT_PUBLIC_API_URL: https://k30market.ru/api/v1
           NEXT_PUBLIC_APP_URL: https://eugenepokalyuk.github.io/k30-next
           # На Pages без своего домена сайт лежит в подкаталоге
           NEXT_PUBLIC_BASE_PATH: /k30-next
