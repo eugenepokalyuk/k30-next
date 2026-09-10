@@ -1,4 +1,5 @@
 export * from './Button/Button';
+export * from './CalloutCard/CalloutCard';
 export * from './Field/Field';
 export * from './Icons/blockIcons';
 export * from './Icons/Icons';

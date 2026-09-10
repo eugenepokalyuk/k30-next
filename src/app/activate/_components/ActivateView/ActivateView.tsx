@@ -15,7 +15,7 @@ import {
   selectActivationFor,
 } from '@/store/slices/activation';
 import type { ActivationStepId } from '@/utils/consts';
-import { Routes, SupportTelegram } from '@/utils/consts';
+import { Routes } from '@/utils/consts';
 import { formatKey, isKeyComplete } from '@/utils/helpers';
 
 import classes from './ActivateView.module.scss';
@@ -23,6 +23,7 @@ import { ActivationRules } from '../ActivationRules/ActivationRules';
 import { KeySection, type KeyStatus } from '../KeySection/KeySection';
 import { ProgressStep } from '../ProgressStep/ProgressStep';
 import { ResultStep } from '../ResultStep/ResultStep';
+import { SupportSection } from '../SupportSection/SupportSection';
 import { TargetStep } from '../TargetStep/TargetStep';
 
 export const ActivateView: FC = () => {
@@ -174,21 +175,10 @@ export const ActivateView: FC = () => {
             />
           )}
 
-          <p className={classes.support}>
-            Что-то пошло не так?{' '}
-            <a
-              href={SupportTelegram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={classes.support_link}
-            >
-              Напишите в поддержку
-            </a>{' '}
-            и приложите код ключа.
-          </p>
+          <SupportSection />
 
           {!cached && !error && !isLoading && code && (
-            <a className={classes.support_link} href={Routes.Home}>
+            <a className={classes.home_link} href={Routes.Home}>
               Вернуться на главную
             </a>
           )}

@@ -4,10 +4,6 @@
   padding: clamp(s.gap(6), 5vw, s.gap(12)) 0;
 }
 
-// Страница шире, чем была: секция ключа и итог активации стоят
-// сетками в две колонки, и в прежние 720 они не помещаются. Ширина у
-// всех блоков страницы одна — контейнер: разъехавшиеся края читаются
-// как разные страницы, сшитые вместе
 .container {
   @include s.glass(s.$width_lg);
 
@@ -65,16 +61,10 @@
   color: var(--text_secondary);
 }
 
-.support {
+.home_link {
   @include s.text_body_2;
 
-  padding-top: s.gap(4);
-  border-top: 1px solid var(--stroke_default);
-  color: var(--text_muted);
-  text-align: center;
-}
-
-.support_link {
+  align-self: center;
   color: var(--text_primary);
 
   &:hover {

@@ -250,6 +250,16 @@ export interface TelegramBlockDto {
   items: TelegramBlockItemDto[];
 }
 
+export interface SupportBlockDto {
+  is_enabled: boolean;
+  overline: string;
+  title: string;
+  text: string;
+  button_label: string;
+  url: string;
+  items: TelegramBlockItemDto[];
+}
+
 export type OrderStatus = 'new' | 'issued' | 'activated' | 'cancelled';
 
 export interface FaqEntryDto {

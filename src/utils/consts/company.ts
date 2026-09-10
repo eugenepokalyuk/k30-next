@@ -1,5 +1,5 @@
-export const CompanyName = 'К30 Market';
-export const CompanyLegalName = 'K30 market';
+export const CompanyName = 'K30MAРКЕТ';
+export const CompanyLegalName = 'K30MAРКЕТ';
 
 /**
  *  Контакты вынесены в переменные окружения: телеграм поддержки меняется

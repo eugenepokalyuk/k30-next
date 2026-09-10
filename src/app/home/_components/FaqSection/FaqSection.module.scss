@@ -107,6 +107,7 @@
     max-width: 68ch;
   }
 }
+
 .support {
   @include s.card;
 
@@ -116,8 +117,8 @@
   gap: s.gap(3);
 
   padding: s.gap(6) s.gap(5);
-  background: var(--background_primary_10);
-  border-color: var(--stroke_primary);
+  background: var(--background_secondary);
+  border-color: var(--stroke_default);
 
   @include s.media_up(lg) {
     position: sticky;
