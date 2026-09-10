@@ -1,0 +1,6 @@
+@use '@/styles/index' as s;
+
+.accent {
+  color: var(--danger);
+  font-weight: s.$medium;
+}

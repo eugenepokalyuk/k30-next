@@ -96,7 +96,9 @@ export const ActivateView: FC = () => {
   const keyStatus = currentKeyStatus(cached, activation);
 
   const rules = cached?.service?.activation_rules ?? '';
-  const needsRules = Boolean(rules) && rulesAcceptedFor !== code;
+  const ruleBlocks = cached?.service?.rule_blocks ?? [];
+  const needsRules =
+    Boolean(rules || ruleBlocks.length) && rulesAcceptedFor !== code;
 
   return (
     <div className={classes.page}>
@@ -151,6 +153,7 @@ export const ActivateView: FC = () => {
                 logo={cached.service.logo}
                 accentColor={cached.service.accent_color}
                 rules={rules}
+                ruleBlocks={ruleBlocks}
                 onAccept={() => setRulesAcceptedFor(code)}
               />
             ) : (

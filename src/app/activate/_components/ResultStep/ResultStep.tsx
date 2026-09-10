@@ -11,6 +11,7 @@ import {
   KeyCode,
   Modal,
   Notice,
+  RichText,
   SuccessMark,
 } from '@/components/ui';
 import type { ActivationDto, ServiceActivationDto } from '@/store/api/types';
@@ -179,11 +180,15 @@ const MissingHelp: FC<{ service?: ServiceActivationDto }> = ({ service }) => {
             block.type === 'list' ? (
               <ul key={index} className={classes.help_list}>
                 {block.items.map((item, itemIndex) => (
-                  <li key={itemIndex}>{item}</li>
+                  <li key={itemIndex}>
+                    <RichText text={item} />
+                  </li>
                 ))}
               </ul>
             ) : (
-              <p key={index}>{block.text}</p>
+              <p key={index}>
+                <RichText text={block.text} />
+              </p>
             ),
           )}
         </div>

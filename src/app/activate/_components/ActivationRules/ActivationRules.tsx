@@ -2,9 +2,16 @@
 
 import React, { FC } from 'react';
 
-import { Button, Modal, ServiceMark } from '@/components/ui';
+import {
+  Button,
+  getBlockIcon,
+  Modal,
+  RichText,
+  ServiceMark,
+} from '@/components/ui';
+import type { ActivationRuleBlockDto } from '@/store/api/types';
 import { SupportTelegram } from '@/utils/consts';
-import { parseInstruction } from '@/utils/helpers';
+import { type InstructionBlock, parseInstruction } from '@/utils/helpers';
 
 import classes from './ActivationRules.module.scss';
 
@@ -13,17 +20,46 @@ interface Props {
   logo: string | null;
   accentColor?: string;
   rules: string;
+  ruleBlocks: ActivationRuleBlockDto[];
   onAccept: () => void;
 }
+
+/** Абзацы и нумерованные списки из шаблона админки */
+const Prose: FC<{ blocks: InstructionBlock[] }> = ({ blocks }) => (
+  <>
+    {blocks.map((block, index) =>
+      block.type === 'list' ? (
+        <ol key={index} className={classes.list}>
+          {block.items.map((item, itemIndex) => (
+            <li key={itemIndex} className={classes.item}>
+              <RichText text={item} />
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p key={index} className={classes.paragraph}>
+          <RichText text={block.text} />
+        </p>
+      ),
+    )}
+  </>
+);
 
 export const ActivationRules: FC<Props> = ({
   serviceName,
   logo,
   accentColor,
   rules,
+  ruleBlocks,
   onAccept,
 }) => {
-  const blocks = parseInstruction(rules);
+  const [intro, ...rest] = parseInstruction(rules);
+
+  // Блок без заголовка или текста — недописанный: показать его значит
+  // показать покупателю иконку с пустотой под ней
+  const blocks = ruleBlocks.filter(
+    (block) => block.title.trim() && block.body.trim(),
+  );
 
   return (
     <Modal
@@ -43,21 +79,28 @@ export const ActivationRules: FC<Props> = ({
       </div>
 
       <div className={classes.rules}>
-        {blocks.map((block, index) =>
-          block.type === 'list' ? (
-            <ol key={index} className={classes.list}>
-              {block.items.map((item, itemIndex) => (
-                <li key={itemIndex} className={classes.item}>
-                  {item}
-                </li>
-              ))}
-            </ol>
-          ) : (
-            <p key={index} className={classes.paragraph}>
-              {block.text}
-            </p>
-          ),
-        )}
+        {intro && <Prose blocks={[intro]} />}
+
+        {blocks.map((block, index) => {
+          const Icon = getBlockIcon(block.icon);
+
+          return (
+            <section key={index} className={classes.block}>
+              <h3 className={classes.block_title}>
+                <span className={classes.block_icon}>
+                  <Icon size={20} />
+                </span>
+                {block.title}
+              </h3>
+
+              <div className={classes.block_body}>
+                <Prose blocks={parseInstruction(block.body)} />
+              </div>
+            </section>
+          );
+        })}
+
+        <Prose blocks={rest} />
       </div>
 
       <div className={classes.actions}>

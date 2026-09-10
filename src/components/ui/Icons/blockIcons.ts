@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import {
+  AlertIcon,
   BoltIcon,
   CardIcon,
   CartIcon,
@@ -15,6 +16,7 @@ import {
 } from './Icons';
 
 const blockIcons: Record<string, FC<IconProps>> = {
+  alert: AlertIcon,
   bolt: BoltIcon,
   shield: ShieldIcon,
   refresh: RefreshIcon,

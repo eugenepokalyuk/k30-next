@@ -1,7 +1,13 @@
 import React, { FC } from 'react';
 
 import { Reveal } from '@/components/motion';
-import { AlertIcon, Button, LinkIcon, OpenInNewIcon } from '@/components/ui';
+import {
+  AlertIcon,
+  Button,
+  LinkIcon,
+  OpenInNewIcon,
+  RichText,
+} from '@/components/ui';
 import { parseInstruction } from '@/utils/helpers';
 
 import classes from './Instruction.module.scss';
@@ -37,7 +43,7 @@ export const Instruction: FC<Props> = ({
               <ul key={index} className={classes.list}>
                 {block.items.map((item, itemIndex) => (
                   <li key={itemIndex} className={classes.item}>
-                    {item}
+                    <RichText text={item} />
                   </li>
                 ))}
               </ul>
@@ -50,7 +56,7 @@ export const Instruction: FC<Props> = ({
                   а указатель, с чего начать
                 */}
                 {index === 0 && <AlertIcon size={18} className={classes.paragraph_icon} />}
-                {block.text}
+                <RichText text={block.text} />
               </p>
             ),
           )}

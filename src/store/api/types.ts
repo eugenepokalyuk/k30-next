@@ -102,6 +102,12 @@ export interface ServiceDto {
   in_stock: boolean;
 }
 
+export interface ActivationRuleBlockDto {
+  icon: string;
+  title: string;
+  body: string;
+}
+
 export interface ServiceActivationDto extends Omit<
   ServiceDto,
   'in_stock' | 'plans'
@@ -114,6 +120,7 @@ export interface ServiceActivationDto extends Omit<
   submit_label: string;
   activation_note: string;
   activation_rules: string;
+  rule_blocks: ActivationRuleBlockDto[];
   missing_subscription_help: string;
   fields_schema: ServiceFieldDto[];
 }
