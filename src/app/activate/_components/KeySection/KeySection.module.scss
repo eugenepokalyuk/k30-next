@@ -103,6 +103,12 @@
     padding-right: 0;
   }
 
+  // Ключик уезжает: на узком экране он отнимает у кода строку, а
+  // говорит ровно то же, что и заголовок рядом
+  .key_icon {
+    display: none;
+  }
+
   .status {
     padding-left: 0;
     padding-top: s.gap(4);
