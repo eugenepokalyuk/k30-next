@@ -1,25 +1,20 @@
-name: Deploy to GitHub Pages
+name: deploy
 
 on:
-  # Деплой при сливе в main.
   push:
     branches: [main]
-  # И кнопкой из вкладки Actions, если нужно перевыкатить без коммита.
   workflow_dispatch:
 
-# Пушу в Pages нужны эти права; GITHUB_TOKEN по умолчанию их не даёт.
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Не отменяем уже идущий деплой — пусть докатится, лишние встают в очередь.
+# Параллельные выкатки перетрут друг друга: обе меняют симлинк current
 concurrency:
-  group: pages
+  group: deploy-production
   cancel-in-progress: false
 
 jobs:
-  build:
+  # Основная витрина: к30маркет.com на своём сервере.
+  # Собираем здесь, а не на сервере: там 2 ГБ памяти и нет node, а экспорт
+  # всё равно статический — на сервер едут готовые файлы
+  server:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -29,26 +24,93 @@ jobs:
           node-version: 24
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
-      - name: Build static export
+      - name: Собрать статику
         env:
-          # Адрес бэкенда. Пока у сервера нет домена — это http на IP.
-          # Заводится переменной репозитория (Settings → Secrets and variables
-          # → Actions → Variables → API_URL), чтобы переезд на домен был
-          # правкой одного поля, а не коммитом.
-          NEXT_PUBLIC_API_URL: ${{ vars.API_URL }}
-          NEXT_PUBLIC_APP_URL: ${{ vars.APP_URL }}
-          # Сайт лежит в подкаталоге /k30-next: у Pages без своего домена
-          # адрес такой. Со своим доменом переменную нужно очистить.
-          NEXT_PUBLIC_BASE_PATH: ${{ vars.BASE_PATH }}
+          # Домен кириллический, в переменных держим punycode: так его видят
+          # nginx, сертификат и сам браузер после нормализации имени
+          NEXT_PUBLIC_API_URL: https://xn--30-8kcuvdm7au.com/api/v1
+          NEXT_PUBLIC_APP_URL: https://xn--30-8kcuvdm7au.com
+          # Пусто: со своим доменом сайт лежит в корне, а не в подкаталоге
+          NEXT_PUBLIC_BASE_PATH: ''
         run: npm run build
 
-      - name: Disable Jekyll
+      - name: Выкатить на сервер
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          # Именно с \n на конце: OpenSSH не читает приватный ключ без
+          # завершающего перевода строки и падает с "error in libcrypto"
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          # Пиним host key: без него ssh либо спросит подтверждение, либо
+          # (с StrictHostKeyChecking=no) молча пустит на подменённый сервер
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+          SSH="ssh -i $HOME/.ssh/id_deploy -o UserKnownHostsFile=$HOME/.ssh/known_hosts"
+
+          # Льём в постоянный staging, а не сразу в релиз: rsync досылает
+          # только изменившееся, и выкатка занимает секунды вместо минуты
+          rsync -az --delete -e "$SSH" out/ k30web@"$HOST":/srv/k30-next/staging/
+
+          # Скрипт скармливаем по stdin, а не держим копию на сервере: так он
+          # версионируется вместе с витриной и не разъезжается с ней
+          $SSH k30web@"$HOST" 'bash -s' -- "$GITHUB_SHA" < deploy/release.sh
+
+      - name: Проверить, что сайт отвечает
+        run: |
+          set -euo pipefail
+          # Проверяем настоящей страницей, а не только кодом ответа: симлинк
+          # мог указать на пустой каталог, и nginx отдал бы бодрый 404
+          for i in $(seq 1 10); do
+            code=$(curl -sS -o /tmp/index.html -w '%{http_code}' https://xn--30-8kcuvdm7au.com/ || echo 000)
+            if [ "$code" = "200" ] && grep -q '_next/static' /tmp/index.html; then
+              echo "ОК: витрина отвечает и отдаёт свою сборку"
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "!!! витрина не отвечает, последний код: $code" >&2
+          exit 1
+
+  # Запасная витрина на GitHub Pages. Смотрит в API нового домена и живёт
+  # своей жизнью: если с сервером что-то не так, магазин открывается отсюда
+  pages:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Собрать статику
+        env:
+          NEXT_PUBLIC_API_URL: https://xn--30-8kcuvdm7au.com/api/v1
+          NEXT_PUBLIC_APP_URL: https://eugenepokalyuk.github.io/k30-next
+          # На Pages без своего домена сайт лежит в подкаталоге
+          NEXT_PUBLIC_BASE_PATH: /k30-next
+        run: npm run build
+
+      - name: Отключить Jekyll
         # Pages прогоняет статику через Jekyll, а тот выкидывает папки,
-        # начинающиеся с подчёркивания, — то есть весь _next. Без этого
-        # файла сайт открывается без стилей и скриптов.
+        # начинающиеся с подчёркивания, — то есть весь _next. Без этого файла
+        # сайт открывается без стилей и скриптов
         run: touch out/.nojekyll
 
       - uses: actions/configure-pages@v6
@@ -57,12 +119,5 @@ jobs:
         with:
           path: out
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
       - id: deployment
         uses: actions/deploy-pages@v5
