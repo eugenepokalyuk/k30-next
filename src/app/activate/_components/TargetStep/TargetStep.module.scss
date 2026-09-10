@@ -26,21 +26,28 @@
 }
 
 .choice_options {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   gap: s.gap(2);
 
   padding: s.gap(2) s.gap(0);
+
+  @include s.media_down(sm) {
+    grid-auto-flow: row;
+  }
 }
 
 .choice_option {
   cursor: pointer;
 
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: s.gap(2);
 
   padding: s.gap(2) s.gap(4);
+  text-align: center;
 
   background: var(--background_elevated);
   border: 1px solid var(--stroke_default);
@@ -70,12 +77,6 @@
   @include s.text_body_2;
 }
 
-.preview {
-  @include s.text_body_2;
-
-  color: var(--text_secondary);
-}
-
 .account {
   display: flex;
   flex-direction: column;
@@ -100,6 +101,7 @@
   justify-content: space-between;
   gap: s.gap(4);
   flex-wrap: wrap;
+  width: 100%;
 
   padding: s.gap(4);
   background: var(--background_elevated);
@@ -116,6 +118,11 @@
 
   color: var(--text_default);
   overflow-wrap: anywhere;
+}
+
+.user_icon {
+  flex: none;
+  color: var(--text_secondary);
 }
 
 .button {
@@ -147,27 +154,3 @@
   }
 }
 
-.example_title {
-  @include s.text_header_3;
-
-  color: var(--text_default);
-}
-
-.example_image {
-  width: 100%;
-  height: auto;
-
-  border: 1px solid var(--stroke_default);
-  border-radius: s.$br_3;
-}
-
-.example_caption {
-  @include s.text_body_2;
-
-  color: var(--text_secondary);
-}
-
-.example_actions {
-  display: flex;
-  justify-content: flex-end;
-}

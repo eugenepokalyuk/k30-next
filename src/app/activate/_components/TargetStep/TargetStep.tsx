@@ -11,6 +11,7 @@ import type {
 import { maskEmail } from '@/utils/helpers';
 
 import classes from './TargetStep.module.scss';
+import { AccountBar } from './AccountBar';
 import { AccountConfirmation } from './AccountConfirmation';
 import { KindChooser } from './KindChooser';
 import { TargetExample } from './TargetExample';
@@ -20,12 +21,10 @@ import { Instruction } from '../Instruction/Instruction';
 interface Props {
   code: string;
   service: ServiceActivationDto;
-  /** Что просит поставщик */
   targets: TargetOptionDto[];
   onStarted: (activation: ActivationDto) => void;
 }
 
-/** Шаг «Аккаунт»: куда выдать подписку */
 export const TargetStep: FC<Props> = ({
   code,
   service,
@@ -73,17 +72,10 @@ export const TargetStep: FC<Props> = ({
         onChange={step.setValue}
         disabled={step.isBusy}
         rows={option.input === 'textarea' ? 8 : undefined}
-        // Секреты и идентификаторы автозаменой только портятся
         autoCapitalize="none"
         spellCheck={false}
         autoComplete="off"
       />
-
-      {step.localEmail && !step.isConfirmed && (
-        <p className={classes.preview}>
-          Похоже, это аккаунт <strong>{maskEmail(step.localEmail)}</strong>.
-        </p>
-      )}
 
       <TargetExample
         image={option.example_image || service.example_image || ''}
@@ -95,19 +87,22 @@ export const TargetStep: FC<Props> = ({
       {step.isConfirmed ? (
         <AccountConfirmation
           note={service.activation_note}
+          email={maskEmail(step.account?.email || step.localEmail)}
           isStarting={step.isStarting}
           onConfirm={step.confirm}
         />
       ) : (
-        <Button
-          type="submit"
-          size="large"
-          loading={step.isChecking}
-          className={classes.button}
-          fullWidth
-        >
-          {service.submit_label || 'Проверить данные'}
-        </Button>
+        <AccountBar email={maskEmail(step.localEmail)}>
+          <Button
+            type="submit"
+            size="large"
+            loading={step.isChecking}
+            className={classes.button}
+            fullWidth={!step.localEmail}
+          >
+            {service.submit_label || 'Проверить данные'}
+          </Button>
+        </AccountBar>
       )}
     </form>
   );

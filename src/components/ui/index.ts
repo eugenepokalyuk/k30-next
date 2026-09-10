@@ -3,6 +3,7 @@ export * from './Field/Field';
 export * from './Icons/blockIcons';
 export * from './Icons/Icons';
 export * from './KeyCode/KeyCode';
+export * from './Lightbox/Lightbox';
 export * from './Logo/Logo';
 export * from './Modal/Modal';
 export * from './Notice/Notice';

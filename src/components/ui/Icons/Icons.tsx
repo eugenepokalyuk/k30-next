@@ -64,6 +64,12 @@ export const ArrowRightIcon: FC<IconProps> = ({ size = 20, className }) => (
   </svg>
 );
 
+export const ArrowLeftIcon: FC<IconProps> = ({ size = 20, className }) => (
+  <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
+    <path d="M313-440l224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+  </svg>
+);
+
 export const MenuIcon: FC<IconProps> = ({ size = 20, className }) => (
   <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
     <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
@@ -91,12 +97,6 @@ export const AlertIcon: FC<IconProps> = ({ size = 20, className }) => (
 export const HomeIcon: FC<IconProps> = ({ size = 20, className }) => (
   <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
     <path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Z" />
-  </svg>
-);
-
-export const StarIcon: FC<IconProps> = ({ size = 20, className }) => (
-  <svg {...base(size)} viewBox="0 -960 960 960" className={className}>
-    <path d="m233-80 65-281L80-550l288-25 112-265 112 265 288 25-218 189 65 281-247-149L233-80Z" />
   </svg>
 );
 
