@@ -7,9 +7,33 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const UUID_ANYWHERE =
   /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
 
+// Кириллица, на глаз неотличимая от латинских a, c, e, B: ID набирают
+// руками или правит автозамена, и UUID из таких букв не собирается
+const LOOKALIKES: Record<string, string> = {
+  '\u0430': 'a',
+  '\u0441': 'c',
+  '\u0435': 'e',
+  '\u0410': 'A',
+  '\u0412': 'B',
+  '\u0421': 'C',
+  '\u0415': 'E',
+};
+
 const MIN_TOKEN_LENGTH = 20;
 
 const ID_KINDS: TargetKind[] = ['account_id', 'org_id', 'user_id'];
+
+/** ID в том виде, в каком его набрали бы латиницей */
+function asciiId(value: string): string {
+  return (
+    value
+      .replace(/[\u0430\u0441\u0435\u0410\u0412\u0421\u0415]/g, (char) => LOOKALIKES[char])
+      // Неразрывный дефис, тире и минус вместо дефиса ставит автозамена
+      .replace(/[\u2010-\u2015\u2212]/g, '-')
+      // Символы нулевой ширины приезжают из мессенджеров
+      .replace(/[\u200b-\u200d\ufeff]/g, '')
+  );
+}
 
 /** Приводит ввод к тому виду, в котором его ждёт бэкенд */
 export function normalizeTarget(kind: TargetKind, raw: string): string {
@@ -17,9 +41,10 @@ export function normalizeTarget(kind: TargetKind, raw: string): string {
   if (!value) return '';
 
   if (ID_KINDS.includes(kind)) {
-    const found = value.match(UUID_ANYWHERE);
+    const id = asciiId(value);
+    const found = id.match(UUID_ANYWHERE);
     return (
-      found ? found[0] : value.replace(/^["'`\s]+|["'`,;\s]+$/g, '')
+      found ? found[0] : id.replace(/^["'`\s]+|["'`,;\s]+$/g, '')
     ).toLowerCase();
   }
 
