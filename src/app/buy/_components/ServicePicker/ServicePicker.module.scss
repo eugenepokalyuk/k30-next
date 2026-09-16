@@ -1,0 +1,80 @@
+@use '@/styles/index' as s;
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cell {
+  display: flex;
+}
+
+.skeleton {
+  height: 76px;
+  border-radius: s.$br_5;
+  background: var(--background_secondary);
+}
+
+.card {
+  @include s.card;
+
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+  flex: 1;
+
+  padding: s.gap(4);
+
+  color: inherit;
+  text-decoration: none;
+
+  transition: s.$transition;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--accent, var(--stroke_primary));
+  }
+
+  &:focus-visible {
+    @include s.focus_ring;
+  }
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(0.5);
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  @include s.text_header_3;
+
+  color: var(--text_default);
+}
+
+.tagline {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+}
+
+.price {
+  @include s.text_body_2;
+
+  flex-shrink: 0;
+  color: var(--text_default);
+  font-weight: s.$semi_bold;
+  white-space: nowrap;
+}
+
+.arrow {
+  flex-shrink: 0;
+  color: var(--icon_secondary);
+}

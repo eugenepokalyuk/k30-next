@@ -1,0 +1,11 @@
+@use '@/styles/index' as s;
+
+.loading {
+  @include s.text_body_2;
+
+  color: var(--text_muted);
+}
+
+.body {
+  max-width: s.$width_reading;
+}

@@ -72,8 +72,12 @@ export default function RootLayout({ children }: Props) {
           {themeScript}
         </Script>
 
-        {/* Блоки анимации приезжают с opacity 0 — их показывает
-            framer-motion после гидрации */}
+        <Script
+          id="telegram-web-app"
+          src="https://telegram.org/js/telegram-web-app.js"
+          strategy="beforeInteractive"
+        />
+
         <noscript>
           <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
         </noscript>

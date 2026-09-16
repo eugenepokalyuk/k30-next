@@ -14,6 +14,7 @@ import {
   RichText,
   SuccessMark,
 } from '@/components/ui';
+import { useHomeRoute } from '@/lib/hooks';
 import type { ActivationDto, ServiceActivationDto } from '@/store/api/types';
 import { Routes, SupportTelegram } from '@/utils/consts';
 import { maskEmail, parseInstruction } from '@/utils/helpers';
@@ -28,6 +29,7 @@ interface Props {
 }
 
 export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
+  const home = useHomeRoute();
   if (activation.status === 'success') {
     const account = accountLine(activation);
 
@@ -75,7 +77,7 @@ export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
             {'Мои заказы'}
           </Button>
 
-          <Button href={Routes.Home} color="default" size="small">
+          <Button href={home} color="default" size="small">
             <HomeIcon size={18} />
             {'На главную'}
           </Button>

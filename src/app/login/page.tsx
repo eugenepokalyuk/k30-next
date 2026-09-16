@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 
 import { LoginView } from './_components/LoginView/LoginView';
@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
+/** `useSearchParams` внутри требует границы ожидания, иначе экспорт не соберётся */
 export default function LoginPage() {
-  return <LoginView />;
+  return (
+    <Suspense>
+      <LoginView />
+    </Suspense>
+  );
 }

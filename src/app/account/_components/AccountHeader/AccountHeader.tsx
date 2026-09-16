@@ -4,6 +4,7 @@ import React, { FC } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button, KeyIcon, UserIcon } from '@/components/ui';
+import { useHomeRoute } from '@/lib/hooks';
 import type { UserDto } from '@/store/api/types';
 import { useAppDispatch } from '@/store/hooks';
 import { authStorage, signedOut } from '@/store/slices/auth';
@@ -21,12 +22,13 @@ interface Props {
 /** Шапка кабинета: кто вошёл и что отсюда можно сделать */
 export const AccountHeader: FC<Props> = ({ user, active }) => {
   const router = useRouter();
+  const home = useHomeRoute();
   const dispatch = useAppDispatch();
 
   const signOut = () => {
     authStorage.write(null);
     dispatch(signedOut());
-    router.replace(Routes.Home);
+    router.replace(home);
   };
 
   return (

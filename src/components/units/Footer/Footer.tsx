@@ -38,6 +38,12 @@ export const Footer: FC = () => {
           <Link className={classes.link} href={Routes.Account}>
             Личный кабинет
           </Link>
+          <Link className={classes.link} href={Routes.Terms}>
+            Пользовательское соглашение
+          </Link>
+          <Link className={classes.link} href={Routes.Privacy}>
+            Политика конфиденциальности
+          </Link>
         </div>
 
         <div className={classes.column}>

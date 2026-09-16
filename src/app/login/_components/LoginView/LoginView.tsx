@@ -1,14 +1,15 @@
 'use client';
 
-import React, { FC, FormEvent, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { FC } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { Button, Field, Notice, TelegramIcon } from '@/components/ui';
-import { AuthCard } from '@/components/units';
+import { AuthCard, TelegramEmailForm } from '@/components/units';
 import { useEmailLogin, useSiteSettings, useTelegramLogin } from '@/lib/hooks';
 import { useAuthOptionsQuery } from '@/store/api/k30Api';
 import { useAppSelector } from '@/store/hooks';
 import { selectIsAuthorized } from '@/store/slices/auth';
+import { selectIsMiniApp, selectWebAppAuth } from '@/store/slices/telegram';
 import { Routes } from '@/utils/consts';
 
 import classes from './LoginView.module.scss';
@@ -19,26 +20,49 @@ export const LoginView: FC = () => {
   const isAuthorized = useAppSelector(selectIsAuthorized);
   const site = useSiteSettings();
 
+  const next = useSearchParams().get('next') ?? '';
+  const backTo = next.startsWith('/') && !next.startsWith('//')
+    ? next
+    : Routes.Account;
+
   const { data: options, isLoading: isOptionsLoading } = useAuthOptionsQuery();
   const telegram = useTelegramLogin();
   const mail = useEmailLogin();
 
-  // Один переход на три случая: вошедший вернулся кнопкой «назад»,
-  // подтверждение поймал опрос бота, код из письма подошёл
-  useEffect(() => {
-    if (isAuthorized) router.replace(Routes.Account);
-  }, [isAuthorized, router]);
+  React.useEffect(() => {
+    if (isAuthorized) router.replace(backTo);
+  }, [backTo, isAuthorized, router]);
+
+  const isMiniApp = useAppSelector(selectIsMiniApp);
+  const webAppAuth = useAppSelector(selectWebAppAuth);
 
   const byEmail = Boolean(options?.email_login_enabled);
   const byTelegram = options ? options.telegram_login_enabled : true;
   const isLoginDisabled = Boolean(options) && !byEmail && !byTelegram;
   const supportUrl = options?.telegram_support_url || site.telegram_support_url;
 
-  const submitEmail = (event: FormEvent) => {
+  const submitEmail = (event: React.FormEvent) => {
     event.preventDefault();
     if (mail.stage === 'email') void mail.requestCode();
     else void mail.verify();
   };
+
+  if (isMiniApp && webAppAuth === 'needs_email') {
+    return (
+      <AuthCard
+        title="Почти готово"
+        description="Мы узнали вас по Telegram. Остался адрес почты — на него придут ключ и чек."
+      >
+        <TelegramEmailForm />
+      </AuthCard>
+    );
+  }
+
+  if (isMiniApp && webAppAuth === 'signing_in') {
+    return (
+      <AuthCard title="Входим" description="Узнаём вас по Telegram — секунду." />
+    );
+  }
 
   return (
     <AuthCard

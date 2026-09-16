@@ -5,9 +5,9 @@ import clsx from 'clsx';
 
 import { Stagger, StaggerItem } from '@/components/motion';
 import { Button, KeyCode, KeyIcon, Notice, ServiceMark } from '@/components/ui';
+import { useHomeRoute } from '@/lib/hooks';
 import { useMyOrdersQuery } from '@/store/api/k30Api';
 import type { OrderDto } from '@/store/api/types';
-import { Routes } from '@/utils/consts';
 import { formatDate } from '@/utils/helpers';
 
 import classes from './OrdersList.module.scss';
@@ -27,6 +27,7 @@ const activationLabel = (order: OrderDto) => {
 };
 
 export const OrdersList: FC = () => {
+  const home = useHomeRoute();
   const { data, isLoading, isError } = useMyOrdersQuery();
 
   if (isLoading) {
@@ -55,7 +56,7 @@ export const OrdersList: FC = () => {
           }
         </p>
 
-        <Button href={Routes.Home} size="small" variant="outlined">
+        <Button href={home} size="small" variant="outlined">
           {'Активировать ключ'}
         </Button>
       </div>

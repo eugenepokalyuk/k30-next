@@ -7,6 +7,7 @@ export * from './Lightbox/Lightbox';
 export * from './Logo/Logo';
 export * from './Modal/Modal';
 export * from './Notice/Notice';
+export * from './Prose/Prose';
 export * from './RichText/RichText';
 export * from './RippleGrid/RippleGrid';
 export * from './Section/Section';

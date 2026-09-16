@@ -9,16 +9,16 @@ import { useSiteSettings } from '@/lib/hooks';
 
 import classes from './Header.module.scss';
 import { AuthButton } from './AuthButton';
-import { navLinks } from './navLinks';
+import { useNavLinks } from './navLinks';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
 
-/** Выезжающая панель меню на узких экранах */
 export const MobileMenu: FC<Props> = ({ isOpen, onClose }) => {
   const { telegram_support_url } = useSiteSettings();
+  const navLinks = useNavLinks();
 
   return (
     <AnimatePresence>

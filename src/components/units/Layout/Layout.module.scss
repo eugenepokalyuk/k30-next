@@ -13,3 +13,9 @@
 .main {
   flex: 1;
 }
+
+.mini_app {
+  .main {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+  }
+}

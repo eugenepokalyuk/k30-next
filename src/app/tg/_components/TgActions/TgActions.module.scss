@@ -1,0 +1,106 @@
+@use '@/styles/index' as s;
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: s.gap(3);
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cell {
+  display: flex;
+}
+
+.card {
+  @include s.card;
+
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+  flex: 1;
+
+  padding: s.gap(4);
+
+  color: inherit;
+  text-decoration: none;
+
+  transition: s.$transition;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--stroke_primary);
+    box-shadow: var(--box_shadow_primary);
+  }
+
+  &:focus-visible {
+    @include s.focus_ring;
+  }
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: s.gap(2);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  width: 44px;
+  height: 44px;
+
+  border-radius: s.$br_3;
+  background: var(--background_primary_10);
+  color: var(--icon_primary);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(1);
+  flex: 1;
+}
+
+.title {
+  @include s.text_header_3;
+
+  color: var(--text_default);
+}
+
+.description {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+}
+
+.arrow {
+  flex-shrink: 0;
+  color: var(--icon_secondary);
+
+  transition: s.$transition;
+}
+
+.card:hover .arrow,
+.card:focus-visible .arrow {
+  color: var(--icon_primary);
+  transform: translateX(3px);
+}
+
+// Стрелка едет вправо по наведению — движение маленькое, но для тех, кто
+// просил убрать анимации, лишнее
+@media (prefers-reduced-motion: reduce) {
+  .arrow {
+    transition: none;
+  }
+
+  .card:hover .arrow,
+  .card:focus-visible .arrow {
+    transform: none;
+  }
+}

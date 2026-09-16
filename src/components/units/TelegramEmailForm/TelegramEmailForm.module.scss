@@ -1,0 +1,14 @@
+@use '@/styles/index' as s;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+}
+
+.description {
+  @include s.text_body_2;
+
+  margin: 0;
+  color: var(--text_secondary);
+}

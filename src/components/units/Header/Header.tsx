@@ -12,7 +12,7 @@ import { useSiteSettings } from '@/lib/hooks';
 import classes from './Header.module.scss';
 import { AuthButton } from './AuthButton';
 import { MobileMenu } from './MobileMenu';
-import { navLinks } from './navLinks';
+import { useNavLinks } from './navLinks';
 import { useHeaderState } from './useHeaderState';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 
@@ -21,6 +21,7 @@ export const Header: FC = () => {
   const { isScrolled, isOpen, toggle, close } = useHeaderState();
   // Контакт поддержки — из админки, без пересборки статики
   const { telegram_support_url } = useSiteSettings();
+  const navLinks = useNavLinks();
 
   return (
     <header

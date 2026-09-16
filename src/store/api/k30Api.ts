@@ -23,11 +23,16 @@ import type {
   AuthOptionsDto,
   AuthResponse,
   BuyBlockDto,
+  BuyerRulesDto,
   CheckAccountResponse,
+  CheckoutDto,
   EmailCodeRequestDto,
   EmailLoginResponse,
   FaqEntryDto,
   HowStepDto,
+  InformerDto,
+  LegalPageDto,
+  LegalSlug,
   OrderDto,
   ServiceDto,
   SiteSettingsDto,
@@ -36,6 +41,7 @@ import type {
   TelegramBlockDto,
   TelegramStartDto,
   TelegramStatusResponse,
+  TelegramWebAppResponse,
   UserDto,
   VerifyKeyResponse,
 } from './types';
@@ -144,9 +150,40 @@ export const k30Api = createApi({
       query: () => 'faq',
     }),
 
-    /** Плитки блока «Почему мы» */
+    /** Плитки блока «Почему мы» на главной */
     advantages: builder.query<AdvantageDto[], void>({
       query: () => 'advantages',
+    }),
+
+    /**
+     *  Те же плитки, но свои у страницы Telegram: одна ручка с фильтром,
+     *  два хука — так главная не перечитывает свой блок, когда менеджер
+     *  правит телеграмный
+     */
+    tgAdvantages: builder.query<AdvantageDto[], void>({
+      query: () => 'advantages?page=tg',
+    }),
+
+    /** Баннеры слайдера на странице Telegram */
+    informers: builder.query<InformerDto[], void>({
+      query: () => 'informers',
+    }),
+
+    /** Правила для покупателей под выбором сервиса */
+    buyerRules: builder.query<BuyerRulesDto, void>({
+      query: () => 'buyer-rules',
+    }),
+
+    /** Сводка заказа и условия покупки для страницы оформления */
+    checkout: builder.query<CheckoutDto, { service: string; plan: string }>({
+      query: ({ service, plan }) =>
+        `checkout?service=${encodeURIComponent(service)}` +
+        `&plan=${encodeURIComponent(plan)}`,
+    }),
+
+    /** Соглашение или политика конфиденциальности */
+    legalPage: builder.query<LegalPageDto, LegalSlug>({
+      query: (slug) => `legal/${slug}`,
     }),
 
     /** Шаги блока «Как это работает» */
@@ -205,6 +242,36 @@ export const k30Api = createApi({
       },
     }),
 
+    /**
+     *  Вход внутри Telegram Mini App: строка initData вместо ожидания в
+     *  чате. Токены кладём здесь же, рядом с остальными способами —
+     *  место старта сессии должно быть одно
+     */
+    telegramWebAppLogin: builder.mutation<
+      TelegramWebAppResponse,
+      { init_data: string; email?: string }
+    >({
+      query: (body) => ({
+        url: 'auth/telegram/webapp',
+        method: 'POST',
+        body,
+      }),
+
+      async onQueryStarted(_body, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (data.status !== 'confirmed' || !data.access || !data.refresh) {
+            return;
+          }
+
+          dispatch(signedIn(data as AuthResponse));
+          authStorage.write(data.refresh);
+        } catch {
+          // Что показать, решает экран входа в Mini App
+        }
+      },
+    }),
+
     /** Шаг 1 входа через телеграм: получить одноразовую ссылку на бота */
     telegramLoginStart: builder.mutation<TelegramStartDto, void>({
       query: () => ({ url: 'auth/telegram/start', method: 'POST' }),
@@ -248,6 +315,19 @@ export const k30Api = createApi({
       providesTags: ['Orders'],
     }),
 
+    /**
+     *  Один заказ по номеру — для страницы оформления.
+     *
+     *  Заказ заводится без ключа: ключ снимается со склада, когда
+     *  подтвердится оплата. Узнать, что это уже случилось, витрине
+     *  больше неоткуда, поэтому экран после оформления перечитывает
+     *  заказ, пока ключ не появится
+     */
+    myOrder: builder.query<OrderDto, number>({
+      query: (number) => `me/orders/${number}`,
+      providesTags: ['Orders'],
+    }),
+
     /** Что работает прямо сейчас */
     mySubscriptions: builder.query<SubscriptionDto[], void>({
       query: () => 'me/subscriptions',
@@ -259,6 +339,16 @@ export const k30Api = createApi({
       query: () => 'me/activations',
       providesTags: ['Activations'],
     }),
+
+    /**
+     *  Оформление заказа. Оплаты пока нет, поэтому заказ уезжает в «ждёт
+     *  оплаты» — экран благодарности читает статус из ответа и не знает,
+     *  что оплата ещё не подключена
+     */
+    createOrder: builder.mutation<OrderDto, { service: string; plan: string }>({
+      query: (body) => ({ url: 'orders', method: 'POST', body }),
+      invalidatesTags: ['Orders'],
+    }),
   }),
 });
 
@@ -267,6 +357,11 @@ export const {
   useSiteSettingsQuery,
   useFaqQuery,
   useAdvantagesQuery,
+  useTgAdvantagesQuery,
+  useInformersQuery,
+  useBuyerRulesQuery,
+  useCheckoutQuery,
+  useLegalPageQuery,
   useHowStepsQuery,
   useBuyBlockQuery,
   useTelegramBlockQuery,
@@ -274,6 +369,7 @@ export const {
   useAuthOptionsQuery,
   useRequestEmailCodeMutation,
   useVerifyEmailCodeMutation,
+  useTelegramWebAppLoginMutation,
   useTelegramLoginStartMutation,
   useTelegramLoginStatusQuery,
   useVerifyKeyMutation,
@@ -284,6 +380,8 @@ export const {
   useMeQuery,
   useUpdateMeMutation,
   useMyOrdersQuery,
+  useMyOrderQuery,
   useMySubscriptionsQuery,
   useMyActivationsQuery,
+  useCreateOrderMutation,
 } = k30Api;

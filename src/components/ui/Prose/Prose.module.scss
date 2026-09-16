@@ -1,0 +1,43 @@
+@use '@/styles/index' as s;
+
+.prose {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+}
+
+.paragraph {
+  @include s.text_body_2;
+
+  margin: 0;
+  color: var(--text_secondary);
+  text-wrap: pretty;
+}
+
+.bullets,
+.numbers {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+
+  margin: 0;
+  padding-left: s.gap(5);
+}
+
+.bullets {
+  list-style: disc;
+}
+
+.numbers {
+  list-style: decimal;
+}
+
+.item {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+
+  &::marker {
+    color: var(--text_muted);
+  }
+}

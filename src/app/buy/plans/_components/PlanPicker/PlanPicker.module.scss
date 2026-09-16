@@ -1,0 +1,143 @@
+@use '@/styles/index' as s;
+
+.grid {
+  display: grid;
+  gap: s.gap(3);
+  grid-template-columns: 1fr;
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include s.media_up(md) {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+.skeleton {
+  height: 240px;
+  border-radius: s.$br_5;
+  background: var(--background_secondary);
+}
+
+.cell {
+  display: flex;
+}
+
+.card {
+  @include s.card;
+
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+  flex: 1;
+
+  padding: s.gap(4);
+
+  transition: s.$transition;
+
+  &:hover {
+    border-color: var(--accent, var(--stroke_primary));
+  }
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+}
+
+.head_text {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(0.5);
+  min-width: 0;
+}
+
+.name {
+  @include s.text_header_3;
+
+  margin: 0;
+  color: var(--text_default);
+}
+
+.tagline {
+  @include s.text_body_2;
+
+  margin: 0;
+  color: var(--text_secondary);
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+  flex: 1;
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fact {
+  @include s.text_body_2;
+
+  display: flex;
+  align-items: center;
+  gap: s.gap(2);
+
+  color: var(--text_secondary);
+
+  svg {
+    flex-shrink: 0;
+    color: var(--icon_primary);
+  }
+}
+
+.foot {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+
+  padding-top: s.gap(4);
+  border-top: 1px solid var(--stroke_default);
+}
+
+.price_row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: s.gap(2);
+}
+
+.price {
+  @include s.text_header_2;
+
+  color: var(--text_default);
+}
+
+.in_stock,
+.out_stock {
+  @include s.text_caption;
+
+  padding: s.gap(1) s.gap(2);
+  border-radius: s.$br_full;
+  font-weight: s.$medium;
+  white-space: nowrap;
+}
+
+.in_stock {
+  background: var(--success_10);
+  color: var(--success);
+}
+
+.out_stock {
+  background: var(--background_elevated);
+  color: var(--text_muted);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: s.gap(4);
+}

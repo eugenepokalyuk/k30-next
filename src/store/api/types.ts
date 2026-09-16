@@ -257,7 +257,13 @@ export interface TelegramBlockDto {
   items: TelegramBlockItemDto[];
 }
 
-export type OrderStatus = 'new' | 'issued' | 'activated' | 'cancelled';
+export type OrderStatus =
+  | 'awaiting_payment'
+  | 'paid'
+  | 'new'
+  | 'issued'
+  | 'activated'
+  | 'cancelled';
 
 export interface FaqEntryDto {
   id: number;
@@ -301,13 +307,72 @@ export interface OrderDto {
   accent_color: string;
   plan: string;
   plan_slug: string;
+  price: string | null;
   key_code: string;
   status: OrderStatus;
   status_label: string;
+  awaits_key: boolean;
+  paid_at: string | null;
   activation_status: ActivationStatus | '';
   activation_url: string;
   account_email: string;
   source: string;
   external_ref: string;
   created_at: string;
+}
+
+export interface InformerDto {
+  id: number;
+  image: string;
+  title: string;
+  url: string;
+}
+
+export interface BuyerRuleItemDto {
+  id: number;
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface BuyerRulesDto {
+  is_enabled: boolean;
+  title: string;
+  text: string;
+  items: BuyerRuleItemDto[];
+}
+
+export interface CheckoutServiceDto {
+  slug: string;
+  name: string;
+  tagline: string;
+  logo: string | null;
+  accent_color: string;
+}
+
+export interface CheckoutBlockDto {
+  key: 'requirements' | 'warranty';
+  icon: string;
+  title: string;
+  body: string;
+}
+
+export interface CheckoutDto {
+  service: CheckoutServiceDto;
+  plan: PlanDto;
+  total: string | null;
+  blocks: CheckoutBlockDto[];
+}
+
+export type LegalSlug = 'terms' | 'privacy';
+
+export interface LegalPageDto {
+  slug: LegalSlug;
+  title: string;
+  body: string;
+  updated_at: string;
+}
+
+export interface TelegramWebAppResponse extends Partial<AuthResponse> {
+  status: 'confirmed' | 'needs_email';
 }
