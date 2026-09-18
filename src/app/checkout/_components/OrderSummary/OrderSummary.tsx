@@ -82,8 +82,9 @@ export const OrderSummary: FC<Props> = ({
         </Notice>
       )}
 
+      {/* Тариф «по запросу» оплатить нельзя: счёт ушёл бы нулевым */}
       <CheckoutAction
-        canPay={payment.canPay}
+        canPay={payment.canPay && total !== null}
         total={total}
         isSending={isSending}
         onPay={onPay}
