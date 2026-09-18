@@ -1,0 +1,14 @@
+@use '@/styles/index' as s;
+
+.key {
+  width: 100%;
+  max-width: 420px;
+}
+
+.hint {
+  @include s.text_caption;
+
+  margin: 0;
+  color: var(--text_muted);
+  text-align: center;
+}

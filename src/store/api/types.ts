@@ -338,6 +338,21 @@ export interface PaymentDto {
   status_label: string;
   pay_url: string;
   error: string;
+
+  service: string;
+  service_slug: string;
+  logo: string | null;
+  accent_color: string;
+  plan: string;
+  plan_slug: string;
+
+  /** Появляются, когда деньги дошли: до оплаты заказа не существует */
+  order_number: number | null;
+  key_code: string;
+  activation_url: string;
+  /** Оплачено, а ключа нет: склад был пуст в момент оплаты */
+  awaits_key: boolean;
+
   created_at: string;
 }
 
@@ -361,26 +376,15 @@ export interface OrderDto {
   source: string;
   external_ref: string;
   created_at: string;
-  /** Незакрытый счёт: по нему покупатель дойдёт до оплаты, не оформляя
-   *  заказ заново. null — платить уже не за что или счёт закрыт */
-  payment: PaymentDto | null;
 }
 
 /**
- *  Ответ оформления: заказ заведён всегда, счёт — если платёжная система
- *  ответила. Не выставился — заказ остаётся, и оплатить его можно ещё
- *  раз, не заводя второй
+ *  Ответ кнопки «Оплатить». Заказа в нём нет: он появится, когда деньги
+ *  дойдут, — а пока есть только счёт со ссылкой на оплату
  */
-export interface CreateOrderResponse {
-  order: OrderDto;
+export interface CreatePaymentResponse {
   payment: PaymentDto | null;
   error: string;
-}
-
-export interface PayOrderResponse {
-  success: boolean;
-  payment?: PaymentDto;
-  error?: string;
 }
 
 export interface InformerDto {

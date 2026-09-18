@@ -26,7 +26,7 @@ import type {
   BuyerRulesDto,
   CheckAccountResponse,
   CheckoutDto,
-  CreateOrderResponse,
+  CreatePaymentResponse,
   EmailCodeRequestDto,
   EmailLoginResponse,
   FaqEntryDto,
@@ -37,7 +37,6 @@ import type {
   OrderDto,
   PaymentDto,
   PaymentOptionsDto,
-  PayOrderResponse,
   ServiceDto,
   SiteSettingsDto,
   SubscriptionDto,
@@ -357,43 +356,30 @@ export const k30Api = createApi({
     }),
 
     /**
-     *  Оформление заказа вместе со счётом.
+     *  Кнопка «Оплатить»: заводит счёт и отдаёт ссылку на оплату.
      *
-     *  Одним запросом, а не двумя: между «завели заказ» и «выставили
-     *  счёт» помещается закрытая вкладка, и заказ остался бы висеть
-     *  без счёта
+     *  Заказа она не создаёт — он появится, когда деньги дойдут. Иначе
+     *  кабинет копил бы строки «ждёт оплаты» по каждому, кто передумал
+     *  на странице банка
      */
-    createOrder: builder.mutation<
-      CreateOrderResponse,
+    createPayment: builder.mutation<
+      CreatePaymentResponse,
       { service: string; plan: string; method: string }
     >({
-      query: (body) => ({ url: 'orders', method: 'POST', body }),
+      query: (body) => ({ url: 'payments', method: 'POST', body }),
       invalidatesTags: ['Orders'],
     }),
 
     /**
-     *  Счёт по уже оформленному заказу: другой способ, протухшая ссылка,
-     *  вернулись и платят снова. Второй заказ ради этого не заводим
+     *  Чем кончился счёт — это читает страница, вернувшаяся с оплаты.
+     *  Номер заказа и код ключа приезжают здесь же, когда оплата пройдёт
      */
-    payOrder: builder.mutation<
-      PayOrderResponse,
-      { number: number; method: string }
-    >({
-      query: ({ number, method }) => ({
-        url: `orders/${number}/pay`,
-        method: 'POST',
-        body: { method },
-      }),
-      invalidatesTags: ['Orders'],
-    }),
-
-    /** Чем кончился платёж — для страницы, вернувшейся с оплаты */
     paymentStatus: builder.query<
       { success: boolean; payment: PaymentDto },
       string
     >({
       query: (id) => `payments/${id}`,
-      providesTags: ['Payment'],
+      providesTags: ['Payment', 'Orders'],
     }),
   }),
 });
@@ -429,8 +415,7 @@ export const {
   useMyOrderQuery,
   useMySubscriptionsQuery,
   useMyActivationsQuery,
-  useCreateOrderMutation,
+  useCreatePaymentMutation,
   usePaymentMethodsQuery,
-  usePayOrderMutation,
   usePaymentStatusQuery,
 } = k30Api;

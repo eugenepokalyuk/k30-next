@@ -5,9 +5,8 @@ import { useSearchParams } from 'next/navigation';
 
 import {
   useCheckoutQuery,
-  useCreateOrderMutation,
+  useCreatePaymentMutation,
   usePaymentMethodsQuery,
-  usePayOrderMutation,
 } from '@/store/api/k30Api';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { cartCleared, planChosen, selectCartItem } from '@/store/slices/cart';
@@ -19,10 +18,11 @@ export const useCheckout = () => {
   const cartItem = useAppSelector(selectCartItem);
 
   // Адрес главнее корзины: по присланной ссылке должен открыться тот
-  // заказ, а не последний отложенный
+  // тариф, а не последний отложенный
   const service = params.get('service') || cartItem?.service || '';
   const plan = params.get('plan') || cartItem?.plan || '';
-  const returnedTo = Number(params.get('order')) || 0;
+  // Сюда возвращает платёжная система — и когда заплатили, и когда нет
+  const returnedTo = params.get('payment') || '';
 
   const order = useCheckoutQuery(
     { service, plan },
@@ -31,59 +31,41 @@ export const useCheckout = () => {
 
   const payment = usePaymentChoice({ skip: Boolean(returnedTo) });
 
-  const [createOrder, created] = useCreateOrderMutation();
-  const [payOrder, retried] = usePayOrderMutation();
+  const [createPayment, created] = useCreatePaymentMutation();
 
   React.useEffect(() => {
-    if (created.data || !service || !plan) return;
+    if (!service || !plan) return;
     if (cartItem?.service === service && cartItem?.plan === plan) return;
 
     dispatch(planChosen({ service, plan }));
-  }, [cartItem, created.data, dispatch, plan, service]);
+  }, [cartItem, dispatch, plan, service]);
 
-  React.useEffect(() => {
-    if (created.data) dispatch(cartCleared());
-  }, [dispatch, created.data]);
-
-  // Редирект, а не новая вкладка: на телефоне вторая теряется, а
-  // приложение банка возвращает человека в ту, из которой ушли
-  const goToPayment = (url?: string) => {
-    if (url) window.location.href = url;
-  };
-
+  /**
+   *  Заводим счёт и уводим на оплату.
+   *
+   *  Редирект, а не новая вкладка: на телефоне вторая теряется, а
+   *  приложение банка возвращает человека в ту, из которой ушли.
+   *  Корзину чистим только здесь — до оплаты покупателю нечего терять,
+   *  а вернувшись, он должен увидеть тот же тариф
+   */
   const pay = async () => {
     try {
-      const result = await createOrder({
+      const result = await createPayment({
         service,
         plan,
         method: payment.method,
       }).unwrap();
-      goToPayment(result.payment?.pay_url);
+
+      if (result.payment?.pay_url) {
+        dispatch(cartCleared());
+        window.location.href = result.payment.pay_url;
+      }
     } catch {
       // Текст отказа показывает `created.error`
     }
   };
 
-  const retry = async (number: number) => {
-    try {
-      const result = await payOrder({ number, method: payment.method }).unwrap();
-      goToPayment(result.payment?.pay_url);
-    } catch {
-      // Текст отказа показывает `retried.error`
-    }
-  };
-
-  return {
-    service,
-    plan,
-    returnedTo,
-    order,
-    payment,
-    created,
-    retried,
-    pay,
-    retry,
-  };
+  return { service, plan, returnedTo, order, payment, created, pay };
 };
 
 /** Способы оплаты и выбранный: пустой список означает, что платить нечем */
