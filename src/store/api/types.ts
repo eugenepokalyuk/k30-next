@@ -299,6 +299,48 @@ export interface SubscriptionDto {
   days_left: number | null;
 }
 
+/** Плитка в разделе «Способы оплаты» — состав задаёт админка */
+export interface PaymentMethodDto {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+}
+
+/**
+ *  Весь раздел «Способы оплаты» целиком, а не только список.
+ *
+ *  Пустой список отвечает на вопрос «чем платить», но не на вопрос
+ *  «почему нечем»: оплату могли выключить на техработы, могли не
+ *  настроить вовсе, а могли выключить все способы по одному. Текст для
+ *  всех трёх случаев пишет менеджер в админке, а не витрина в вёрстке
+ */
+export interface PaymentOptionsDto {
+  is_enabled: boolean;
+  methods: PaymentMethodDto[];
+  notice: string;
+  unavailable_text: string;
+}
+
+export type PaymentStatus =
+  | 'pending'
+  | 'confirmed'
+  | 'canceled'
+  | 'chargebacked'
+  | 'error';
+
+export interface PaymentDto {
+  id: string;
+  method: string;
+  amount: string;
+  currency: string;
+  status: PaymentStatus;
+  status_label: string;
+  pay_url: string;
+  error: string;
+  created_at: string;
+}
+
 export interface OrderDto {
   number: number;
   service: string;
@@ -319,6 +361,26 @@ export interface OrderDto {
   source: string;
   external_ref: string;
   created_at: string;
+  /** Незакрытый счёт: по нему покупатель дойдёт до оплаты, не оформляя
+   *  заказ заново. null — платить уже не за что или счёт закрыт */
+  payment: PaymentDto | null;
+}
+
+/**
+ *  Ответ оформления: заказ заведён всегда, счёт — если платёжная система
+ *  ответила. Не выставился — заказ остаётся, и оплатить его можно ещё
+ *  раз, не заводя второй
+ */
+export interface CreateOrderResponse {
+  order: OrderDto;
+  payment: PaymentDto | null;
+  error: string;
+}
+
+export interface PayOrderResponse {
+  success: boolean;
+  payment?: PaymentDto;
+  error?: string;
 }
 
 export interface InformerDto {

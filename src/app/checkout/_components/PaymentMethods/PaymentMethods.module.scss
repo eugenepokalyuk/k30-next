@@ -1,0 +1,151 @@
+@use '@/styles/index' as s;
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+
+  padding-top: s.gap(4);
+  border-top: 1px solid var(--stroke_default);
+}
+
+.title {
+  @include s.text_caption;
+
+  margin: 0;
+  color: var(--text_muted);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+}
+
+.method {
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+
+  width: 100%;
+  padding: s.gap(3);
+
+  text-align: left;
+  cursor: pointer;
+
+  background: var(--background_default);
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_4;
+
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+
+  &:hover:not(:disabled) {
+    border-color: var(--stroke_primary);
+  }
+
+  &:focus-visible {
+    @include s.focus_ring(2px);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.checked {
+  border-color: var(--stroke_primary);
+  background: var(--background_primary_10);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  width: 36px;
+  height: 36px;
+
+  border-radius: s.$br_3;
+  background: var(--background_primary_10);
+  color: var(--icon_primary);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(0.5);
+  min-width: 0;
+  flex: 1;
+}
+
+.name {
+  @include s.text_body_2;
+
+  color: var(--text_default);
+  font-weight: s.$semi_bold;
+}
+
+.hint {
+  @include s.text_caption;
+
+  color: var(--text_muted);
+}
+
+// Точка выбора рисуется рамкой, а не браузерным radio: нативный
+// элемент не красится под тему и на тёмной сливается с карточкой
+.mark {
+  flex-shrink: 0;
+
+  width: 18px;
+  height: 18px;
+
+  border: 2px solid var(--stroke_default);
+  border-radius: 50%;
+
+  .checked & {
+    border-color: var(--stroke_primary);
+    border-width: 5px;
+  }
+}
+
+.notice {
+  @include s.text_caption;
+
+  margin: 0;
+  color: var(--text_muted);
+}
+
+.skeletons {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+}
+
+.skeleton {
+  height: 62px;
+  border-radius: s.$br_4;
+  background: var(--background_default);
+  border: 1px solid var(--stroke_default);
+
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}

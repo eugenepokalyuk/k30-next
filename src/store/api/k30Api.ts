@@ -26,6 +26,7 @@ import type {
   BuyerRulesDto,
   CheckAccountResponse,
   CheckoutDto,
+  CreateOrderResponse,
   EmailCodeRequestDto,
   EmailLoginResponse,
   FaqEntryDto,
@@ -34,6 +35,9 @@ import type {
   LegalPageDto,
   LegalSlug,
   OrderDto,
+  PaymentDto,
+  PaymentOptionsDto,
+  PayOrderResponse,
   ServiceDto,
   SiteSettingsDto,
   SubscriptionDto,
@@ -95,7 +99,7 @@ const baseQueryWithReauth: BaseQueryFn<
 export const k30Api = createApi({
   reducerPath: 'k30Api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Me', 'Orders', 'Activations'],
+  tagTypes: ['Me', 'Orders', 'Activations', 'Payment'],
   endpoints: (builder) => ({
     services: builder.query<ServiceDto[], void>({
       query: () => 'services/',
@@ -341,13 +345,55 @@ export const k30Api = createApi({
     }),
 
     /**
-     *  Оформление заказа. Оплаты пока нет, поэтому заказ уезжает в «ждёт
-     *  оплаты» — экран благодарности читает статус из ответа и не знает,
-     *  что оплата ещё не подключена
+     *  Раздел «Способы оплаты» на странице оформления.
+     *
+     *  Читается анонимно и до входа: чем можно заплатить — такое же
+     *  содержимое витрины, как цена. От ответа зависит, будет ли кнопка
+     *  оплаты вообще: пустой список — значит платить нечем, и оформлять
+     *  заказ незачем
      */
-    createOrder: builder.mutation<OrderDto, { service: string; plan: string }>({
+    paymentMethods: builder.query<PaymentOptionsDto, void>({
+      query: () => 'payment-methods',
+    }),
+
+    /**
+     *  Оформление заказа вместе со счётом.
+     *
+     *  Одним запросом, а не двумя: между «завели заказ» и «выставили
+     *  счёт» помещается закрытая вкладка, и заказ остался бы висеть
+     *  без счёта
+     */
+    createOrder: builder.mutation<
+      CreateOrderResponse,
+      { service: string; plan: string; method: string }
+    >({
       query: (body) => ({ url: 'orders', method: 'POST', body }),
       invalidatesTags: ['Orders'],
+    }),
+
+    /**
+     *  Счёт по уже оформленному заказу: другой способ, протухшая ссылка,
+     *  вернулись и платят снова. Второй заказ ради этого не заводим
+     */
+    payOrder: builder.mutation<
+      PayOrderResponse,
+      { number: number; method: string }
+    >({
+      query: ({ number, method }) => ({
+        url: `orders/${number}/pay`,
+        method: 'POST',
+        body: { method },
+      }),
+      invalidatesTags: ['Orders'],
+    }),
+
+    /** Чем кончился платёж — для страницы, вернувшейся с оплаты */
+    paymentStatus: builder.query<
+      { success: boolean; payment: PaymentDto },
+      string
+    >({
+      query: (id) => `payments/${id}`,
+      providesTags: ['Payment'],
     }),
   }),
 });
@@ -384,4 +430,7 @@ export const {
   useMySubscriptionsQuery,
   useMyActivationsQuery,
   useCreateOrderMutation,
+  usePaymentMethodsQuery,
+  usePayOrderMutation,
+  usePaymentStatusQuery,
 } = k30Api;

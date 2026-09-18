@@ -1,0 +1,54 @@
+@use '@/styles/index' as s;
+
+.blocks {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+}
+
+.block {
+  @include s.card;
+
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(3);
+
+  padding: s.gap(5);
+}
+
+.block_head {
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+}
+
+.block_icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+
+  width: 40px;
+  height: 40px;
+
+  border-radius: s.$br_3;
+  background: var(--background_primary_10);
+  color: var(--icon_primary);
+}
+
+.block_title {
+  @include s.text_header_3;
+
+  margin: 0;
+  color: var(--text_default);
+}
+
+.legal {
+  @include s.text_caption;
+
+  margin: 0;
+  color: var(--text_muted);
+
+  a {
+    color: var(--text_primary);
+  }
+}

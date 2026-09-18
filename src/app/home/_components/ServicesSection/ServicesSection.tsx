@@ -6,19 +6,21 @@ import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { duration, ease } from '@/components/motion';
-import { ArrowRightIcon, Notice, Section, ServiceMark } from '@/components/ui';
+import {
+  ArrowRightIcon,
+  Button,
+  Notice,
+  Section,
+  ServiceMark,
+} from '@/components/ui';
 import { useServicesQuery } from '@/store/api/k30Api';
-import type { ServiceDto } from '@/store/api/types';
-import { Routes } from '@/utils/consts';
+import { buyPlansRoute, Routes } from '@/utils/consts';
 import { formatPrice, formatPriceFrom } from '@/utils/helpers';
 
 import classes from './ServicesSection.module.scss';
-import { ServiceModal } from './ServiceModal';
 
 export const ServicesSection: FC = () => {
   const { data, isLoading, isError } = useServicesQuery();
-
-  const [opened, setOpened] = React.useState<ServiceDto | null>(null);
 
   const hasLogos = Boolean(data?.some((service) => service.logo));
 
@@ -42,7 +44,7 @@ export const ServicesSection: FC = () => {
           className={classes.notice}
         >
           Обновите страницу или напишите в поддержку — на активацию ключа это не
-          влияет.
+          влияет
         </Notice>
       )}
 
@@ -75,15 +77,16 @@ export const ServicesSection: FC = () => {
                     : undefined
                 }
               >
-                <button
-                  type="button"
+                {/* Ссылкой служит вся карточка: один таб-стоп и клик в
+                    любое место ведут к тарифам */}
+                <Link
+                  href={buyPlansRoute(service.slug)}
                   className={classes.opener}
-                  onClick={() => setOpened(service)}
                 >
                   <span className={classes.opener_label}>
-                    Тарифы и цены: {service.name}
+                    Выбрать тариф: {service.name}
                   </span>
-                </button>
+                </Link>
 
                 <div className={classes.head}>
                   <ServiceMark
@@ -115,18 +118,26 @@ export const ServicesSection: FC = () => {
                           {formatPrice(plan.price) ?? 'по запросу'}
                         </span>
                       ) : (
-                        <span className={classes.stock_out}>скоро</span>
+                        <span className={classes.stock_out}>{'скоро'}</span>
                       )}
                     </li>
                   ))}
                 </ul>
+
+                <Button
+                  variant="glow"
+                  size="small"
+                  className={classes.buy}
+                  decorative
+                >
+                  {'Выбрать тариф'}
+                  <ArrowRightIcon size={18} />
+                </Button>
               </motion.li>
             );
           })}
         </AnimatePresence>
       </ul>
-
-      <ServiceModal service={opened} onClose={() => setOpened(null)} />
     </Section>
   );
 };

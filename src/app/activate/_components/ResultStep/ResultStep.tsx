@@ -89,7 +89,7 @@ export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
   if (activation.status === 'cancelled') {
     return (
       <div className={classes.result}>
-        <Notice tone="info" title="Активация отменена">
+        <Notice tone="info" title="Активация отменена" className={classes.notice}>
           {'Ключ не потрачен — можно активировать заново'}
         </Notice>
 
@@ -103,7 +103,7 @@ export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
   if (activation.status === 'review') {
     return (
       <div className={classes.result}>
-        <Notice tone="info" title="Проверяем вручную">
+        <Notice tone="info" title="Проверяем вручную" className={classes.notice}>
           {activation.error || 'Активация не дала однозначного результата, и мы перепроверяем её.'}{' '}
           {'Ключ закреплён за вами — повторять активацию не нужно.'}
         </Notice>
@@ -121,6 +121,7 @@ export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
         title={
           isCustomerFault ? 'Проверьте данные аккаунта' : 'Активация не прошла'
         }
+        className={classes.notice}
       >
         {activation.error || 'Напишите в поддержку — разберёмся и активируем.'}
       </Notice>

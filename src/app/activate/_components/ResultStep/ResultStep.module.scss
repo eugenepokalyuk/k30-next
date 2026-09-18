@@ -8,6 +8,10 @@
   width: 100%;
 }
 
+.notice {
+  align-self: stretch;
+}
+
 .hint {
   @include s.text_body_2;
 

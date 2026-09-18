@@ -6,12 +6,14 @@ import classes from './Button.module.scss';
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?: 'primary' | 'default';
-  variant?: 'filled' | 'outlined' | 'ghost';
+  variant?: 'filled' | 'outlined' | 'ghost' | 'glow';
   size?: 'small' | 'medium' | 'large';
   fullWidth?: boolean;
   loading?: boolean;
   href?: string;
   external?: boolean;
+  /** Вид кнопки без интерактивности — когда ссылкой служит блок вокруг */
+  decorative?: boolean;
 }
 
 export const Button: FC<Props> = ({
@@ -25,6 +27,7 @@ export const Button: FC<Props> = ({
   children,
   href,
   external,
+  decorative,
   onClick,
   ...rest
 }) => {
@@ -35,6 +38,12 @@ export const Button: FC<Props> = ({
     className,
     { [classes.full_width]: fullWidth, [classes.loading]: loading },
   );
+
+  // Вложенные ссылки и кнопки браузер не разрешает, а лишний таб-стоп
+  // ведёт туда же, куда и сам блок
+  if (decorative) {
+    return <span className={cx}>{children}</span>;
+  }
 
   // Ссылке отдаём только onClick: остальные пропсы типизированы под
   // <button> и на <a> дают невалидный html
