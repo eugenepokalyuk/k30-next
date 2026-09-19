@@ -45,8 +45,13 @@ export const metadata: Metadata = {
   icons: {
     // basePath к ссылкам в метаданных Next не подставляет — на Pages без
     // своего домена сайт лежит в подкаталоге, и иконка искалась бы в корне
-    icon: [{ url: `${basePath}/favicon.svg`, type: 'image/svg+xml' }],
-    shortcut: `${basePath}/favicon.svg`,
+    icon: [
+      { url: `${basePath}/favicon.ico`, sizes: '16x16 32x32 48x48' },
+      { url: `${basePath}/icon-192.png`, sizes: '192x192', type: 'image/png' },
+      { url: `${basePath}/icon.png`, sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: `${basePath}/favicon.ico`,
+    apple: { url: `${basePath}/apple-touch-icon.png`, sizes: '180x180' },
   },
 };
 
