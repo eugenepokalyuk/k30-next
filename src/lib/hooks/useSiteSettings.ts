@@ -6,6 +6,7 @@ import { SupportTelegram } from '@/utils/consts';
 
 /** Чем живёт витрина, пока настройки не приехали */
 const fallback: SiteSettingsDto = {
+  logo: null,
   telegram_channel_url: '',
   telegram_support_url: SupportTelegram,
   telegram_bot_url: '',

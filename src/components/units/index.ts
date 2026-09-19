@@ -5,6 +5,7 @@ export * from './Header/Header';
 export * from './KeyForm/KeyForm';
 export * from './Layout/Layout';
 export * from './PageBackground/PageBackground';
+export * from './SiteIcon/SiteIcon';
 export * from './TelegramEmailForm/TelegramEmailForm';
 export * from './TelegramWidget/TelegramWidget';
 export * from './ThemeToggle/ThemeToggle';

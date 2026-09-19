@@ -11,6 +11,7 @@ import { BottomNav } from '../BottomNav/BottomNav';
 import { Footer } from '../Footer/Footer';
 import { Header } from '../Header/Header';
 import { PageBackground } from '../PageBackground/PageBackground';
+import { SiteIcon } from '../SiteIcon/SiteIcon';
 import { TelegramWidget } from '../TelegramWidget/TelegramWidget';
 
 export const Layout: FC<React.PropsWithChildren> = ({ children }) => {
@@ -18,6 +19,7 @@ export const Layout: FC<React.PropsWithChildren> = ({ children }) => {
 
   return (
     <div className={clsx(classes.layout, { [classes.mini_app]: isMiniApp })}>
+      <SiteIcon />
       <PageBackground />
 
       <Header />

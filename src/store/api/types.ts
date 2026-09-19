@@ -15,7 +15,8 @@ export interface KeyStateDto {
   activated_at: string | null;
 }
 
-export type TargetKind = 'access_token' | 'session_json' | 'account_id' | 'org_id' | 'user_id';
+export type TargetKind =
+  'access_token' | 'session_json' | 'account_id' | 'org_id' | 'user_id';
 
 export interface TargetOptionDto {
   kind: TargetKind;
@@ -189,11 +190,7 @@ export interface TelegramStartDto {
 }
 
 export type TelegramLoginStatus =
-  | 'pending'
-  | 'confirmed'
-  | 'needs_email'
-  | 'needs_code'
-  | 'expired';
+  'pending' | 'confirmed' | 'needs_email' | 'needs_code' | 'expired';
 
 export interface TelegramStatusResponse extends Partial<AuthResponse> {
   status: TelegramLoginStatus;
@@ -216,6 +213,8 @@ export interface EmailLoginResponse extends AuthResponse {
 }
 
 export interface SiteSettingsDto {
+  /** Полный адрес логотипа из админки; null — берём логотип из сборки */
+  logo: string | null;
   telegram_channel_url: string;
   telegram_support_url: string;
   telegram_bot_url: string;
@@ -258,12 +257,7 @@ export interface TelegramBlockDto {
 }
 
 export type OrderStatus =
-  | 'awaiting_payment'
-  | 'paid'
-  | 'new'
-  | 'issued'
-  | 'activated'
-  | 'cancelled';
+  'awaiting_payment' | 'paid' | 'new' | 'issued' | 'activated' | 'cancelled';
 
 export interface FaqEntryDto {
   id: number;
@@ -323,11 +317,7 @@ export interface PaymentOptionsDto {
 }
 
 export type PaymentStatus =
-  | 'pending'
-  | 'confirmed'
-  | 'canceled'
-  | 'chargebacked'
-  | 'error';
+  'pending' | 'confirmed' | 'canceled' | 'chargebacked' | 'error';
 
 export interface PaymentDto {
   id: string;
