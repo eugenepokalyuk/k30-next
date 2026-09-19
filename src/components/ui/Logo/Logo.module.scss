@@ -7,21 +7,10 @@
 }
 
 .mark {
-  display: grid;
-  place-items: center;
+  flex-shrink: 0;
 
   width: 34px;
   height: 34px;
-
-  background: linear-gradient(135deg, s.$primary, s.$primary_light);
-  border-radius: s.$br_2;
-
-  color: var(--text_on_primary_fill);
-
-  font-family: var(--font-manrope), sans-serif;
-  font-weight: s.$bold;
-  font-size: 18px;
-  line-height: 1;
 }
 
 .name {
