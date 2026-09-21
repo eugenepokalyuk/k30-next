@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 
 import { useSiteSettings } from '@/lib/hooks';
 
@@ -14,7 +14,7 @@ import { useSiteSettings } from '@/lib/hooks';
 export const SiteIcon: FC = () => {
   const { logo } = useSiteSettings();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!logo) return;
 
     document

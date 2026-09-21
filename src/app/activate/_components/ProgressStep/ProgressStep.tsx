@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { motion } from 'framer-motion';
 
 import { duration, ease } from '@/components/motion';
@@ -32,7 +32,7 @@ export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
   const [cancel, { isLoading: isCancelling }] = useCancelActivationMutation();
   */
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (fresh && fresh !== activation) onUpdate(fresh);
   }, [fresh, activation, onUpdate]);
 

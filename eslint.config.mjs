@@ -36,6 +36,43 @@ export default tseslint.config(
     },
   },
 
+  // Хуки React — только через неймспейс: React.useEffect, не useEffect
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'react',
+              importNames: [
+                'useState',
+                'useEffect',
+                'useLayoutEffect',
+                'useRef',
+                'useMemo',
+                'useCallback',
+                'useId',
+                'useReducer',
+                'useContext',
+                'useTransition',
+                'useDeferredValue',
+                'useImperativeHandle',
+                'useSyncExternalStore',
+                'useOptimistic',
+                'useActionState',
+              ],
+              message:
+                'Хуки зовём через неймспейс: React.useEffect вместо useEffect. '
+                + 'Импортируйте сам React, а из пакета берите только типы',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
   // Смягчения для первичного внедрения
   {
     plugins: { 'jsx-a11y': jsxA11y },

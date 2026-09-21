@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import React from 'react';
 import { useLocalStorageState } from 'react-stateful-hooks';
 
 export type Theme = 'light' | 'dark';
@@ -21,7 +21,7 @@ export function useTheme(): ThemeState {
     DEFAULT_THEME,
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     const root = document.documentElement;
     root.setAttribute('data-theme', theme);
     root.style.colorScheme = theme;

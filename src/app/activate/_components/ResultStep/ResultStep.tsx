@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { motion } from 'framer-motion';
 
 import { duration, ease } from '@/components/motion';
@@ -14,7 +14,6 @@ import {
   RichText,
   SuccessMark,
 } from '@/components/ui';
-import { useHomeRoute } from '@/lib/hooks';
 import type { ActivationDto, ServiceActivationDto } from '@/store/api/types';
 import { Routes, SupportTelegram } from '@/utils/consts';
 import { maskEmail, parseInstruction } from '@/utils/helpers';
@@ -29,7 +28,6 @@ interface Props {
 }
 
 export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
-  const home = useHomeRoute();
   if (activation.status === 'success') {
     const account = accountLine(activation);
 
@@ -77,7 +75,7 @@ export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
             {'Мои заказы'}
           </Button>
 
-          <Button href={home} color="default" size="small">
+          <Button href={Routes.Home} color="default" size="small">
             <HomeIcon size={18} />
             {'На главную'}
           </Button>
@@ -150,7 +148,7 @@ export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
 };
 
 const MissingHelp: FC<{ service?: ServiceActivationDto }> = ({ service }) => {
-  const [isHelpOpen, setHelpOpen] = useState(false);
+  const [isHelpOpen, setHelpOpen] = React.useState(false);
 
   const help = service?.missing_subscription_help ?? '';
   if (!help) return null;
