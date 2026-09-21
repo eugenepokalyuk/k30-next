@@ -39,6 +39,7 @@ export const TelegramLoginButton: FC<Props> = ({ bot, onAuth }) => {
     script.async = true;
     script.setAttribute('data-telegram-login', bot);
     script.setAttribute('data-size', 'large');
+    script.setAttribute('data-lang', 'ru');
     script.setAttribute('data-userpic', 'false');
     script.setAttribute('data-radius', '12');
     script.setAttribute('data-request-access', 'write');
