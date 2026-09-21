@@ -6,10 +6,21 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Button, Field, Notice, TelegramIcon } from '@/components/ui';
 import { AuthCard, TelegramEmailForm } from '@/components/units';
 import { useEmailLogin, useSiteSettings, useTelegramLogin } from '@/lib/hooks';
-import { useAuthOptionsQuery } from '@/store/api/k30Api';
-import { useAppSelector } from '@/store/hooks';
+import {
+  useAuthOptionsQuery,
+  useTelegramWebAppLoginMutation,
+} from '@/store/api/k30Api';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectIsAuthorized } from '@/store/slices/auth';
-import { selectIsMiniApp, selectWebAppAuth } from '@/store/slices/telegram';
+import {
+  selectIsMiniApp,
+  selectTelegram,
+  selectWebAppAuth,
+  webAppAuthFailed,
+  webAppAuthStarted,
+  webAppNeedsEmail,
+  webAppSignedIn,
+} from '@/store/slices/telegram';
 import { Routes } from '@/utils/consts';
 
 import classes from './LoginView.module.scss';
@@ -17,6 +28,7 @@ import classes from './LoginView.module.scss';
 /** Вход: код на почту и подтверждение в телеграм-боте */
 export const LoginView: FC = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const isAuthorized = useAppSelector(selectIsAuthorized);
   const site = useSiteSettings();
 
@@ -35,9 +47,36 @@ export const LoginView: FC = () => {
 
   const isMiniApp = useAppSelector(selectIsMiniApp);
   const webAppAuth = useAppSelector(selectWebAppAuth);
+  const { initData, error: webAppError } = useAppSelector(selectTelegram);
+
+  const [webAppLogin, { isLoading: isWebAppLogging }] =
+    useTelegramWebAppLoginMutation();
+
+  /** Повтор входа по данным самого Mini App — без ухода в чат */
+  const retryWebApp = async () => {
+    if (!initData) return;
+    dispatch(webAppAuthStarted());
+
+    try {
+      const result = await webAppLogin({ init_data: initData }).unwrap();
+      if (result.status === 'needs_email') dispatch(webAppNeedsEmail());
+      else dispatch(webAppSignedIn());
+    } catch {
+      dispatch(
+        webAppAuthFailed(
+          'Telegram снова не ответил. Попробуйте ещё раз или войдите по почте.',
+        ),
+      );
+    }
+  };
 
   const byEmail = Boolean(options?.email_login_enabled);
-  const byTelegram = options ? options.telegram_login_enabled : true;
+  // Внутри Mini App вход через бота предлагать нельзя: ссылка уводит в
+  // другой чат, а на компьютере Telegram при этом закрывает само
+  // приложение — вернуться к опросу заявки уже некуда. Здесь и так есть
+  // initData, по ней и входим
+  const byTelegram =
+    (options ? options.telegram_login_enabled : true) && !isMiniApp;
   const isLoginDisabled = Boolean(options) && !byEmail && !byTelegram;
   const supportUrl = options?.telegram_support_url || site.telegram_support_url;
 
@@ -61,6 +100,24 @@ export const LoginView: FC = () => {
   if (isMiniApp && webAppAuth === 'signing_in') {
     return (
       <AuthCard title="Входим" description="Узнаём вас по Telegram — секунду." />
+    );
+  }
+
+  if (isMiniApp && webAppAuth === 'failed') {
+    return (
+      <AuthCard
+        title="Вход через Telegram не прошёл"
+        description="Попробуем ещё раз — из приложения выходить не нужно."
+      >
+        <div className={classes.form}>
+          <Notice tone="error">{webAppError}</Notice>
+
+          <Button fullWidth onClick={retryWebApp} loading={isWebAppLogging}>
+            <TelegramIcon size={18} />
+            Попробовать ещё раз
+          </Button>
+        </div>
+      </AuthCard>
     );
   }
 

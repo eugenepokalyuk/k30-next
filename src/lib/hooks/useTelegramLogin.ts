@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import React from 'react';
 
+import { pendingLogin } from '@/lib/telegram';
 import { apiErrorMessage } from '@/store/api/errors';
 import {
   k30Api,
@@ -37,9 +38,21 @@ export function useTelegramLogin(): Result {
   const [startLogin, { isLoading: isStarting }] =
     useTelegramLoginStartMutation();
 
-  const [link, setLink] = useState<TelegramStartDto | null>(null);
-  const [error, setError] = useState('');
+  const [link, setLink] = React.useState<TelegramStartDto | null>(null);
+  const [error, setError] = React.useState('');
+  // Заявка не с этой страницы, а из хранилища: про неё человек уже забыл
+  const [isRestored, setIsRestored] = React.useState(false);
   const nonce = link?.nonce ?? '';
+
+  // Заявку с прошлого открытия подхватываем после первой отрисовки:
+  // localStorage на сервере нет, а разойтись разметка не должна
+  React.useEffect(() => {
+    const stored = pendingLogin.read();
+    if (!stored) return;
+
+    setLink((current) => current ?? stored);
+    setIsRestored(true);
+  }, []);
 
   // Кэш читаем селектором, а не результатом хука ниже, ради одного: темп
   // опроса задаётся до самого опроса, и остановить его нужно тем же
@@ -61,12 +74,29 @@ export function useTelegramLogin(): Result {
     pollingInterval: isSettled ? 0 : POLL_MS,
   });
 
+  // Отработавшая заявка ничего не стоит хранить: nonce одноразовый, и
+  // следующий вход начнётся с новой ссылки
+  React.useEffect(() => {
+    if (isSettled) pendingLogin.write(null);
+  }, [isSettled]);
+
+  // Заявка из хранилища могла давно закончиться — например, токены забрал
+  // другой экран. Про такую молчим: человек только открыл страницу и
+  // ошибку о своём входе получасовой давности не ждёт
+  React.useEffect(() => {
+    if (!isRestored || !isLost) return;
+    setLink(null);
+    setIsRestored(false);
+  }, [isLost, isRestored]);
+
   const start = async () => {
     setError('');
+    setIsRestored(false);
 
     try {
       const started = await startLogin().unwrap();
       setLink(started);
+      pendingLogin.write(started);
       // Открываем телеграм прямо в обработчике нажатия: вкладку, открытую
       // после ответа сервера, режет блокировщик всплывающих окон — а эту
       // браузер считает следствием клика
