@@ -14,11 +14,6 @@ import { formatKey, isKeyComplete } from '@/utils/helpers';
 import classes from './KeyForm.module.scss';
 
 interface Props {
-  /**
-   *  Своя подпись над полем. На главной она нужна, в секции ключа —
-   *  нет: там ровно тот же текст стоит заголовком карточки, и два
-   *  «Ключ активации» подряд читаются как разные поля
-   */
   label?: string;
 }
 

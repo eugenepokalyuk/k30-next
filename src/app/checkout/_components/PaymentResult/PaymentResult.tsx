@@ -10,20 +10,12 @@ import { formatPrice } from '@/utils/helpers';
 import classes from './PaymentResult.module.scss';
 import { StatusScreen } from '../StatusScreen/StatusScreen';
 
-/** Подтверждение может нести колбэк — пару секунд его стоит подождать */
 const POLL_MS = 3000;
 
 interface Props {
   id: string;
 }
 
-/**
- *  Чем кончилась оплата. Экран возврата с платёжной системы.
- *
- *  Читает счёт, а не заказ: до оплаты заказа не существует. Пока счёт
- *  ждёт денег, опрашиваем — покупатель мог вернуться раньше, чем
- *  платёжная система нам сообщила
- */
 export const PaymentResult: FC<Props> = ({ id }) => {
   const { data, isLoading, isError } = usePaymentStatusQuery(id, {
     pollingInterval: POLL_MS,
@@ -88,8 +80,6 @@ export const PaymentResult: FC<Props> = ({ id }) => {
     );
   }
 
-  // Денег нет и счёт закрыт — вести обратно на ту же ссылку бессмысленно,
-  // она уже не работает
   const isClosed = payment.status !== 'pending';
 
   return (

@@ -16,10 +16,8 @@ import { useNavLinks } from './navLinks';
 import { useHeaderState } from './useHeaderState';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 
-/** Шапка сайта */
 export const Header: FC = () => {
   const { isScrolled, isOpen, toggle, close } = useHeaderState();
-  // Контакт поддержки — из админки, без пересборки статики
   const { telegram_support_url } = useSiteSettings();
   const navLinks = useNavLinks();
 

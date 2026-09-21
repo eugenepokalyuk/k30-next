@@ -24,7 +24,6 @@ interface Props {
   onAccept: () => void;
 }
 
-/** Абзацы и нумерованные списки из шаблона админки */
 const Prose: FC<{ blocks: InstructionBlock[] }> = ({ blocks }) => (
   <>
     {blocks.map((block, index) =>
@@ -55,8 +54,6 @@ export const ActivationRules: FC<Props> = ({
 }) => {
   const [intro, ...rest] = parseInstruction(rules);
 
-  // Блок без заголовка или текста — недописанный: показать его значит
-  // показать покупателю иконку с пустотой под ней
   const blocks = ruleBlocks.filter(
     (block) => block.title.trim() && block.body.trim(),
   );

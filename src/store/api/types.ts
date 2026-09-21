@@ -27,7 +27,6 @@ export interface TargetOptionDto {
   how_to_url: string;
   how_to_label: string;
   secret: boolean;
-  /** Свой пример для этого вида данных; пусто — берётся общий у сервиса */
   example_image: string;
   example_caption: string;
 }
@@ -54,12 +53,9 @@ export interface ActivationDto {
   can_retry: boolean;
   can_cancel: boolean;
   account_email: string;
-  /** Идентификатор аккаунта, если он у нас есть: сам ввод или разбор JSON */
   account_id: string;
-  /** Вид присланных данных и они же в замаскированном виде */
   target_kind: string;
   target_hint: string;
-  /** chatgpt, claude, grok, perplexity — чем подписать аккаунт на успехе */
   platform: string;
   activation_url: string;
   queue_position: number | null;
@@ -80,7 +76,6 @@ export interface ServiceFieldDto {
   required: boolean;
 }
 
-/** Тариф внутри сервиса */
 export interface PlanDto {
   slug: string;
   short_id: string;
@@ -213,7 +208,6 @@ export interface EmailLoginResponse extends AuthResponse {
 }
 
 export interface SiteSettingsDto {
-  /** Полный адрес логотипа из админки; null — берём логотип из сборки */
   logo: string | null;
   telegram_channel_url: string;
   telegram_support_url: string;
@@ -293,7 +287,6 @@ export interface SubscriptionDto {
   days_left: number | null;
 }
 
-/** Плитка в разделе «Способы оплаты» — состав задаёт админка */
 export interface PaymentMethodDto {
   id: string;
   title: string;
@@ -301,14 +294,6 @@ export interface PaymentMethodDto {
   icon: string;
 }
 
-/**
- *  Весь раздел «Способы оплаты» целиком, а не только список.
- *
- *  Пустой список отвечает на вопрос «чем платить», но не на вопрос
- *  «почему нечем»: оплату могли выключить на техработы, могли не
- *  настроить вовсе, а могли выключить все способы по одному. Текст для
- *  всех трёх случаев пишет менеджер в админке, а не витрина в вёрстке
- */
 export interface PaymentOptionsDto {
   is_enabled: boolean;
   methods: PaymentMethodDto[];
@@ -336,11 +321,9 @@ export interface PaymentDto {
   plan: string;
   plan_slug: string;
 
-  /** Появляются, когда деньги дошли: до оплаты заказа не существует */
   order_number: number | null;
   key_code: string;
   activation_url: string;
-  /** Оплачено, а ключа нет: склад был пуст в момент оплаты */
   awaits_key: boolean;
 
   created_at: string;
@@ -368,10 +351,6 @@ export interface OrderDto {
   created_at: string;
 }
 
-/**
- *  Ответ кнопки «Оплатить». Заказа в нём нет: он появится, когда деньги
- *  дойдут, — а пока есть только счёт со ссылкой на оплату
- */
 export interface CreatePaymentResponse {
   payment: PaymentDto | null;
   error: string;

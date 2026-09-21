@@ -43,8 +43,6 @@ export const metadata: Metadata = {
     description,
   },
   icons: {
-    // basePath к ссылкам в метаданных Next не подставляет — на Pages без
-    // своего домена сайт лежит в подкаталоге, и иконка искалась бы в корне
     icon: [
       { url: `${basePath}/favicon.ico`, sizes: '16x16 32x32 48x48' },
       { url: `${basePath}/icon-192.png`, sizes: '192x192', type: 'image/png' },
@@ -55,7 +53,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Тема стоит на <html> до первой отрисовки
 const themeScript = getColorSchemeScript({
   key: THEME_STORAGE_KEY,
   attribute: 'data-theme',
@@ -66,13 +63,8 @@ type Props = Readonly<React.PropsWithChildren>;
 
 export default function RootLayout({ children }: Props) {
   return (
-    // suppressHydrationWarning — про тему и только про неё: скрипт ниже
-    // меняет data-theme и color-scheme на <html> до гидрации, и React
-    // честно жалуется на расхождение с разметкой сервера
     <html lang="ru" data-theme={DEFAULT_THEME} suppressHydrationWarning>
       <body className={getFonts()}>
-        {/* next/script, а не голый <script>: beforeInteractive кладёт код
-            в разметку до гидрации, где он и должен сработать */}
         <Script id="theme" strategy="beforeInteractive">
           {themeScript}
         </Script>

@@ -272,7 +272,6 @@ export const RippleGrid: FC<Props> = ({
       renderer.gl.getExtension('WEBGL_lose_context')?.loseContext();
       container.removeChild(gl.canvas);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {

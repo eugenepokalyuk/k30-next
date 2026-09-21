@@ -95,7 +95,6 @@ export function useTargetStep({
         value: normalizeTarget(option.kind, value),
       }).unwrap();
 
-      // `success` — первым
       if (!response.success) {
         setError(response.error || 'Проверка не прошла. Попробуйте ещё раз.');
         return;

@@ -4,7 +4,6 @@ import { useSiteSettingsQuery } from '@/store/api/k30Api';
 import type { SiteSettingsDto } from '@/store/api/types';
 import { SupportTelegram } from '@/utils/consts';
 
-/** Чем живёт витрина, пока настройки не приехали */
 const fallback: SiteSettingsDto = {
   logo: null,
   telegram_channel_url: '',
@@ -14,7 +13,6 @@ const fallback: SiteSettingsDto = {
   review_yandex_market_url: '',
 };
 
-/** Ссылки и подписи витрины из админки */
 export const useSiteSettings = (): SiteSettingsDto => {
   const { data } = useSiteSettingsQuery();
   return data ?? fallback;

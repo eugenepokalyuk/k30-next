@@ -14,8 +14,6 @@ const manrope = Manrope({
   display: 'swap',
 });
 
-// Код ключа и настоящие токены — моноширинным: группы символов встают
-// столбиком, и покупателю проще сверить код с тем, что ему прислали
 const jetBrainsMono = JetBrains_Mono({
   variable: '--font-mono',
   weight: ['400', '500'],

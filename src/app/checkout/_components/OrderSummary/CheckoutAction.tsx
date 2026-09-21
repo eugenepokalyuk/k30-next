@@ -12,14 +12,12 @@ import { Routes } from '@/utils/consts';
 import classes from './OrderSummary.module.scss';
 
 interface Props {
-  /** Платить нечем — не показываем ничего: ни оплаты, ни входа */
   canPay: boolean;
   total: string | null;
   isSending: boolean;
   onPay: () => void;
 }
 
-/** Чем заканчивается карточка заказа: оплатой, входом или вопросом о почте */
 export const CheckoutAction: FC<Props> = ({
   canPay,
   total,
@@ -32,8 +30,6 @@ export const CheckoutAction: FC<Props> = ({
   const webAppAuth = useAppSelector(selectWebAppAuth);
 
   if (isAuthReady && !isAuthorized && isMiniApp && webAppAuth === 'needs_email') {
-    // В Telegram уводить на экран входа некуда: покупателя мы узнали, не
-    // хватает только почты
     return (
       <TelegramEmailForm description="Укажите почту — на неё придут ключ и чек. Это разовый вопрос." />
     );

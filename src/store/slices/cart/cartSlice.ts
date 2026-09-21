@@ -59,8 +59,6 @@ export const cartStorage = {
       if (item) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(item));
       else window.localStorage.removeItem(STORAGE_KEY);
     } catch {
-      // Приватный режим или запрет хранилища: покупка продолжит
-      // работать, просто выбор не переживёт перезагрузку вкладки
     }
   },
 };

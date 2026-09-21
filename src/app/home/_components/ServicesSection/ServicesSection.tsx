@@ -77,8 +77,6 @@ export const ServicesSection: FC = () => {
                     : undefined
                 }
               >
-                {/* Ссылкой служит вся карточка: один таб-стоп и клик в
-                    любое место ведут к тарифам */}
                 <Link
                   href={buyPlansRoute(service.slug)}
                   className={classes.opener}

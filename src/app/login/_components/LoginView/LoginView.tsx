@@ -25,7 +25,6 @@ import { Routes } from '@/utils/consts';
 
 import classes from './LoginView.module.scss';
 
-/** Вход: код на почту и подтверждение в телеграм-боте */
 export const LoginView: FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -52,7 +51,6 @@ export const LoginView: FC = () => {
   const [webAppLogin, { isLoading: isWebAppLogging }] =
     useTelegramWebAppLoginMutation();
 
-  /** Повтор входа по данным самого Mini App — без ухода в чат */
   const retryWebApp = async () => {
     if (!initData) return;
     dispatch(webAppAuthStarted());
@@ -71,10 +69,6 @@ export const LoginView: FC = () => {
   };
 
   const byEmail = Boolean(options?.email_login_enabled);
-  // Внутри Mini App вход через бота предлагать нельзя: ссылка уводит в
-  // другой чат, а на компьютере Telegram при этом закрывает само
-  // приложение — вернуться к опросу заявки уже некуда. Здесь и так есть
-  // initData, по ней и входим
   const byTelegram =
     (options ? options.telegram_login_enabled : true) && !isMiniApp;
   const isLoginDisabled = Boolean(options) && !byEmail && !byTelegram;
@@ -242,9 +236,6 @@ export const LoginView: FC = () => {
             )}
 
             {telegram.link ? (
-              // Кнопка ведёт на ту же заявку: если вкладку с телеграмом
-              // закрыли или её съел блокировщик, второй попытке не нужен
-              // новый nonce — старый ещё жив
               <Button
                 fullWidth
                 href={telegram.link.url}

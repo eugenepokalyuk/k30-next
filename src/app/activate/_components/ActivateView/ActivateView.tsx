@@ -214,11 +214,6 @@ function currentStep(
   return 'progress';
 }
 
-/**
- *  Что показывает карточка статуса. «Принят» держится до конца: ключ,
- *  открывший форму, остаётся принятым и на ожидании, и на успехе —
- *  меняется шаг, а не судьба ключа
- */
 function currentKeyStatus(
   cached: { canActivate: boolean; message: string } | null,
   activation: ActivationDto | null,
@@ -226,7 +221,5 @@ function currentKeyStatus(
   if (activation) return 'accepted';
   if (!cached) return 'waiting';
   if (cached.canActivate) return 'accepted';
-  // Пустое сообщение при `canActivate: false` — это ещё не отказ, а
-  // непроверенный ключ: так выглядит состояние до ответа сервера
   return cached.message ? 'rejected' : 'waiting';
 }

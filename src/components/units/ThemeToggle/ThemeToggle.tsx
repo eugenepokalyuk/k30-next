@@ -12,7 +12,6 @@ interface Props {
   className?: string;
 }
 
-/** Переключатель светлой и тёмной темы */
 export const ThemeToggle: FC<Props> = ({ className }) => {
   const { theme, toggle } = useTheme();
   const isDark = theme === 'dark';

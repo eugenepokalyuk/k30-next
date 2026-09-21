@@ -21,7 +21,6 @@ interface Props {
   onPay: () => void;
 }
 
-/** Что покупаем, чем платим и сколько это стоит */
 export const OrderSummary: FC<Props> = ({
   data,
   payment,
@@ -82,7 +81,6 @@ export const OrderSummary: FC<Props> = ({
         </Notice>
       )}
 
-      {/* Тариф «по запросу» оплатить нельзя: счёт ушёл бы нулевым */}
       <CheckoutAction
         canPay={payment.canPay && total !== null}
         total={total}

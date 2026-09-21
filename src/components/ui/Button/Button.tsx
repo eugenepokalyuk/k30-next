@@ -12,7 +12,6 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
   href?: string;
   external?: boolean;
-  /** Вид кнопки без интерактивности — когда ссылкой служит блок вокруг */
   decorative?: boolean;
 }
 
@@ -39,14 +38,10 @@ export const Button: FC<Props> = ({
     { [classes.full_width]: fullWidth, [classes.loading]: loading },
   );
 
-  // Вложенные ссылки и кнопки браузер не разрешает, а лишний таб-стоп
-  // ведёт туда же, куда и сам блок
   if (decorative) {
     return <span className={cx}>{children}</span>;
   }
 
-  // Ссылке отдаём только onClick: остальные пропсы типизированы под
-  // <button> и на <a> дают невалидный html
   const linkProps = {
     className: cx,
     onClick: onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>,
@@ -73,8 +68,6 @@ export const Button: FC<Props> = ({
       type="button"
       {...rest}
       onClick={onClick}
-      // Пока идёт запрос, кнопка выключена: второй клик ушёл бы вторым
-      // запросом к провайдеру, а тот спишет вторую подписку
       disabled={disabled || loading}
       className={cx}
     >

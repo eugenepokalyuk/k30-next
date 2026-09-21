@@ -18,8 +18,6 @@ interface Props {
 export const Logo: FC<Props> = ({ className }) => {
   const { data, isError } = useSiteSettingsQuery();
 
-  // Пока настройки едут, место под знак пустое: иначе при загруженном в
-  // админке логотипе на долю секунды мелькал бы старый из сборки
   const src = data ? (data.logo ?? bundledLogo) : isError ? bundledLogo : null;
 
   return (

@@ -7,14 +7,12 @@ import classes from './StatusScreen.module.scss';
 interface Props {
   overline: string;
   title: string;
-  /** Галка успеха над текстом */
   mark?: boolean;
   text?: ReactNode;
   children?: ReactNode;
   actions?: ReactNode;
 }
 
-/** Одна мысль по центру экрана: так выглядят все состояния оформления */
 export const StatusScreen: FC<Props> = ({
   overline,
   title,

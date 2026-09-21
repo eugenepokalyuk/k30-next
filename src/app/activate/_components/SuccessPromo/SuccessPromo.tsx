@@ -26,8 +26,6 @@ export const SuccessPromo: FC = () => {
 
   if (!hasTelegram && !hasReview) return null;
 
-  // Вторую карточку выключают в админке, и оставшаяся не должна жаться
-  // в половину строки с пустотой рядом
   const single = hasTelegram !== hasReview;
 
   return (
@@ -86,9 +84,7 @@ export const SuccessPromo: FC = () => {
 };
 
 interface MarkProps {
-  /** Адрес картинки из админки */
   icon: string | null;
-  /** Заливка запасного знака */
   className: string;
   children: React.ReactNode;
 }

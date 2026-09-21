@@ -16,21 +16,11 @@ interface Props {
   onUpdate: (activation: ActivationDto) => void;
 }
 
-/** Экран ожидания: поставщик выдаёт подписку */
 export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
   const { activation: fresh, elapsed } = useActivationPolling(
     activation.id,
     activation,
   );
-
-  /*
-    Отмена скрыта по просьбе дизайна — вместе с ней спит и её обвязка.
-    Оставлена целиком, а не удалена: поставщик отмену умеет, ручка
-    `activations/<id>/cancel` жива, и вернуть кнопку — это снять три
-    комментария, а не писать заново
-
-  const [cancel, { isLoading: isCancelling }] = useCancelActivationMutation();
-  */
 
   React.useEffect(() => {
     if (fresh && fresh !== activation) onUpdate(fresh);
@@ -39,18 +29,6 @@ export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
   const current = fresh ?? activation;
   const isQueued = current.status === 'pending';
   const isLong = elapsed > ActivationLongWaitSeconds;
-
-  /*
-  const onCancel = async () => {
-    try {
-      const response = await cancel(current.id).unwrap();
-      onUpdate(response.activation);
-    } catch {
-      // Отмена не удалась — активация продолжается, её итог придёт
-      // очередным опросом
-    }
-  };
-  */
 
   return (
     <motion.div
@@ -62,7 +40,6 @@ export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
       <div className={classes.head}>
         <span className={classes.spinner} aria-hidden="true" />
         <div className={classes.headings}>
-          {/* Читается вслух при смене: покупатель мог уйти в другое окно */}
           <p className={classes.title} role="status" aria-live="polite">
             {current.status_label}
           </p>
@@ -96,19 +73,6 @@ export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
         ничего не потеряется: активация идёт на сервере.
       </p>
 
-      {/*
-      {current.can_cancel && (
-        <Button
-          type="button"
-          variant="ghost"
-          size="small"
-          onClick={onCancel}
-          loading={isCancelling}
-        >
-          Отменить, пока не началось
-        </Button>
-      )}
-      */}
     </motion.div>
   );
 };

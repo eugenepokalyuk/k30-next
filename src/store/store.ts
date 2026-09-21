@@ -19,8 +19,6 @@ export const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
 });
 
-// Без этого RTK Query не узнает, что вкладку вернули из фона, и
-// skipPollingIfUnfocused в опросе активации станет из паузы замком
 if (typeof window !== 'undefined') {
   setupListeners(store.dispatch);
 }

@@ -1,5 +1,3 @@
-/** Проверка данных активации на стороне витрины */
-
 import type { TargetKind } from '@/store/api/types';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -7,8 +5,6 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const UUID_ANYWHERE =
   /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
 
-// Кириллица, на глаз неотличимая от латинских a, c, e, B: ID набирают
-// руками или правит автозамена, и UUID из таких букв не собирается
 const LOOKALIKES: Record<string, string> = {
   '\u0430': 'a',
   '\u0441': 'c',
@@ -23,19 +19,15 @@ const MIN_TOKEN_LENGTH = 20;
 
 const ID_KINDS: TargetKind[] = ['account_id', 'org_id', 'user_id'];
 
-/** ID в том виде, в каком его набрали бы латиницей */
 function asciiId(value: string): string {
   return (
     value
       .replace(/[\u0430\u0441\u0435\u0410\u0412\u0421\u0415]/g, (char) => LOOKALIKES[char])
-      // Неразрывный дефис, тире и минус вместо дефиса ставит автозамена
       .replace(/[\u2010-\u2015\u2212]/g, '-')
-      // Символы нулевой ширины приезжают из мессенджеров
       .replace(/[\u200b-\u200d\ufeff]/g, '')
   );
 }
 
-/** Приводит ввод к тому виду, в котором его ждёт бэкенд */
 export function normalizeTarget(kind: TargetKind, raw: string): string {
   const value = (raw ?? '').trim();
   if (!value) return '';
@@ -49,7 +41,6 @@ export function normalizeTarget(kind: TargetKind, raw: string): string {
   }
 
   if (kind === 'access_token') {
-    // Частая ошибка: в поле «токен» вставляют весь JSON сессии
     if (value.startsWith('{')) {
       const token = readToken(value);
       if (token) return token;
@@ -60,7 +51,6 @@ export function normalizeTarget(kind: TargetKind, raw: string): string {
   return value;
 }
 
-/** Что не так с введённым */
 export function validateTarget(kind: TargetKind, raw: string): string | null {
   const value = normalizeTarget(kind, raw);
   if (!value) return 'Заполните это поле.';
@@ -96,7 +86,6 @@ export function validateTarget(kind: TargetKind, raw: string): string | null {
   return null;
 }
 
-/** Почта из данных, если её видно локально */
 export function previewEmail(kind: TargetKind, raw: string): string {
   const value = normalizeTarget(kind, raw);
   if (!value) return '';
@@ -158,7 +147,6 @@ function emailFromJwt(token: string): string {
   return '';
 }
 
-/** Почта для показа: «b***r@example.com» */
 export function maskEmail(email: string): string {
   const value = (email ?? '').trim();
   if (!value.includes('@')) return value;

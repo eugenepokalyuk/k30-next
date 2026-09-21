@@ -8,7 +8,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-/** `useSearchParams` внутри требует границы ожидания, иначе экспорт не соберётся */
 export default function LoginPage() {
   return (
     <Suspense>

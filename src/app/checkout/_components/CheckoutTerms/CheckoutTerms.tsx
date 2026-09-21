@@ -12,7 +12,6 @@ interface Props {
   blocks: CheckoutBlockDto[];
 }
 
-/** Условия покупки рядом с заказом: тексты приходят из админки */
 export const CheckoutTerms: FC<Props> = ({ blocks }) => (
   <div className={classes.blocks}>
     {blocks.map((block) => {

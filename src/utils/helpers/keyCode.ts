@@ -1,17 +1,10 @@
-/** Правила кода ключа на стороне витрины */
-
 const PREFIX = 'K30';
 
-/** Длины групп после префикса: провайдер, сервис, ключ, контроль */
 const GROUPS = [4, 4, 6, 1];
 
 const TOTAL_LENGTH =
   PREFIX.length + GROUPS.reduce((sum, length) => sum + length, 0);
 
-/**
- *  Символы, которых в алфавите нет, но которые человек напечатает вместо
- *  похожих
- */
 const LOOKALIKES: Record<string, string> = {
   O: '0',
   I: '1',
@@ -19,7 +12,6 @@ const LOOKALIKES: Record<string, string> = {
   U: 'V',
 };
 
-/** Убирает разделители и раскладывает похожие символы */
 export function normalizeKey(raw: string): string {
   return raw
     .toUpperCase()
@@ -27,7 +19,6 @@ export function normalizeKey(raw: string): string {
     .replace(/[OILU]/g, (char) => LOOKALIKES[char] ?? char);
 }
 
-/** Расставляет дефисы: K30-1E3D-54E3-7A3AF6-K */
 export function formatKey(raw: string): string {
   const flat = normalizeKey(raw).slice(0, TOTAL_LENGTH);
   if (!flat) return '';
@@ -44,7 +35,6 @@ export function formatKey(raw: string): string {
   return parts.join('-');
 }
 
-/** Набран ли код целиком */
 export function isKeyComplete(raw: string): boolean {
   const flat = normalizeKey(raw);
   return flat.length === TOTAL_LENGTH && flat.startsWith(PREFIX);

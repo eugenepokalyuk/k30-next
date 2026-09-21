@@ -16,22 +16,15 @@ interface Props {
   user: UserDto;
 }
 
-/** Как к покупателю обращаться и где его искать в телеграме */
 export const ProfileCard: FC<Props> = ({ user }) => {
   const dispatch = useAppDispatch();
   const [updateMe, { isLoading }] = useUpdateMeMutation();
   const id = React.useId();
 
-  // Профиль приезжает асинхронно (после обмена refresh на access), но
-  // родитель не рендерит карточку, пока его нет, — начальные значения
-  // берутся из пропса один раз, синхронизировать их не нужно
   const [name, setName] = React.useState(user.name);
   const [telegram, setTelegram] = React.useState(user.telegram_username);
   const [saved, setSaved] = React.useState(false);
 
-  // Заполненный профиль показывать негде: два поля и кнопка занимают
-  // пол-экрана телефона выше заказов, ради которых в кабинет и заходят.
-  // Пустой — наоборот, открыт сразу, иначе его не заметят
   const isFilled = Boolean(name.trim() && telegram.trim());
   const [isOpen, setIsOpen] = React.useState(!isFilled);
 
@@ -54,8 +47,6 @@ export const ProfileCard: FC<Props> = ({ user }) => {
         setIsOpen(false);
       }
     } catch {
-      // Значения в полях остались, кнопка снова активна — повторный клик
-      // обычно проходит
     }
   };
 

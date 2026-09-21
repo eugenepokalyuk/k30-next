@@ -54,7 +54,6 @@
       border-color: var(--accent);
       transform: translateY(-3px);
 
-      // Кнопка своего :hover не получает — сверху лежит ссылка-карточка
       --glow_alpha: 42%;
 
       &::before {
@@ -216,7 +215,6 @@
   }
 }
 
-// Кнопка — украшение поверх ссылки-карточки: клик всё равно ловит она
 .buy {
   position: relative;
   z-index: 2;

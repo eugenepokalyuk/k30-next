@@ -9,7 +9,6 @@ import { CompanyLegalName, Routes, SupportEmail } from '@/utils/consts';
 
 import classes from './Footer.module.scss';
 
-/** Подвал */
 export const Footer: FC = () => {
   const { telegram_support_url, telegram_channel_url } = useSiteSettings();
 

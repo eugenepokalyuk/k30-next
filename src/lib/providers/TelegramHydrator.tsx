@@ -33,8 +33,6 @@ export const TelegramHydrator: FC = () => {
 
     dispatch(modeDetected({ mode: 'mini_app', initData }));
 
-    // Без ready() Telegram держит заставку, без expand() окно открывается
-    // в половину экрана и нижняя навигация оказывается за сгибом
     app?.ready();
     app?.expand();
   }, []);
@@ -54,9 +52,6 @@ export const TelegramHydrator: FC = () => {
         if (result.status === 'needs_email') dispatch(webAppNeedsEmail());
         else dispatch(webAppSignedIn());
       } catch {
-        // Молча: покупатель пришёл смотреть каталог, а не входить, и
-        // ошибка входа не должна закрывать ему страницу. Кабинет
-        // предложит войти обычным способом
         dispatch(
           webAppAuthFailed(
             'Не получилось войти через Telegram. Откройте приложение заново ' +

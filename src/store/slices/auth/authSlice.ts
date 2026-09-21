@@ -2,14 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { AuthResponse, UserDto } from '@/store/api/types';
 
-/** Ключ в localStorage */
 const STORAGE_KEY = 'k30.refresh';
 
 export interface AuthState {
   access: string | null;
   refresh: string | null;
   user: UserDto | null;
-  /** false, пока не прочитали localStorage и не обменяли refresh на access */
   isReady: boolean;
 }
 
@@ -24,14 +22,12 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    /** Успешный вход или регистрация */
     signedIn: (state, { payload }: PayloadAction<AuthResponse>) => {
       state.access = payload.access;
       state.refresh = payload.refresh;
       state.user = payload.user;
       state.isReady = true;
     },
-    /** Обновление пары по refresh — профиль при этом не меняется */
     tokenRefreshed: (
       state,
       { payload }: PayloadAction<{ access: string; refresh?: string }>,
@@ -42,7 +38,6 @@ export const authSlice = createSlice({
     profileLoaded: (state, { payload }: PayloadAction<UserDto>) => {
       state.user = payload;
     },
-    /** Прочитали localStorage: токен есть или его нет */
     hydrated: (state, { payload }: PayloadAction<string | null>) => {
       state.refresh = payload;
       state.isReady = payload === null;
@@ -65,7 +60,6 @@ export const {
 
 export const authReducer = authSlice.reducer;
 
-/** Чтение и запись refresh-токена */
 export const authStorage = {
   read(): string | null {
     if (typeof window === 'undefined') return null;
@@ -81,8 +75,6 @@ export const authStorage = {
       if (token) window.localStorage.setItem(STORAGE_KEY, token);
       else window.localStorage.removeItem(STORAGE_KEY);
     } catch {
-      // Приватный режим или запрет хранилища: вход продолжит работать,
-      // просто не переживёт перезагрузку вкладки
     }
   },
 };

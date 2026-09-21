@@ -26,7 +26,6 @@ export function useHeaderState(): State {
   const close = React.useCallback(() => setIsOpen(false), []);
   const toggle = React.useCallback(() => setIsOpen((current) => !current), []);
 
-  // Не в эффекте: он дал бы лишний проход с меню поверх новой страницы
   const [renderedPath, setRenderedPath] = React.useState(pathname);
 
   if (renderedPath !== pathname) {

@@ -20,10 +20,8 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
 
-  // React + hooks + правила React Compiler
   ...reactHooks.configs['recommended-latest'],
 
-  // Клиентский код — браузерное окружение, jsx и a11y
   {
     files: ['src/**/*.{ts,tsx}'],
     plugins: { 'jsx-a11y': jsxA11y },
@@ -36,7 +34,6 @@ export default tseslint.config(
     },
   },
 
-  // Хуки React — только через неймспейс: React.useEffect, не useEffect
   {
     files: ['src/**/*.{ts,tsx}'],
     rules: {
@@ -73,10 +70,10 @@ export default tseslint.config(
     },
   },
 
-  // Смягчения для первичного внедрения
   {
     plugins: { 'jsx-a11y': jsxA11y },
     rules: {
+      'no-empty': ['error', { allowEmptyCatch: true }],
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': [
         'warn',
@@ -84,12 +81,10 @@ export default tseslint.config(
       ],
       '@typescript-eslint/ban-ts-comment': 'warn',
       '@typescript-eslint/no-empty-object-type': 'warn',
-      // jsx-a11y — пока советующие предупреждения, не блокеры
       'jsx-a11y/click-events-have-key-events': 'warn',
       'jsx-a11y/no-static-element-interactions': 'warn',
       'jsx-a11y/no-noninteractive-element-interactions': 'warn',
       'jsx-a11y/no-autofocus': 'warn',
-      // Правила React Compiler — пока предупреждения
       'react-hooks/immutability': 'warn',
       'react-hooks/purity': 'warn',
       'react-hooks/preserve-manual-memoization': 'warn',
@@ -113,13 +108,8 @@ export default tseslint.config(
         'warn',
         {
           groups: [
-            // react первым, затем остальные внешние пакеты
             ['^react', '^next', '^@?\\w'],
-            // внутренние @-алиасы (см. paths в tsconfig.json):
-            // сначала с подпутём (@/utils/hooks), затем голый алиас
             ['^@/(components|store|lib|utils|styles)/', '^@/'],
-            // относительные импорты одной группой (без пустых строк между)
-            // внутри ./ стили (./foo.module.scss) выше компонентов
             [
               '^\\./.*\\.s?css$',
               '^\\./',
@@ -134,6 +124,5 @@ export default tseslint.config(
     },
   },
 
-  // Отключаем стилевые правила, конфликтующие с Prettier
   prettier,
 );

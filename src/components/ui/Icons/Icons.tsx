@@ -5,7 +5,6 @@ export interface IconProps {
   className?: string;
 }
 
-/** Иконки инлайном */
 const base = (size: number) => ({
   width: size,
   height: size,

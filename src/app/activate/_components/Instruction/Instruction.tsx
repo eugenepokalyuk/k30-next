@@ -49,12 +49,6 @@ export const Instruction: FC<Props> = ({
               </ul>
             ) : (
               <p key={index} className={classes.paragraph}>
-                {/*
-                  Знак внимания — только у первого абзаца: он и есть то,
-                  что надо сделать, остальные блоки его поясняют. Цвет
-                  наследуется от текста: это не предупреждение об ошибке,
-                  а указатель, с чего начать
-                */}
                 {index === 0 && <AlertIcon size={18} className={classes.paragraph_icon} />}
                 <RichText text={block.text} />
               </p>

@@ -1,7 +1,5 @@
 @use '@/styles/index' as s;
 
-//: Жёлтый Яндекс Маркета. Цвет площадки, а не темы: он одинаков и в
-//: светлой, и в тёмной — по нему кнопку и узнают
 $market: #fc0;
 $market_hover: #ffd633;
 
@@ -17,8 +15,6 @@ $market_hover: #ffd633;
   }
 }
 
-// Одна карточка занимает всю ширину: на половине строки она читается как
-// обрезанная, а рядом пустует место выключенного блока
 .single {
   grid-template-columns: 1fr;
 
@@ -32,7 +28,6 @@ $market_hover: #ffd633;
       flex: 1;
     }
 
-    // На всю ширину кнопку растягивать уже незачем — её место в строке
     .action {
       flex-shrink: 0;
       width: auto;
@@ -69,8 +64,6 @@ $market_hover: #ffd633;
 }
 
 .uploaded {
-  // Картинка из админки приходит со своим фоном и формой: круг здесь
-  // только обрезает её по общему размеру
   overflow: hidden;
   background: var(--background_elevated);
 }
@@ -82,13 +75,10 @@ $market_hover: #ffd633;
 }
 
 .telegram_mark {
-  // Тот же градиент, что у круглой кнопки телеграма на главной
   background: linear-gradient(135deg, s.$primary, s.$primary_light);
   color: var(--text_on_primary_fill);
 }
 
-// У знака телеграма «хвост» уводит центр вправо-вниз — как и в виджете,
-// возвращаем его на место
 .telegram_glyph {
   transform: translate(-1px, 1px);
 }
@@ -104,8 +94,6 @@ $market_hover: #ffd633;
   color: var(--text_default);
 }
 
-// Кнопка площадки: цвет её, а не темы. Текст тёмный — на жёлтом белый
-// не читается ни в одной теме
 .market_button {
   background: $market;
   color: #1a1a1a;

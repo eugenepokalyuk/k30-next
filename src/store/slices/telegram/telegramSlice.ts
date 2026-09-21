@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type TelegramMode = 'unknown' | 'browser' | 'mini_app';
 
-/** Что мешает бесшовному входу — если мешает */
 export type TelegramAuthState =
   | 'idle'
   | 'signing_in'
