@@ -17,7 +17,7 @@ export interface BottomNavItem {
 }
 
 export const bottomNavItems: BottomNavItem[] = [
-  { label: 'Главная', icon: HomeIcon, href: Routes.Tg },
+  { label: 'Главная', icon: HomeIcon, href: Routes.Home },
   { label: 'Кабинет', icon: UserIcon, href: Routes.Account },
   { label: 'Поддержка', icon: SupportIcon, isSupport: true },
   { label: 'Ещё', icon: MenuIcon, href: Routes.TgMore },

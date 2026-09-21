@@ -5,9 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import clsx from 'clsx';
 
-import { useHomeRoute } from '@/lib/hooks';
 import { useSiteSettingsQuery } from '@/store/api/k30Api';
-import { CompanyName } from '@/utils/consts';
+import { CompanyName, Routes } from '@/utils/consts';
 
 import classes from './Logo.module.scss';
 import bundledLogo from './logo.png';
@@ -17,7 +16,6 @@ interface Props {
 }
 
 export const Logo: FC<Props> = ({ className }) => {
-  const home = useHomeRoute();
   const { data, isError } = useSiteSettingsQuery();
 
   // Пока настройки едут, место под знак пустое: иначе при загруженном в
@@ -25,7 +23,7 @@ export const Logo: FC<Props> = ({ className }) => {
   const src = data ? (data.logo ?? bundledLogo) : isError ? bundledLogo : null;
 
   return (
-    <Link href={home} className={clsx(classes.logo, className)}>
+    <Link href={Routes.Home} className={clsx(classes.logo, className)}>
       {src ? (
         <Image
           src={src}

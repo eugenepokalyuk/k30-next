@@ -16,7 +16,7 @@ const webLinks: NavLink[] = [
 ];
 
 const miniAppLinks: NavLink[] = [
-  { href: `${Routes.Tg}#services`, label: 'Сервисы' },
+  { href: Routes.Services, label: 'Сервисы' },
 ];
 
 export const useNavLinks = (): NavLink[] =>

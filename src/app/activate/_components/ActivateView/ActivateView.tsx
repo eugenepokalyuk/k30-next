@@ -4,7 +4,6 @@ import React, { FC } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import { Notice, ServiceMark, Steps } from '@/components/ui';
-import { useHomeRoute } from '@/lib/hooks';
 import { apiErrorMessage } from '@/store/api/errors';
 import { useVerifyKeyMutation } from '@/store/api/k30Api';
 import type { ActivationDto } from '@/store/api/types';
@@ -16,7 +15,7 @@ import {
   selectActivationFor,
 } from '@/store/slices/activation';
 import type { ActivationStepId } from '@/utils/consts';
-import { SupportTelegram } from '@/utils/consts';
+import { Routes, SupportTelegram } from '@/utils/consts';
 import { formatKey, isKeyComplete } from '@/utils/helpers';
 
 import classes from './ActivateView.module.scss';
@@ -28,7 +27,6 @@ import { TargetStep } from '../TargetStep/TargetStep';
 
 export const ActivateView: FC = () => {
   const params = useSearchParams();
-  const home = useHomeRoute();
   const dispatch = useAppDispatch();
   const [verifyKey, { isLoading }] = useVerifyKeyMutation();
 
@@ -193,7 +191,7 @@ export const ActivateView: FC = () => {
           </p>
 
           {!cached && !error && !isLoading && code && (
-            <a className={classes.support_link} href={home}>
+            <a className={classes.support_link} href={Routes.Home}>
               Вернуться на главную
             </a>
           )}

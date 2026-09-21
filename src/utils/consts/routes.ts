@@ -8,7 +8,7 @@ export const Routes = {
   How: '/#how',
   Faq: '/#faq',
 
-  Tg: '/tg',
+  /** Документы в Mini App. Адрес остался от бывшей витрины /tg */
   TgMore: '/tg/more',
 
   Buy: '/buy',
