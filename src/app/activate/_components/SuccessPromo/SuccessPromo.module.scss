@@ -17,6 +17,29 @@ $market_hover: #ffd633;
   }
 }
 
+// Одна карточка занимает всю ширину: на половине строки она читается как
+// обрезанная, а рядом пустует место выключенного блока
+.single {
+  grid-template-columns: 1fr;
+
+  @include s.media_up(md) {
+    .card {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .head {
+      flex: 1;
+    }
+
+    // На всю ширину кнопку растягивать уже незачем — её место в строке
+    .action {
+      flex-shrink: 0;
+      width: auto;
+    }
+  }
+}
+
 .card {
   @include s.card;
 

@@ -81,24 +81,29 @@ export const ActivationRules: FC<Props> = ({
       <div className={classes.rules}>
         {intro && <Prose blocks={[intro]} />}
 
-        {blocks.map((block, index) => {
-          const Icon = getBlockIcon(block.icon);
+        {blocks.length > 0 && (
+          <div className={classes.blocks}>
+            {blocks.map((block, index) => {
+              const Icon = getBlockIcon(block.icon);
 
-          return (
-            <section key={index} className={classes.block}>
-              <h3 className={classes.block_title}>
-                <span className={classes.block_icon}>
-                  <Icon size={20} />
-                </span>
-                {block.title}
-              </h3>
+              return (
+                <section key={index} className={classes.block}>
+                  <span className={classes.block_icon}>
+                    <Icon size={18} />
+                  </span>
 
-              <div className={classes.block_body}>
-                <Prose blocks={parseInstruction(block.body)} />
-              </div>
-            </section>
-          );
-        })}
+                  <div className={classes.block_text}>
+                    <h3 className={classes.block_title}>{block.title}</h3>
+
+                    <div className={classes.block_body}>
+                      <Prose blocks={parseInstruction(block.body)} />
+                    </div>
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+        )}
 
         <Prose blocks={rest} />
       </div>

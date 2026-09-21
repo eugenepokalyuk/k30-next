@@ -14,10 +14,70 @@
   }
 }
 
+.heading {
+  display: flex;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+  width: 100%;
+
+  // Шапка карточки — целиком кнопка, поэтому у неё нет своих отступов:
+  // попасть по ней можно в любом месте строки
+  padding: 0;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+
+  &:focus-visible {
+    @include s.focus_ring;
+  }
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(1);
+  min-width: 0;
+  flex: 1;
+}
+
 .title {
   @include s.text_header_3;
 
   color: var(--text_default);
+}
+
+// Свёрнутый профиль сам говорит, что в нём лежит — иначе кнопку
+// разворачивания жмут наугад
+.summary {
+  @include s.text_body_2;
+
+  overflow: hidden;
+  color: var(--text_secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.saved {
+  @include s.text_body_2;
+
+  flex-shrink: 0;
+  color: var(--text_secondary);
+}
+
+.chevron {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--icon_secondary);
+}
+
+// Высоту анимирует framer-motion, поэтому содержимое нужно подрезать
+.body {
+  overflow: hidden;
 }
 
 .form {

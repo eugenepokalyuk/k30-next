@@ -16,7 +16,7 @@
 .rules {
   display: flex;
   flex-direction: column;
-  gap: s.gap(4);
+  gap: s.gap(3);
 }
 
 .paragraph {
@@ -56,23 +56,38 @@
   }
 }
 
-.block {
+// Правила читают перед активацией, и целиком: четыре отдельные карточки
+// с заголовками уводили кнопку за край экрана. Здесь они строки одного
+// списка — тот же текст, но втрое короче по высоте
+.blocks {
   @include s.card;
 
   display: flex;
   flex-direction: column;
+}
+
+.block {
+  display: flex;
+  align-items: flex-start;
   gap: s.gap(3);
 
-  padding: s.gap(4);
+  padding: s.gap(3) s.gap(4);
+
+  & + & {
+    border-top: 1px solid var(--stroke_default);
+  }
+}
+
+.block_text {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(1);
 }
 
 .block_title {
-  @include s.text_header_3;
+  @include s.text_body_1;
 
-  display: flex;
-  align-items: center;
-  gap: s.gap(2.5);
-
+  font-weight: s.$medium;
   color: var(--text_default);
 }
 
@@ -82,8 +97,8 @@
   justify-content: center;
 
   flex-shrink: 0;
-  width: s.gap(9);
-  height: s.gap(9);
+  width: s.gap(7);
+  height: s.gap(7);
   border-radius: 50%;
 
   color: var(--icon_primary);
@@ -93,7 +108,15 @@
 .block_body {
   display: flex;
   flex-direction: column;
-  gap: s.gap(3);
+  gap: s.gap(2);
+
+  // В строке списка текст правила идёт подписью к заголовку
+  .paragraph,
+  .item {
+    @include s.text_body_2;
+
+    color: var(--text_secondary);
+  }
 }
 
 .actions {

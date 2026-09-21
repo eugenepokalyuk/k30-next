@@ -1,8 +1,10 @@
 'use client';
 
 import React, { FC } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 
-import { Button, Field } from '@/components/ui';
+import { duration, ease } from '@/components/motion';
+import { Button, ChevronDownIcon, Field } from '@/components/ui';
 import { useUpdateMeMutation } from '@/store/api/k30Api';
 import type { UserDto } from '@/store/api/types';
 import { useAppDispatch } from '@/store/hooks';
@@ -18,6 +20,7 @@ interface Props {
 export const ProfileCard: FC<Props> = ({ user }) => {
   const dispatch = useAppDispatch();
   const [updateMe, { isLoading }] = useUpdateMeMutation();
+  const id = React.useId();
 
   // Профиль приезжает асинхронно (после обмена refresh на access), но
   // родитель не рендерит карточку, пока его нет, — начальные значения
@@ -25,6 +28,12 @@ export const ProfileCard: FC<Props> = ({ user }) => {
   const [name, setName] = React.useState(user.name);
   const [telegram, setTelegram] = React.useState(user.telegram_username);
   const [saved, setSaved] = React.useState(false);
+
+  // Заполненный профиль показывать негде: два поля и кнопка занимают
+  // пол-экрана телефона выше заказов, ради которых в кабинет и заходят.
+  // Пустой — наоборот, открыт сразу, иначе его не заметят
+  const isFilled = Boolean(name.trim() && telegram.trim());
+  const [isOpen, setIsOpen] = React.useState(!isFilled);
 
   React.useEffect(() => {
     if (!saved) return;
@@ -41,33 +50,82 @@ export const ProfileCard: FC<Props> = ({ user }) => {
       }).unwrap();
       dispatch(profileLoaded(updated));
       setSaved(true);
+      if (updated.name.trim() && updated.telegram_username.trim()) {
+        setIsOpen(false);
+      }
     } catch {
       // Значения в полях остались, кнопка снова активна — повторный клик
       // обычно проходит
     }
   };
 
+  const summary = [name.trim(), telegram.trim()]
+    .filter(Boolean)
+    .join(' · ');
+
   return (
     <section className={classes.card}>
-      <h2 className={classes.title}>{'Профиль'}</h2>
+      <h2 className={classes.heading}>
+        <button
+          type="button"
+          className={classes.toggle}
+          onClick={() => setIsOpen((current) => !current)}
+          aria-expanded={isOpen}
+          aria-controls={id}
+        >
+          <span className={classes.head}>
+            <span className={classes.title}>Профиль</span>
 
-      <form className={classes.form} onSubmit={save}>
-        <Field label="Имя" name="name" value={name} onChange={setName} />
-        <Field
-          label="Telegram"
-          name="telegram"
-          placeholder="@username"
-          value={telegram}
-          onChange={setTelegram}
-          hint="По нему сходятся заказы из телеграма с этим кабинетом."
-        />
+            {!isOpen && (
+              <span className={classes.summary}>
+                {summary || 'Имя и телеграм не указаны'}
+              </span>
+            )}
+          </span>
 
-        <div className={classes.actions}>
-          <Button type="submit" size="small" loading={isLoading}>
-            {saved ? 'Сохранено' : 'Сохранить'}
-          </Button>
-        </div>
-      </form>
+          {saved && <span className={classes.saved}>Сохранено</span>}
+
+          <motion.span
+            className={classes.chevron}
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: duration.base, ease }}
+            aria-hidden
+          >
+            <ChevronDownIcon size={20} />
+          </motion.span>
+        </button>
+      </h2>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            id={id}
+            className={classes.body}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: duration.base, ease }}
+          >
+            <form className={classes.form} onSubmit={save}>
+              <Field label="Имя" name="name" value={name} onChange={setName} />
+              <Field
+                label="Telegram"
+                name="telegram"
+                placeholder="@username"
+                value={telegram}
+                onChange={setTelegram}
+                hint="По нему сходятся заказы из телеграма с этим кабинетом."
+              />
+
+              <div className={classes.actions}>
+                <Button type="submit" size="small" loading={isLoading}>
+                  {saved ? 'Сохранено' : 'Сохранить'}
+                </Button>
+              </div>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

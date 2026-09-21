@@ -26,8 +26,12 @@ export const SuccessPromo: FC = () => {
 
   if (!hasTelegram && !hasReview) return null;
 
+  // Вторую карточку выключают в админке, и оставшаяся не должна жаться
+  // в половину строки с пустотой рядом
+  const single = hasTelegram !== hasReview;
+
   return (
-    <div className={classes.promo}>
+    <div className={clsx(classes.promo, { [classes.single]: single })}>
       {hasTelegram && (
         <article className={classes.card}>
           <div className={classes.head}>
@@ -41,7 +45,13 @@ export const SuccessPromo: FC = () => {
             <p className={classes.text}>{data.telegram_text}</p>
           </div>
 
-          <Button href={data.telegram_url} external size="small" fullWidth>
+          <Button
+            href={data.telegram_url}
+            external
+            size="small"
+            fullWidth
+            className={classes.action}
+          >
             {data.telegram_button_label}
 
             <ArrowRightIcon size={18} />
@@ -64,7 +74,7 @@ export const SuccessPromo: FC = () => {
             external
             size="small"
             fullWidth
-            className={classes.market_button}
+            className={clsx(classes.market_button, classes.action)}
           >
             {data.review_button_label}
             <ArrowRightIcon size={18} />
