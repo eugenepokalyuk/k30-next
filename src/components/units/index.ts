@@ -7,5 +7,6 @@ export * from './Layout/Layout';
 export * from './PageBackground/PageBackground';
 export * from './SiteIcon/SiteIcon';
 export * from './TelegramEmailForm/TelegramEmailForm';
+export * from './TelegramLoginButton/TelegramLoginButton';
 export * from './TelegramWidget/TelegramWidget';
 export * from './ThemeToggle/ThemeToggle';

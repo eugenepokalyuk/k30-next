@@ -4,8 +4,17 @@ import React, { FC } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { Button, Field, Notice, TelegramIcon } from '@/components/ui';
-import { AuthCard, TelegramEmailForm } from '@/components/units';
-import { useEmailLogin, useSiteSettings, useTelegramLogin } from '@/lib/hooks';
+import {
+  AuthCard,
+  TelegramEmailForm,
+  TelegramLoginButton,
+} from '@/components/units';
+import {
+  useEmailLogin,
+  useSiteSettings,
+  useTelegramLogin,
+  useTelegramWidgetLogin,
+} from '@/lib/hooks';
 import {
   useAuthOptionsQuery,
   useTelegramWebAppLoginMutation,
@@ -38,6 +47,7 @@ export const LoginView: FC = () => {
 
   const { data: options, isLoading: isOptionsLoading } = useAuthOptionsQuery();
   const telegram = useTelegramLogin();
+  const widget = useTelegramWidgetLogin();
   const mail = useEmailLogin();
 
   React.useEffect(() => {
@@ -71,7 +81,10 @@ export const LoginView: FC = () => {
   const byEmail = Boolean(options?.email_login_enabled);
   const byTelegram =
     (options ? options.telegram_login_enabled : true) && !isMiniApp;
-  const isLoginDisabled = Boolean(options) && !byEmail && !byTelegram;
+  const byWidget = Boolean(options?.telegram_widget_enabled) && !isMiniApp;
+  const botName = options?.telegram_bot_username ?? '';
+  const isLoginDisabled =
+    Boolean(options) && !byEmail && !byTelegram && !byWidget;
   const supportUrl = options?.telegram_support_url || site.telegram_support_url;
 
   const submitEmail = (event: React.FormEvent) => {
@@ -208,7 +221,45 @@ export const LoginView: FC = () => {
           </form>
         )}
 
-        {byEmail && byTelegram && <div className={classes.divider}>или</div>}
+        {byEmail && (byTelegram || byWidget) && (
+          <div className={classes.divider}>или</div>
+        )}
+
+        {byWidget && (
+          <div className={classes.form}>
+            {widget.error && <Notice tone="error">{widget.error}</Notice>}
+
+            {widget.stage === 'needs_email' ? (
+              <form
+                className={classes.form}
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  void widget.submitEmail();
+                }}
+                noValidate
+              >
+                <Field
+                  label="Почта"
+                  type="email"
+                  name="widget_email"
+                  autoComplete="email"
+                  inputMode="email"
+                  placeholder="you@example.com"
+                  enterKeyHint="go"
+                  value={widget.email}
+                  onChange={widget.setEmail}
+                  hint="Мы узнали вас по Telegram. На почту придут ключ и чек."
+                />
+
+                <Button type="submit" fullWidth loading={widget.isSending}>
+                  Войти
+                </Button>
+              </form>
+            ) : (
+              <TelegramLoginButton bot={botName} onAuth={widget.authorize} />
+            )}
+          </div>
+        )}
 
         {byTelegram && (
           <>

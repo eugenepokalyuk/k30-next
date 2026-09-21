@@ -43,6 +43,7 @@ import type {
   TargetKind,
   TelegramBlockDto,
   TelegramStartDto,
+  TelegramWidgetUser,
   TelegramStatusResponse,
   TelegramWebAppResponse,
   UserDto,
@@ -237,6 +238,30 @@ export const k30Api = createApi({
       },
     }),
 
+    telegramWidgetLogin: builder.mutation<
+      TelegramWebAppResponse,
+      { telegram: TelegramWidgetUser; email?: string }
+    >({
+      query: (body) => ({
+        url: 'auth/telegram/widget',
+        method: 'POST',
+        body,
+      }),
+
+      async onQueryStarted(_body, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (data.status !== 'confirmed' || !data.access || !data.refresh) {
+            return;
+          }
+
+          dispatch(signedIn(data as AuthResponse));
+          authStorage.write(data.refresh);
+        } catch {
+        }
+      },
+    }),
+
     telegramLoginStart: builder.mutation<TelegramStartDto, void>({
       query: () => ({ url: 'auth/telegram/start', method: 'POST' }),
     }),
@@ -330,6 +355,7 @@ export const {
   useVerifyEmailCodeMutation,
   useTelegramWebAppLoginMutation,
   useTelegramLoginStartMutation,
+  useTelegramWidgetLoginMutation,
   useTelegramLoginStatusQuery,
   useVerifyKeyMutation,
   useCheckAccountMutation,

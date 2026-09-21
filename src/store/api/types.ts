@@ -194,7 +194,19 @@ export interface TelegramStatusResponse extends Partial<AuthResponse> {
 export interface AuthOptionsDto {
   telegram_support_url: string;
   telegram_login_enabled: boolean;
+  telegram_widget_enabled: boolean;
+  telegram_bot_username: string;
   email_login_enabled: boolean;
+}
+
+export interface TelegramWidgetUser {
+  id: number;
+  hash: string;
+  auth_date: number;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  photo_url?: string;
 }
 
 export interface EmailCodeRequestDto {
