@@ -25,8 +25,7 @@ export const ProfileCard: FC<Props> = ({ user }) => {
   const [telegram, setTelegram] = React.useState(user.telegram_username);
   const [saved, setSaved] = React.useState(false);
 
-  const isFilled = Boolean(name.trim() && telegram.trim());
-  const [isOpen, setIsOpen] = React.useState(!isFilled);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (!saved) return;

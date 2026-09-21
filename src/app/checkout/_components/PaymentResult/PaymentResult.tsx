@@ -48,10 +48,9 @@ export const PaymentResult: FC<Props> = ({ id }) => {
   if (payment.key_code) {
     return (
       <StatusScreen
-        overline="Оплачено"
-        title="Ключ активации"
-        mark
-        text={`${summary}. Ключ ваш — сохраните код, он понадобится при активации и останется в кабинете.`}
+        overline="Ключ активации"
+        title="Оплата прошла"
+        text={summary}
         actions={
           <>
             <Button href={activateRoute(payment.key_code)} size="large">
@@ -63,7 +62,14 @@ export const PaymentResult: FC<Props> = ({ id }) => {
           </>
         }
       >
-        <KeyCode code={payment.key_code} className={classes.key} />
+        <div className={classes.ready}>
+          <KeyCode code={payment.key_code} className={classes.key} />
+          <span className={classes.status}>Ключ готов</span>
+        </div>
+
+        <p className={classes.hint}>
+          Сохраните код — он понадобится при активации и останется в кабинете.
+        </p>
       </StatusScreen>
     );
   }
