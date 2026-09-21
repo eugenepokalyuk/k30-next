@@ -16,7 +16,7 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 
 const description =
   'Подписки на ChatGPT, Claude, Gemini, Grok и Perplexity по ключу активации. ' +
-  'Ключ приходит сразу после оплаты, активация занимает пару минут.';
+  'Ключ приходит сразу после оплаты, активация занимает пару минут';
 
 export const metadata: Metadata = {
   metadataBase: new URL(

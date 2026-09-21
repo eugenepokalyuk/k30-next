@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'Купить подписку',
   description:
     'Выберите сервис и тариф: ChatGPT, Claude, Gemini, Grok, Perplexity. ' +
-    'Ключ приходит после оплаты, активация занимает пару минут.',
+    'Ключ приходит после оплаты, активация занимает пару минут',
 };
 
 export default function BuyPage() {

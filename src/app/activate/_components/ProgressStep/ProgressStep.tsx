@@ -45,8 +45,8 @@ export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
           </p>
           <p className={classes.subtitle}>
             {isQueued && current.queue_position
-              ? `Вы ${current.queue_position}-й в очереди.`
-              : 'Обычно это занимает от 30 секунд до двух минут.'}
+              ? `Вы ${current.queue_position}-й в очереди`
+              : 'Обычно это занимает от 30 секунд до двух минут'}
           </p>
         </div>
         <span className={classes.timer} aria-hidden="true">
@@ -70,7 +70,7 @@ export const ProgressStep: FC<Props> = ({ activation, onUpdate }) => {
 
       <p className={classes.warning}>
         Не закрывайте и не обновляйте страницу без нужды — но если закроете,
-        ничего не потеряется: активация идёт на сервере.
+        ничего не потеряется: активация идёт на сервере
       </p>
 
     </motion.div>

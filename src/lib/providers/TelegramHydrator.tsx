@@ -55,7 +55,7 @@ export const TelegramHydrator: FC = () => {
         dispatch(
           webAppAuthFailed(
             'Не получилось войти через Telegram. Откройте приложение заново ' +
-              'или войдите по почте.',
+              'или войдите по почте',
           ),
         );
       }

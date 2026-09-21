@@ -106,7 +106,7 @@ export const LoginView: FC = () => {
 
   if (isMiniApp && webAppAuth === 'signing_in') {
     return (
-      <AuthCard title="Входим" description="Узнаём вас по Telegram — секунду." />
+      <AuthCard title="Входим" description="Узнаём вас по Telegram — секунду" />
     );
   }
 
@@ -114,7 +114,7 @@ export const LoginView: FC = () => {
     return (
       <AuthCard
         title="Вход через Telegram не прошёл"
-        description="Попробуем ещё раз — из приложения выходить не нужно."
+        description="Попробуем ещё раз — из приложения выходить не нужно"
       >
         <div className={classes.form}>
           <Notice tone="error">{webAppError}</Notice>
@@ -170,7 +170,7 @@ export const LoginView: FC = () => {
                   enterKeyHint="send"
                   value={mail.email}
                   onChange={mail.setEmail}
-                  hint="Пришлём код — пароль придумывать не нужно."
+                  hint="Пришлём код — пароль придумывать не нужно"
                 />
                 <Button type="submit" fullWidth loading={mail.isSending}>
                   Получить код
@@ -268,7 +268,7 @@ export const LoginView: FC = () => {
             {telegram.stage === 'needs_email' && (
               <Notice tone="info" title="Бот ждёт вашу почту">
                 Допишите её в чате с ботом — после этого вход продолжится сам,
-                страницу закрывать не нужно.
+                страницу закрывать не нужно
               </Notice>
             )}
 

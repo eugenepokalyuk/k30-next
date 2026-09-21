@@ -29,7 +29,7 @@ export const ServicesSection: FC = () => {
       id="services"
       overline="Можете приобрести"
       title="Сервисы"
-      description="Ключ работает только со своим сервисом — он зашит в код и определяется автоматически."
+      description="Ключ работает только со своим сервисом — он зашит в код и определяется автоматически"
       action={
         <Link className={classes.more} href={Routes.AllServices}>
           Ещё сервисы

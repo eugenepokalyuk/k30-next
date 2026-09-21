@@ -77,7 +77,7 @@ export const Footer: FC = () => {
         </span>
         <span className={classes.disclaimer}>
           Мы не связаны с правообладателями сервисов и не являемся их
-          официальным представителем.
+          официальным представителем
         </span>
       </div>
     </footer>

@@ -62,7 +62,7 @@ export const OrderSummary: FC<Props> = ({
       {!data.plan.in_stock && (
         <Notice tone="info" title="Тарифа нет в наличии">
           Заказ примем, но ключ придётся подождать — он появится здесь и в
-          кабинете, как только поступит на склад.
+          кабинете, как только поступит на склад
         </Notice>
       )}
 
@@ -77,7 +77,7 @@ export const OrderSummary: FC<Props> = ({
 
       {error != null && (
         <Notice tone="error" title="Заказ не оформился">
-          {apiErrorMessage(error, 'Попробуйте ещё раз или напишите в поддержку.')}
+          {apiErrorMessage(error, 'Попробуйте ещё раз или напишите в поддержку')}
         </Notice>
       )}
 

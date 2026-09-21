@@ -90,7 +90,7 @@ export function useTelegramLogin(): Result {
   };
 
   const lostMessage = isMissing
-    ? 'Заявка не найдена — начните вход заново.'
+    ? 'Заявка не найдена — начните вход заново'
     : 'Ссылка на бота живёт пять минут и уже устарела. Нажмите кнопку ещё раз — сделаем новую.';
 
   let stage: TelegramLoginStage = 'idle';

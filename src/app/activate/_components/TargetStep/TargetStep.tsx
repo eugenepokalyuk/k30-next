@@ -36,7 +36,7 @@ export const TargetStep: FC<Props> = ({
   if (!step.option) {
     return (
       <Notice tone="error" title="Форма активации ещё не настроена">
-        Напишите в поддержку — активируем ключ вручную.
+        Напишите в поддержку — активируем ключ вручную
       </Notice>
     );
   }

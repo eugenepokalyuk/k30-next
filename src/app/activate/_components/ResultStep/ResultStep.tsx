@@ -52,7 +52,7 @@ export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
               ) : (
                 <p className={classes.done_account}>
                   Если сервис ещё не видит подписку — выйдите из аккаунта и
-                  зайдите снова.
+                  зайдите снова
                 </p>
               )}
             </div>
@@ -102,8 +102,8 @@ export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
     return (
       <div className={classes.result}>
         <Notice tone="info" title="Проверяем вручную" className={classes.notice}>
-          {activation.error || 'Активация не дала однозначного результата, и мы перепроверяем её.'}{' '}
-          {'Ключ закреплён за вами — повторять активацию не нужно.'}
+          {activation.error || 'Активация не дала однозначного результата, и мы перепроверяем её'}{' '}
+          {'Ключ закреплён за вами — повторять активацию не нужно'}
         </Notice>
         <Support code={activation.key.code} />
       </div>
@@ -121,7 +121,7 @@ export const ResultStep: FC<Props> = ({ activation, service, onRetry }) => {
         }
         className={classes.notice}
       >
-        {activation.error || 'Напишите в поддержку — разберёмся и активируем.'}
+        {activation.error || 'Напишите в поддержку — разберёмся и активируем'}
       </Notice>
 
       {activation.blame === 'provider' && (
@@ -216,7 +216,7 @@ const MissingHelp: FC<{ service?: ServiceActivationDto }> = ({ service }) => {
 const Support: FC<{ code: string }> = ({ code }) => (
   <div className={classes.support}>
     <p className={classes.support_text}>
-      Приложите к обращению код ключа — по нему видно всю историю попыток.
+      Приложите к обращению код ключа — по нему видно всю историю попыток
     </p>
     <KeyCode code={code} className={classes.support_code} />
     <Button href={SupportTelegram} external variant="outlined" size="small">

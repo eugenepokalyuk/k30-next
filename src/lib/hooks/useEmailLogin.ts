@@ -51,7 +51,7 @@ export function useEmailLogin(): Result {
 
     const address = email.trim();
     if (!address) {
-      setError('Введите почту, на неё придёт код.');
+      setError('Введите почту, на неё придёт код');
       return;
     }
 
@@ -76,7 +76,7 @@ export function useEmailLogin(): Result {
     setError('');
 
     if (!code.trim()) {
-      setError('Введите код из письма.');
+      setError('Введите код из письма');
       return;
     }
 

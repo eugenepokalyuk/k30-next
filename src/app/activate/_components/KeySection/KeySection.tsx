@@ -59,7 +59,7 @@ function title(status: KeyStatus): string {
 }
 
 function text(status: KeyStatus): string {
-  if (status === 'accepted') return 'Можно переходить к активации.';
-  if (status === 'rejected') return 'Напишите в поддержку — разберёмся.';
-  return 'Введите код из письма — проверим его и откроем активацию.';
+  if (status === 'accepted') return 'Можно переходить к активации';
+  if (status === 'rejected') return 'Напишите в поддержку — разберёмся';
+  return 'Введите код из письма — проверим его и откроем активацию';
 }

@@ -53,12 +53,12 @@ export function normalizeTarget(kind: TargetKind, raw: string): string {
 
 export function validateTarget(kind: TargetKind, raw: string): string | null {
   const value = normalizeTarget(kind, raw);
-  if (!value) return 'Заполните это поле.';
+  if (!value) return 'Заполните это поле';
 
   if (ID_KINDS.includes(kind)) {
     return UUID.test(value)
       ? null
-      : 'Должно выглядеть так: 123e4567-e89b-42d3-a456-426614174000 — 36 символов с дефисами.';
+      : 'Должно выглядеть так: 123e4567-e89b-42d3-a456-426614174000 — 36 символов с дефисами';
   }
 
   if (kind === 'access_token') {
@@ -75,7 +75,7 @@ export function validateTarget(kind: TargetKind, raw: string): string | null {
       return 'Это не похоже на JSON сессии. Скопируйте весь текст со страницы целиком, вместе с фигурными скобками.';
     }
     if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
-      return 'В JSON сессии ожидается объект в фигурных скобках.';
+      return 'В JSON сессии ожидается объект в фигурных скобках';
     }
     if (!readToken(value)) {
       return 'В JSON нет поля accessToken. Похоже, скопирована не та страница или вы вышли из аккаунта — войдите и повторите.';

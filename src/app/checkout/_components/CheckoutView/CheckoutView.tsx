@@ -23,7 +23,7 @@ export const CheckoutView: FC = () => {
       <StatusScreen
         overline="Оформление заказа"
         title="Корзина пуста"
-        text="Выберите сервис и тариф — они появятся здесь."
+        text="Выберите сервис и тариф — они появятся здесь"
         actions={<Button href={Routes.Buy}>Выбрать подписку</Button>}
       />
     );

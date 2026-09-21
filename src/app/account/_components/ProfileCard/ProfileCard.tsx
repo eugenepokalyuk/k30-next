@@ -104,7 +104,7 @@ export const ProfileCard: FC<Props> = ({ user }) => {
                 placeholder="@username"
                 value={telegram}
                 onChange={setTelegram}
-                hint="По нему сходятся заказы из телеграма с этим кабинетом."
+                hint="По нему сходятся заказы из телеграма с этим кабинетом"
               />
 
               <div className={classes.actions}>

@@ -68,7 +68,7 @@ export const PaymentResult: FC<Props> = ({ id }) => {
         </div>
 
         <p className={classes.hint}>
-          Сохраните код — он понадобится при активации и останется в кабинете.
+          Сохраните код — он понадобится при активации и останется в кабинете
         </p>
       </StatusScreen>
     );

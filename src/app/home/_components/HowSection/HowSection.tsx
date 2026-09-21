@@ -18,7 +18,7 @@ export const HowSection: FC = () => {
       id="how"
       overline="Порядок действий"
       title="Как это работает"
-      description="Путь от оплаты до работающей подписки."
+      description="Путь от оплаты до работающей подписки"
     >
       <Stagger as="ol" className={classes.list}>
         {data.map((step, index) => {

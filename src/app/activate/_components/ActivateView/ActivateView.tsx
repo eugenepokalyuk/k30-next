@@ -45,7 +45,7 @@ export const ActivateView: FC = () => {
 
     const load = async () => {
       if (!isKeyComplete(code)) {
-        setError('Ссылка неполная — проверьте код ключа.');
+        setError('Ссылка неполная — проверьте код ключа');
         return;
       }
 
@@ -187,7 +187,7 @@ export const ActivateView: FC = () => {
             >
               Напишите в поддержку
             </a>{' '}
-            и приложите код ключа.
+            и приложите код ключа
           </p>
 
           {!cached && !error && !isLoading && code && (
