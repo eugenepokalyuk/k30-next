@@ -128,6 +128,42 @@ export const LoginView: FC = () => {
     );
   }
 
+  if (byWidget && widget.stage === 'needs_email') {
+    return (
+      <AuthCard
+        title="Почти готово"
+        description="Мы узнали вас по Telegram. Остался адрес почты — на него придут ключ и чек."
+      >
+        <form
+          className={classes.form}
+          onSubmit={(event) => {
+            event.preventDefault();
+            void widget.submitEmail();
+          }}
+          noValidate
+        >
+          {widget.error && <Notice tone="error">{widget.error}</Notice>}
+
+          <Field
+            label="Почта"
+            type="email"
+            name="widget_email"
+            autoComplete="email"
+            inputMode="email"
+            placeholder="you@example.com"
+            enterKeyHint="go"
+            value={widget.email}
+            onChange={widget.setEmail}
+          />
+
+          <Button type="submit" fullWidth loading={widget.isSending}>
+            Войти
+          </Button>
+        </form>
+      </AuthCard>
+    );
+  }
+
   return (
     <AuthCard
       title="Вход"
@@ -229,35 +265,7 @@ export const LoginView: FC = () => {
           <div className={classes.form}>
             {widget.error && <Notice tone="error">{widget.error}</Notice>}
 
-            {widget.stage === 'needs_email' ? (
-              <form
-                className={classes.form}
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  void widget.submitEmail();
-                }}
-                noValidate
-              >
-                <Field
-                  label="Почта"
-                  type="email"
-                  name="widget_email"
-                  autoComplete="email"
-                  inputMode="email"
-                  placeholder="you@example.com"
-                  enterKeyHint="go"
-                  value={widget.email}
-                  onChange={widget.setEmail}
-                  hint="Мы узнали вас по Telegram. На почту придут ключ и чек."
-                />
-
-                <Button type="submit" fullWidth loading={widget.isSending}>
-                  Войти
-                </Button>
-              </form>
-            ) : (
-              <TelegramLoginButton bot={botName} onAuth={widget.authorize} />
-            )}
+            <TelegramLoginButton bot={botName} onAuth={widget.authorize} />
           </div>
         )}
 
