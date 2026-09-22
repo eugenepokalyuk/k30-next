@@ -4,9 +4,9 @@ import React, { FC } from 'react';
 import clsx from 'clsx';
 
 import { AlertIcon, KeyCode, KeyIcon, SuccessMark } from '@/components/ui';
-import { KeyForm } from '@/components/units';
 
 import classes from './KeySection.module.scss';
+import { KeyForm } from '../KeyForm/KeyForm';
 
 export type KeyStatus = 'waiting' | 'accepted' | 'rejected';
 

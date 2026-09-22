@@ -79,6 +79,7 @@ export interface ServiceFieldDto {
 export interface PlanDto {
   slug: string;
   short_id: string;
+  icon: string;
   name: string;
   tagline: string;
   duration_days: number;
@@ -422,4 +423,11 @@ export interface LegalPageDto {
 
 export interface TelegramWebAppResponse extends Partial<AuthResponse> {
   status: 'confirmed' | 'needs_email';
+}
+
+export interface IconDto {
+  key: string;
+  name: string;
+  view_box: string;
+  body: string;
 }

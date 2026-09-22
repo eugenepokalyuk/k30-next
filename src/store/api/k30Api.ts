@@ -31,6 +31,7 @@ import type {
   EmailLoginResponse,
   FaqEntryDto,
   HowStepDto,
+  IconDto,
   InformerDto,
   LegalPageDto,
   LegalSlug,
@@ -154,6 +155,10 @@ export const k30Api = createApi({
 
     informers: builder.query<InformerDto[], void>({
       query: () => 'informers',
+    }),
+
+    icons: builder.query<IconDto[], void>({
+      query: () => 'icons',
     }),
 
     buyerRules: builder.query<BuyerRulesDto, void>({
@@ -337,6 +342,7 @@ export const k30Api = createApi({
 });
 
 export const {
+  useIconsQuery,
   useServicesQuery,
   useSiteSettingsQuery,
   useFaqQuery,

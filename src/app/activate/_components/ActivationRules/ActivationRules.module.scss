@@ -56,50 +56,106 @@
   }
 }
 
-.blocks {
-  @include s.card;
-
+.sections {
   display: flex;
   flex-direction: column;
+  gap: s.gap(3);
 }
 
-.block {
-  display: flex;
-  align-items: flex-start;
-  gap: s.gap(3);
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: s.gap(2);
 
-  padding: s.gap(3) s.gap(4);
-
-  & + & {
-    border-top: 1px solid var(--stroke_default);
+  @include s.media_up(sm) {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
 }
 
-.block_text {
+.tab {
   display: flex;
   flex-direction: column;
-  gap: s.gap(1);
+  align-items: center;
+  justify-content: center;
+  gap: s.gap(1.5);
+
+  min-height: s.gap(20);
+  padding: s.gap(2.5) s.gap(2);
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_3;
+  background: var(--background_secondary);
+
+  color: var(--text_secondary);
+  text-align: center;
+  cursor: pointer;
+
+  transition:
+    border-color s.$transition-duration s.$ease_out,
+    background s.$transition-duration s.$ease_out,
+    color s.$transition-duration s.$ease_out;
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--primary);
+      color: var(--text_default);
+    }
+  }
+
+  &:focus-visible {
+    @include s.focus_ring;
+  }
 }
 
-.block_title {
-  @include s.text_body_1;
-
-  font-weight: s.$medium;
+.tab_active {
+  border-color: var(--primary);
+  background: var(--background_primary_10);
   color: var(--text_default);
+
+  .tab_icon {
+    color: #fff;
+    background: var(--background_primary);
+  }
 }
 
-.block_icon {
+.tab_icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  flex-shrink: 0;
-  width: s.gap(7);
-  height: s.gap(7);
+  width: s.gap(8);
+  height: s.gap(8);
   border-radius: 50%;
 
   color: var(--icon_primary);
   background: var(--background_primary_10);
+
+  transition:
+    color s.$transition-duration s.$ease_out,
+    background s.$transition-duration s.$ease_out;
+}
+
+.tab_title {
+  @include s.text_caption;
+
+  font-weight: s.$medium;
+  text-wrap: balance;
+}
+
+.panel {
+  @include s.card;
+
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+
+  padding: s.gap(4);
+}
+
+.panel_title {
+  @include s.text_body_1;
+
+  font-weight: s.$medium;
+  color: var(--text_default);
 }
 
 .block_body {

@@ -1,33 +1,8 @@
 @use '@/styles/index' as s;
 
-.ready {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: s.gap(3);
+.key_section {
   width: 100%;
-
-  @include s.media_down(sm) {
-    flex-direction: column;
-    gap: s.gap(2);
-  }
-}
-
-.key {
-  width: 100%;
-  max-width: 420px;
-}
-
-.status {
-  @include s.text_body_2;
-
-  flex-shrink: 0;
-  padding: s.gap(1.5) s.gap(3);
-  border-radius: 999px;
-
-  color: var(--success);
-  background: var(--success_10);
-  white-space: nowrap;
+  text-align: left;
 }
 
 .hint {

@@ -4,6 +4,7 @@ import React, { FC } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import { Notice, ServiceMark, Steps } from '@/components/ui';
+import { KeySection, type KeyStatus } from '@/components/units';
 import { apiErrorMessage } from '@/store/api/errors';
 import { useVerifyKeyMutation } from '@/store/api/k30Api';
 import type { ActivationDto } from '@/store/api/types';
@@ -20,7 +21,6 @@ import { formatKey, isKeyComplete } from '@/utils/helpers';
 
 import classes from './ActivateView.module.scss';
 import { ActivationRules } from '../ActivationRules/ActivationRules';
-import { KeySection, type KeyStatus } from '../KeySection/KeySection';
 import { ProgressStep } from '../ProgressStep/ProgressStep';
 import { ResultStep } from '../ResultStep/ResultStep';
 import { TargetStep } from '../TargetStep/TargetStep';

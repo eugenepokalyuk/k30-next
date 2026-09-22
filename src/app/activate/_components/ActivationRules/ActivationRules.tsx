@@ -1,10 +1,11 @@
 'use client';
 
 import React, { FC } from 'react';
+import clsx from 'clsx';
 
 import {
+  BlockIcon,
   Button,
-  getBlockIcon,
   Modal,
   RichText,
   ServiceMark,
@@ -58,6 +59,10 @@ export const ActivationRules: FC<Props> = ({
     (block) => block.title.trim() && block.body.trim(),
   );
 
+  const tabsId = React.useId();
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  const activeBlock = blocks[activeIndex] ?? blocks[0];
+
   return (
     <Modal
       isOpen
@@ -79,26 +84,51 @@ export const ActivationRules: FC<Props> = ({
         {intro && <Prose blocks={[intro]} />}
 
         {blocks.length > 0 && (
-          <div className={classes.blocks}>
-            {blocks.map((block, index) => {
-              const Icon = getBlockIcon(block.icon);
+          <div className={classes.sections}>
+            <div
+              className={classes.tabs}
+              role="tablist"
+              aria-label="Разделы правил"
+            >
+              {blocks.map((block, index) => {
+                const isActive = index === activeIndex;
 
-              return (
-                <section key={index} className={classes.block}>
-                  <span className={classes.block_icon}>
-                    <Icon size={18} />
-                  </span>
+                return (
+                  <button
+                    key={index}
+                    type="button"
+                    role="tab"
+                    id={`${tabsId}-tab-${index}`}
+                    aria-selected={isActive}
+                    aria-controls={`${tabsId}-panel`}
+                    className={clsx(classes.tab, {
+                      [classes.tab_active]: isActive,
+                    })}
+                    onClick={() => setActiveIndex(index)}
+                  >
+                    <span className={classes.tab_icon}>
+                      <BlockIcon name={block.icon} size={18} />
+                    </span>
+                    <span className={classes.tab_title}>{block.title}</span>
+                  </button>
+                );
+              })}
+            </div>
 
-                  <div className={classes.block_text}>
-                    <h3 className={classes.block_title}>{block.title}</h3>
+            {activeBlock && (
+              <section
+                role="tabpanel"
+                id={`${tabsId}-panel`}
+                aria-labelledby={`${tabsId}-tab-${activeIndex}`}
+                className={classes.panel}
+              >
+                <h3 className={classes.panel_title}>{activeBlock.title}</h3>
 
-                    <div className={classes.block_body}>
-                      <Prose blocks={parseInstruction(block.body)} />
-                    </div>
-                  </div>
-                </section>
-              );
-            })}
+                <div className={classes.block_body}>
+                  <Prose blocks={parseInstruction(activeBlock.body)} />
+                </div>
+              </section>
+            )}
           </div>
         )}
 

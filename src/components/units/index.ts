@@ -3,6 +3,7 @@ export * from './BottomNav/BottomNav';
 export * from './Footer/Footer';
 export * from './Header/Header';
 export * from './KeyForm/KeyForm';
+export * from './KeySection/KeySection';
 export * from './Layout/Layout';
 export * from './PageBackground/PageBackground';
 export * from './SiteIcon/SiteIcon';

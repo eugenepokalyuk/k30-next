@@ -2,7 +2,8 @@
 
 import React, { FC } from 'react';
 
-import { Button, KeyCode, Notice } from '@/components/ui';
+import { Button, Notice } from '@/components/ui';
+import { KeySection } from '@/components/units';
 import { usePaymentStatusQuery } from '@/store/api/k30Api';
 import { activateRoute, checkoutRoute, Routes } from '@/utils/consts';
 import { formatPrice } from '@/utils/helpers';
@@ -50,26 +51,23 @@ export const PaymentResult: FC<Props> = ({ id }) => {
       <StatusScreen
         overline="Ключ активации"
         title="Оплата прошла"
-        text={summary}
         actions={
           <>
             <Button href={activateRoute(payment.key_code)} size="large">
-              Активировать подписку
+              {'Активировать подписку'}
             </Button>
+
             <Button href={Routes.Account} variant="outlined">
-              Мои заказы
+              {'Мои заказы'}
             </Button>
           </>
         }
       >
-        <div className={classes.ready}>
-          <KeyCode code={payment.key_code} className={classes.key} />
-          <span className={classes.status}>Ключ готов</span>
-        </div>
-
-        <p className={classes.hint}>
-          Сохраните код — он понадобится при активации и останется в кабинете
-        </p>
+        <KeySection
+          code={payment.key_code}
+          status="accepted"
+          className={classes.key_section}
+        />
       </StatusScreen>
     );
   }
@@ -100,22 +98,22 @@ export const PaymentResult: FC<Props> = ({ id }) => {
               href={checkoutRoute(payment.service_slug, payment.plan_slug)}
               size="large"
             >
-              Оплатить ещё раз
+              {'Оплатить ещё раз'}
             </Button>
           ) : (
             <Button href={payment.pay_url} external size="large">
-              Вернуться к оплате
+              {'Вернуться к оплате'}
             </Button>
           )}
           <Button href={Routes.Buy} variant="outlined">
-            Выбрать другой тариф
+            {'Выбрать другой тариф'}
           </Button>
         </>
       }
     >
       {payment.status === 'pending' && (
         <p className={classes.hint}>
-          Уже заплатили? Подождите несколько секунд — страница обновится сама.
+          {'Уже заплатили? Подождите несколько секунд — страница обновится сама'}
         </p>
       )}
     </StatusScreen>

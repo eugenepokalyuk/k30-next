@@ -11,7 +11,7 @@ import {
 } from 'framer-motion';
 
 import { Reveal, Stagger, StaggerItem } from '@/components/motion';
-import { Button, getBlockIcon, Section, TelegramIcon } from '@/components/ui';
+import { BlockIcon, Button, Section, TelegramIcon } from '@/components/ui';
 import { useTelegramBlockQuery } from '@/store/api/k30Api';
 
 import classes from './TelegramSection.module.scss';
@@ -72,12 +72,10 @@ export const TelegramSection: FC<Props> = ({ className }) => {
         {data.items.length > 0 && (
           <Stagger as="ul" className={classes.benefits}>
             {data.items.map((item) => {
-              const Icon = getBlockIcon(item.icon);
-
               return (
                 <StaggerItem as="li" key={item.id} className={classes.benefit}>
                   <span className={classes.icon}>
-                    <Icon size={20} />
+                    <BlockIcon name={item.icon} size={20} />
                   </span>
 
                   <div className={classes.benefit_text}>

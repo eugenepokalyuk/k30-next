@@ -24,8 +24,11 @@ export const StatusScreen: FC<Props> = ({
   <Section overline={overline} title={title} centered>
     <div className={classes.screen}>
       {mark && <SuccessMark />}
+
       {text && <p className={classes.text}>{text}</p>}
+
       {children}
+
       {actions && <div className={classes.actions}>{actions}</div>}
     </div>
   </Section>

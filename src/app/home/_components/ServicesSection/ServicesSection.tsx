@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { duration, ease } from '@/components/motion';
 import {
   ArrowRightIcon,
+  BlockIcon,
   Button,
   Notice,
   Section,
@@ -107,30 +108,52 @@ export const ServicesSection: FC = () => {
                   </div>
                 </div>
 
-                <ul className={classes.plans}>
-                  {service.plans.map((plan) => (
-                    <li key={plan.slug} className={classes.plan}>
-                      <span className={classes.plan_name}>{plan.name}</span>
-                      {plan.in_stock ? (
-                        <span className={classes.plan_price}>
-                          {formatPrice(plan.price) ?? 'по запросу'}
-                        </span>
-                      ) : (
-                        <span className={classes.stock_out}>{'скоро'}</span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
+                <div className={classes.plans_box}>
+                  <ul className={classes.plans}>
+                    {service.plans.map((plan) => {
+                      return (
+                        <li key={plan.slug} className={classes.plan}>
+                          <span className={classes.plan_title}>
+                            {plan.icon && (
+                              <span className={classes.plan_icon}>
+                                <BlockIcon name={plan.icon} size={24} />
+                              </span>
+                            )}
 
-                <Button
-                  variant="glow"
-                  size="small"
-                  className={classes.buy}
-                  decorative
-                >
-                  {'Выбрать тариф'}
-                  <ArrowRightIcon size={18} />
-                </Button>
+                            <span className={classes.plan_name}>
+                              {plan.name}
+                            </span>
+                          </span>
+
+                          {plan.in_stock ? (
+                            <span className={classes.plan_price}>
+                              {formatPrice(plan.price) ?? 'по запросу'}
+                            </span>
+                          ) : (
+                            <span
+                              className={clsx(
+                                classes.plan_price,
+                                classes.stock_out,
+                              )}
+                            >
+                              {'скоро'}
+                            </span>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+
+                  <Button
+                    variant="glow"
+                    size="small"
+                    className={classes.buy}
+                    decorative
+                  >
+                    {'Выбрать тариф'}
+                    <ArrowRightIcon size={18} />
+                  </Button>
+                </div>
               </motion.li>
             );
           })}

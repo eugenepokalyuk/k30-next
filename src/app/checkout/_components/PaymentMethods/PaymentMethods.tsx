@@ -3,7 +3,7 @@
 import React, { FC } from 'react';
 import clsx from 'clsx';
 
-import { getBlockIcon, Notice } from '@/components/ui';
+import { BlockIcon, Notice } from '@/components/ui';
 import type { PaymentMethodDto } from '@/store/api/types';
 
 import classes from './PaymentMethods.module.scss';
@@ -48,7 +48,6 @@ export const PaymentMethods: FC<Props> = ({
           aria-label="Способ оплаты"
         >
           {methods.map((method) => {
-            const Icon = getBlockIcon(method.icon);
             const checked = method.id === value;
 
             return (
@@ -62,7 +61,7 @@ export const PaymentMethods: FC<Props> = ({
                 className={clsx(classes.method, checked && classes.checked)}
               >
                 <span className={classes.icon}>
-                  <Icon size={20} />
+                  <BlockIcon name={method.icon} size={20} />
                 </span>
 
                 <span className={classes.text}>

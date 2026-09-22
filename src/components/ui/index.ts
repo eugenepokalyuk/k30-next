@@ -1,5 +1,6 @@
 export * from './Button/Button';
 export * from './Field/Field';
+export * from './Icons/BlockIcon';
 export * from './Icons/blockIcons';
 export * from './Icons/Icons';
 export * from './KeyCode/KeyCode';
