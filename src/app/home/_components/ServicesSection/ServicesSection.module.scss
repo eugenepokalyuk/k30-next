@@ -235,13 +235,6 @@
   white-space: nowrap;
 }
 
-.stock_out {
-  border-color: var(--stroke_default);
-  background: none;
-  color: var(--text_muted);
-  font-weight: normal;
-}
-
 .skeleton {
   height: 132px;
   border-radius: s.$br_5;

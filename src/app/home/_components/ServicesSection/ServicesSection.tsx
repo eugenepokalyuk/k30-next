@@ -125,20 +125,9 @@ export const ServicesSection: FC = () => {
                             </span>
                           </span>
 
-                          {plan.in_stock ? (
-                            <span className={classes.plan_price}>
-                              {formatPrice(plan.price) ?? 'по запросу'}
-                            </span>
-                          ) : (
-                            <span
-                              className={clsx(
-                                classes.plan_price,
-                                classes.stock_out,
-                              )}
-                            >
-                              {'скоро'}
-                            </span>
-                          )}
+                          <span className={classes.plan_price}>
+                            {formatPrice(plan.price) ?? 'по запросу'}
+                          </span>
                         </li>
                       );
                     })}
