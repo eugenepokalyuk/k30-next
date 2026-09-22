@@ -209,12 +209,27 @@
   color: var(--accent);
 }
 
+.plan_text {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(0.5);
+  min-width: 0;
+}
+
 .plan_name {
   @include s.text_body_2;
 
   min-width: 0;
   color: var(--text_default);
   font-weight: s.$semi_bold;
+}
+
+.plan_tagline {
+  @include s.text_caption;
+
+  min-width: 0;
+  color: var(--text_secondary);
+  text-wrap: pretty;
 }
 
 .plan_price {

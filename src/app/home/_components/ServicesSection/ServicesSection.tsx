@@ -120,8 +120,16 @@ export const ServicesSection: FC = () => {
                               </span>
                             )}
 
-                            <span className={classes.plan_name}>
-                              {plan.name}
+                            <span className={classes.plan_text}>
+                              <span className={classes.plan_name}>
+                                {plan.name}
+                              </span>
+
+                              {plan.tagline && (
+                                <span className={classes.plan_tagline}>
+                                  {plan.tagline}
+                                </span>
+                              )}
                             </span>
                           </span>
 
