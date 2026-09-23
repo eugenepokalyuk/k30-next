@@ -8,7 +8,7 @@ import { Button, KeyCode, KeyIcon, Notice, ServiceMark } from '@/components/ui';
 import { useMyOrdersQuery } from '@/store/api/k30Api';
 import type { OrderDto } from '@/store/api/types';
 import { Routes } from '@/utils/consts';
-import { formatDate } from '@/utils/helpers';
+import { formatDate, formatPrice } from '@/utils/helpers';
 
 import classes from './OrdersList.module.scss';
 
@@ -105,6 +105,23 @@ export const OrdersList: FC = () => {
                 </>
               )}
             </p>
+
+            {Number(order.discount) > 0 && (
+              <p className={classes.discount}>
+                {order.promo_code
+                  ? `Скидка по промокоду ${order.promo_code}`
+                  : 'Скидка'}{' '}
+                <span className={classes.discount_value}>
+                  −{formatPrice(order.discount)}
+                </span>
+                {order.full_price && (
+                  <span className={classes.full_price}>
+                    {' вместо '}
+                    {formatPrice(order.full_price)}
+                  </span>
+                )}
+              </p>
+            )}
 
             {order.key_code && (
               <KeyCode code={order.key_code} className={classes.code} />

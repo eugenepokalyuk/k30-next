@@ -9,12 +9,20 @@ import {
   usePaymentMethodsQuery,
 } from '@/store/api/k30Api';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { cartCleared, planChosen, selectCartItem } from '@/store/slices/cart';
+import {
+  cartCleared,
+  planChosen,
+  selectCartItem,
+  selectCartReady,
+} from '@/store/slices/cart';
+
+import { usePromo } from '../PromoField/usePromo';
 
 export const useCheckout = () => {
   const params = useSearchParams();
   const dispatch = useAppDispatch();
   const cartItem = useAppSelector(selectCartItem);
+  const isCartReady = useAppSelector(selectCartReady);
 
   const service = params.get('service') || cartItem?.service || '';
   const plan = params.get('plan') || cartItem?.plan || '';
@@ -27,14 +35,16 @@ export const useCheckout = () => {
 
   const payment = usePaymentChoice({ skip: Boolean(returnedTo) });
 
+  const promo = usePromo({ service, plan, skip: Boolean(returnedTo) });
+
   const [createPayment, created] = useCreatePaymentMutation();
 
   React.useEffect(() => {
-    if (!service || !plan) return;
+    if (!isCartReady || !service || !plan) return;
     if (cartItem?.service === service && cartItem?.plan === plan) return;
 
     dispatch(planChosen({ service, plan }));
-  }, [cartItem, dispatch, plan, service]);
+  }, [cartItem, isCartReady, plan, service]);
 
   const pay = async () => {
     try {
@@ -42,17 +52,37 @@ export const useCheckout = () => {
         service,
         plan,
         method: payment.method,
+        promo: promo.applied?.code,
       }).unwrap();
 
       if (result.payment?.pay_url) {
         dispatch(cartCleared());
         window.location.href = result.payment.pay_url;
       }
-    } catch {
+    } catch (error) {
+      const refusal = promoRefusal(error);
+      if (refusal) promo.reject(refusal);
     }
   };
 
-  return { service, plan, returnedTo, order, payment, created, pay };
+  return {
+    service,
+    plan,
+    returnedTo,
+    order,
+    payment,
+    promo,
+    created,
+    payError: promoRefusal(created.error) ? null : created.error,
+    pay,
+  };
+};
+
+const promoRefusal = (error: unknown): string => {
+  const data = (error as { data?: { error?: string; error_code?: string } })
+    ?.data;
+
+  return data?.error_code === 'promo' ? (data.error ?? '') : '';
 };
 
 const usePaymentChoice = ({ skip }: { skip: boolean }) => {

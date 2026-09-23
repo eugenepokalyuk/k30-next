@@ -1,0 +1,143 @@
+@use '@/styles/index' as s;
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  padding-right: s.gap(13);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  &::placeholder {
+    letter-spacing: normal;
+  }
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  background: var(--background_secondary);
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_2;
+  color: var(--text_secondary);
+  cursor: pointer;
+
+  transition: s.$transition;
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      border-color: var(--stroke_primary);
+      color: var(--text_primary);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  &:focus-visible {
+    @include s.focus_ring;
+  }
+}
+
+.accepted {
+  border-color: color-mix(in srgb, var(--success) 45%, transparent);
+  background: var(--success_10);
+  color: var(--success);
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      border-color: var(--danger);
+      background: var(--danger_10);
+      color: var(--danger);
+    }
+  }
+}
+
+.glyph {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 18px;
+  height: 18px;
+
+  pointer-events: none;
+}
+
+.check,
+.cross {
+  position: absolute;
+  inset: 0;
+
+  transition:
+    opacity s.$transition-duration s.$ease_out,
+    transform s.$transition-duration s.$ease_out;
+}
+
+.cross {
+  opacity: 0;
+  transform: scale(0.6) rotate(-90deg);
+}
+
+.accepted:hover .check,
+.accepted:focus-visible .check {
+  opacity: 0;
+  transform: scale(0.6) rotate(90deg);
+}
+
+.accepted:hover .cross,
+.accepted:focus-visible .cross {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .check,
+  .cross {
+    transition: none;
+  }
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+
+  border: 2px solid currentcolor;
+  border-right-color: transparent;
+  border-radius: 50%;
+
+  animation: spin 0.7s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error {
+  overflow: hidden;
+  margin: 0;
+  color: var(--danger);
+
+  @include s.text_body_2;
+}
+
+.error_text {
+  display: block;
+  padding-top: s.gap(2);
+}

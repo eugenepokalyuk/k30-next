@@ -16,6 +16,7 @@ import classes from './AccountView.module.scss';
 import { AccountHeader } from '../AccountHeader/AccountHeader';
 import { OrdersList } from '../OrdersList/OrdersList';
 import { ProfileCard } from '../ProfileCard/ProfileCard';
+import { PromosList } from '../PromosList/PromosList';
 import { SubscriptionsList } from '../SubscriptionsList/SubscriptionsList';
 
 export const AccountView: FC = () => {
@@ -56,6 +57,11 @@ export const AccountView: FC = () => {
         <section className={classes.orders}>
           <h2 className={classes.section_title}>Заказы</h2>
           <OrdersList />
+        </section>
+
+        <section className={classes.orders}>
+          <h2 className={classes.section_title}>Промокоды</h2>
+          <PromosList />
         </section>
       </div>
     </div>

@@ -9,10 +9,16 @@ export interface CartItem {
 
 export interface CartState {
   item: CartItem | null;
+  promo: string;
   isReady: boolean;
 }
 
-const initialState: CartState = { item: null, isReady: false };
+export interface StoredCart {
+  item: CartItem | null;
+  promo: string;
+}
+
+const initialState: CartState = { item: null, promo: '', isReady: false };
 
 export const cartSlice = createSlice({
   name: 'cart',
@@ -21,43 +27,70 @@ export const cartSlice = createSlice({
     planChosen: (state, { payload }: PayloadAction<CartItem>) => {
       state.item = payload;
       state.isReady = true;
-      cartStorage.write(payload);
+      cartStorage.write({ item: payload, promo: state.promo });
+    },
+    promoApplied: (state, { payload }: PayloadAction<string>) => {
+      state.promo = payload;
+      cartStorage.write({ item: state.item, promo: payload });
+    },
+    promoCleared: (state) => {
+      state.promo = '';
+      cartStorage.write({ item: state.item, promo: '' });
     },
     cartCleared: (state) => {
       state.item = null;
+      state.promo = '';
       cartStorage.write(null);
     },
-    cartHydrated: (state, { payload }: PayloadAction<CartItem | null>) => {
-      state.item = payload;
+    cartHydrated: (state, { payload }: PayloadAction<StoredCart>) => {
+      state.item = payload.item;
+      state.promo = payload.promo;
       state.isReady = true;
     },
   },
 });
 
-export const { planChosen, cartCleared, cartHydrated } = cartSlice.actions;
+export const {
+  planChosen,
+  promoApplied,
+  promoCleared,
+  cartCleared,
+  cartHydrated,
+} = cartSlice.actions;
 
 export const cartReducer = cartSlice.reducer;
 
 export const cartStorage = {
-  read(): CartItem | null {
-    if (typeof window === 'undefined') return null;
+  read(): StoredCart {
+    const empty: StoredCart = { item: null, promo: '' };
+    if (typeof window === 'undefined') return empty;
+
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (!raw) return null;
+      if (!raw) return empty;
 
-      const parsed = JSON.parse(raw) as Partial<CartItem>;
-      if (!parsed?.service || !parsed?.plan) return null;
+      const parsed = JSON.parse(raw) as Partial<CartItem> & { promo?: string };
+      const promo = typeof parsed?.promo === 'string' ? parsed.promo : '';
 
-      return { service: parsed.service, plan: parsed.plan };
+      if (!parsed?.service || !parsed?.plan) return { item: null, promo };
+
+      return { item: { service: parsed.service, plan: parsed.plan }, promo };
     } catch {
-      return null;
+      return empty;
     }
   },
-  write(item: CartItem | null) {
+  write(cart: StoredCart | null) {
     if (typeof window === 'undefined') return;
     try {
-      if (item) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(item));
-      else window.localStorage.removeItem(STORAGE_KEY);
+      if (!cart?.item && !cart?.promo) {
+        window.localStorage.removeItem(STORAGE_KEY);
+        return;
+      }
+
+      window.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ ...cart.item, promo: cart.promo }),
+      );
     } catch {
     }
   },

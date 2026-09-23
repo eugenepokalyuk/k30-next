@@ -16,6 +16,8 @@ interface Props {
   name?: string;
   autoComplete?: string;
   disabled?: boolean;
+  readOnly?: boolean;
+  invalid?: boolean;
   rows?: number;
   className?: string;
   inputClassName?: string;
@@ -37,6 +39,8 @@ export const Field: FC<Props> = ({
   name,
   autoComplete,
   disabled,
+  readOnly,
+  invalid,
   rows = 6,
   className,
   inputClassName,
@@ -48,6 +52,7 @@ export const Field: FC<Props> = ({
 }) => {
   const id = React.useId();
   const hintId = `${id}-hint`;
+  const isInvalid = Boolean(error) || Boolean(invalid);
 
   const shared = {
     id,
@@ -55,15 +60,16 @@ export const Field: FC<Props> = ({
     value,
     placeholder,
     disabled,
+    readOnly,
     autoComplete,
     inputMode,
     autoCapitalize,
     spellCheck,
     enterKeyHint,
-    'aria-invalid': Boolean(error),
+    'aria-invalid': isInvalid,
     'aria-describedby': error || hint ? hintId : undefined,
     className: clsx(classes.control, inputClassName, {
-      [classes.invalid]: Boolean(error),
+      [classes.invalid]: isInvalid,
     }),
     onChange: (
       event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

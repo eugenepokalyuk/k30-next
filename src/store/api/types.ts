@@ -321,6 +321,8 @@ export interface PaymentDto {
   id: string;
   method: string;
   amount: string;
+  discount: string;
+  promo_code: string;
   currency: string;
   status: PaymentStatus;
   status_label: string;
@@ -351,6 +353,9 @@ export interface OrderDto {
   plan: string;
   plan_slug: string;
   price: string | null;
+  full_price: string | null;
+  discount: string;
+  promo_code: string;
   key_code: string;
   status: OrderStatus;
   status_label: string;
@@ -367,6 +372,33 @@ export interface OrderDto {
 export interface CreatePaymentResponse {
   payment: PaymentDto | null;
   error: string;
+  error_code?: string;
+}
+
+export type PromoKind = 'percent' | 'fixed';
+
+export interface AppliedPromoDto {
+  code: string;
+  kind: PromoKind;
+  label: string;
+  discount: string;
+  total: string;
+}
+
+export interface PromoCheckResponse {
+  success: boolean;
+  error: string;
+  promo: AppliedPromoDto | null;
+}
+
+export interface PromoUseDto {
+  code: string;
+  amount: string;
+  order_amount: string | null;
+  order_number: number | null;
+  service: string;
+  plan: string;
+  used_at: string;
 }
 
 export interface InformerDto {

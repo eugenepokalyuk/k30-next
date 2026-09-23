@@ -13,8 +13,17 @@ import { PaymentResult } from '../PaymentResult/PaymentResult';
 import { StatusScreen } from '../StatusScreen/StatusScreen';
 
 export const CheckoutView: FC = () => {
-  const { service, plan, returnedTo, order, payment, created, pay } =
-    useCheckout();
+  const {
+    service,
+    plan,
+    returnedTo,
+    order,
+    payment,
+    promo,
+    created,
+    payError,
+    pay,
+  } = useCheckout();
 
   if (returnedTo) return <PaymentResult id={returnedTo} />;
 
@@ -57,8 +66,9 @@ export const CheckoutView: FC = () => {
         <OrderSummary
           data={order.data}
           payment={payment}
+          promo={promo}
           isSending={created.isLoading}
-          error={created.error}
+          error={payError}
           onPay={pay}
         />
 

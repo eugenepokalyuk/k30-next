@@ -38,15 +38,17 @@ import type {
   OrderDto,
   PaymentDto,
   PaymentOptionsDto,
+  PromoCheckResponse,
+  PromoUseDto,
   ServiceDto,
   SiteSettingsDto,
   SubscriptionDto,
   TargetKind,
   TelegramBlockDto,
   TelegramStartDto,
-  TelegramWidgetUser,
   TelegramStatusResponse,
   TelegramWebAppResponse,
+  TelegramWidgetUser,
   UserDto,
   VerifyKeyResponse,
 } from './types';
@@ -99,7 +101,7 @@ const baseQueryWithReauth: BaseQueryFn<
 export const k30Api = createApi({
   reducerPath: 'k30Api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Me', 'Orders', 'Activations', 'Payment'],
+  tagTypes: ['Me', 'Orders', 'Activations', 'Payment', 'Promos'],
   endpoints: (builder) => ({
     services: builder.query<ServiceDto[], void>({
       query: () => 'services/',
@@ -325,10 +327,22 @@ export const k30Api = createApi({
 
     createPayment: builder.mutation<
       CreatePaymentResponse,
-      { service: string; plan: string; method: string }
+      { service: string; plan: string; method: string; promo?: string }
     >({
       query: (body) => ({ url: 'payments', method: 'POST', body }),
       invalidatesTags: ['Orders'],
+    }),
+
+    checkPromo: builder.mutation<
+      PromoCheckResponse,
+      { code: string; service: string; plan: string }
+    >({
+      query: (body) => ({ url: 'promo/check', method: 'POST', body }),
+    }),
+
+    myPromos: builder.query<PromoUseDto[], void>({
+      query: () => 'me/promos',
+      providesTags: ['Promos'],
     }),
 
     paymentStatus: builder.query<
@@ -336,7 +350,7 @@ export const k30Api = createApi({
       string
     >({
       query: (id) => `payments/${id}`,
-      providesTags: ['Payment', 'Orders'],
+      providesTags: ['Payment', 'Orders', 'Promos'],
     }),
   }),
 });
@@ -375,6 +389,8 @@ export const {
   useMySubscriptionsQuery,
   useMyActivationsQuery,
   useCreatePaymentMutation,
+  useCheckPromoMutation,
+  useMyPromosQuery,
   usePaymentMethodsQuery,
   usePaymentStatusQuery,
 } = k30Api;

@@ -3,97 +3,53 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: s.gap(3);
+  gap: s.gap(2);
 }
 
 .item {
   @include s.card;
 
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  gap: s.gap(3);
-  padding: s.gap(5);
-}
-
-.top {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: s.gap(3);
-  width: 100%;
-  flex-wrap: wrap;
+
+  padding: s.gap(4);
 }
 
-.service {
-  @include s.text_header_3;
+.code {
+  @include s.text_body_2;
 
-  display: flex;
-  align-items: center;
-  gap: s.gap(2);
-  min-width: 0;
-
-  color: var(--text_default);
-}
-
-.badge {
-  @include s.text_caption;
-
+  flex-shrink: 0;
   padding: s.gap(1) s.gap(2.5);
+
+  border: 1px dashed var(--stroke_strong);
+  border-radius: s.$br_2;
   background: var(--background_elevated);
-  border: 1px solid var(--stroke_strong);
-  border-radius: s.$br_full;
-  color: var(--text_secondary);
+  color: var(--text_default);
+
+  font-weight: s.$semi_bold;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
 }
 
-.done {
-  background: var(--success_10);
-  border-color: var(--success);
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(0.5);
+  min-width: 0;
+}
+
+.amount {
+  @include s.text_body_2;
+
   color: var(--success);
+  font-weight: s.$semi_bold;
 }
 
 .meta {
   @include s.text_caption;
 
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-
   color: var(--text_muted);
-}
-
-.separator {
-  padding: 0 s.gap(1.5);
-}
-
-.nowrap {
-  white-space: nowrap;
-}
-
-.code {
-  width: 100%;
-}
-
-.discount {
-  @include s.text_body_2;
-
-  color: var(--text_secondary);
-}
-
-.discount_value {
-  color: var(--success);
-  font-weight: s.$semi_bold;
-}
-
-.full_price {
-  color: var(--text_muted);
-}
-
-.account {
-  @include s.text_body_2;
-
-  color: var(--text_secondary);
   overflow-wrap: anywhere;
 }
 

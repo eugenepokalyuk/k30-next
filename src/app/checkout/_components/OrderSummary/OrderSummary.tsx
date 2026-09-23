@@ -1,8 +1,10 @@
 'use client';
 
 import React, { FC } from 'react';
+import clsx from 'clsx';
+import { AnimatePresence, motion } from 'framer-motion';
 
-import { Reveal } from '@/components/motion';
+import { duration, ease, Reveal } from '@/components/motion';
 import { Notice, ServiceMark } from '@/components/ui';
 import { apiErrorMessage } from '@/store/api/errors';
 import type { CheckoutDto } from '@/store/api/types';
@@ -12,10 +14,13 @@ import classes from './OrderSummary.module.scss';
 import { CheckoutAction } from './CheckoutAction';
 import type { PaymentChoice } from '../CheckoutView/useCheckout';
 import { PaymentMethods } from '../PaymentMethods/PaymentMethods';
+import { PromoField } from '../PromoField/PromoField';
+import type { Promo } from '../PromoField/usePromo';
 
 interface Props {
   data: CheckoutDto;
   payment: PaymentChoice;
+  promo: Promo;
   isSending: boolean;
   error: unknown;
   onPay: () => void;
@@ -24,11 +29,13 @@ interface Props {
 export const OrderSummary: FC<Props> = ({
   data,
   payment,
+  promo,
   isSending,
   error,
   onPay,
 }) => {
-  const total = formatPrice(data.total);
+  const applied = promo.applied;
+  const total = formatPrice(applied ? applied.total : data.total);
 
   return (
     <Reveal className={classes.summary}>
@@ -54,9 +61,50 @@ export const OrderSummary: FC<Props> = ({
         </div>
       </div>
 
+      <PromoField promo={promo} />
+
+      <AnimatePresence initial={false}>
+        {applied && (
+          <motion.div
+            className={classes.lines}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: duration.fast, ease }}
+          >
+            <div className={classes.lines_inner}>
+              <p className={classes.line}>
+                <span className={classes.line_label}>Стоимость</span>
+                <span className={classes.line_value}>
+                  {formatPrice(data.total)}
+                </span>
+              </p>
+
+              <p className={classes.line}>
+                <span className={classes.line_label}>
+                  Скидка по промокоду {applied.code}
+                </span>
+                <span className={clsx(classes.line_value, classes.discount)}>
+                  −{formatPrice(applied.discount)}
+                </span>
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className={classes.total}>
         <span className={classes.total_label}>К оплате</span>
-        <span className={classes.total_value}>{total ?? 'по запросу'}</span>
+
+        <motion.span
+          key={total ?? 'none'}
+          className={classes.total_value}
+          initial={{ opacity: 0.35, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: duration.fast, ease }}
+        >
+          {total ?? 'по запросу'}
+        </motion.span>
       </div>
 
       {!data.plan.in_stock && (

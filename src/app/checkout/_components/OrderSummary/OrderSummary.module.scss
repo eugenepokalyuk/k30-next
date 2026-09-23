@@ -43,6 +43,44 @@
   font-weight: s.$semi_bold;
 }
 
+.lines {
+  overflow: hidden;
+}
+
+.lines_inner {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(2);
+}
+
+.line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: s.gap(3);
+
+  margin: 0;
+}
+
+.line_label {
+  @include s.text_body_2;
+
+  color: var(--text_secondary);
+}
+
+.line_value {
+  @include s.text_body_2;
+
+  flex-shrink: 0;
+  color: var(--text_default);
+  font-weight: s.$medium;
+  white-space: nowrap;
+}
+
+.discount {
+  color: var(--success);
+}
+
 .total {
   display: flex;
   align-items: baseline;
@@ -62,7 +100,10 @@
 .total_value {
   @include s.text_header_2;
 
+  display: inline-flex;
+  justify-content: flex-end;
   color: var(--text_default);
+  white-space: nowrap;
 }
 
 .note {
