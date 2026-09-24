@@ -15,7 +15,25 @@ import classes from './ReferralCard.module.scss';
 export const ReferralCard: FC = () => {
   const { data, isLoading, isError } = useMyReferralsQuery();
 
-  if (isLoading || isError || !data?.is_enabled) return null;
+  if (isLoading) {
+    return <p className={classes.loading}>Загружаем реферальную программу</p>;
+  }
+
+  if (isError) {
+    return (
+      <Notice tone="error" title="Не получилось загрузить раздел">
+        Обновите страницу или напишите в поддержку
+      </Notice>
+    );
+  }
+
+  if (!data?.is_enabled) {
+    return (
+      <Notice tone="info" title="Программа сейчас выключена">
+        Как только мы её включим, здесь появятся ваша ссылка и бонусный счёт
+      </Notice>
+    );
+  }
 
   return (
     <section className={classes.section}>
@@ -122,7 +140,9 @@ const Friends: FC<{ data: ReferralsDto }> = ({ data }) => {
   if (!data.invited.length) {
     return (
       <Notice tone="info" title="Пока никто не пришёл">
-        {`Отправьте ссылку — за каждую покупку друга начислим ${data.percent.replace(/\.?0+$/, '')}% бонусами`}
+        {data.tiers.length
+          ? 'Отправьте ссылку — награда придёт, когда друзья дойдут до покупки'
+          : 'Отправьте ссылку — друзья, дошедшие до покупки, появятся здесь'}
       </Notice>
     );
   }

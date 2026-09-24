@@ -1,5 +1,11 @@
 @use '@/styles/index' as s;
 
+.loading {
+  @include s.text_body_1;
+
+  color: var(--text_secondary);
+}
+
 .section {
   display: flex;
   flex-direction: column;

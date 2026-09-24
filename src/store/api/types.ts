@@ -420,7 +420,6 @@ export interface ReferralsDto {
   is_enabled: boolean;
   title: string;
   text: string;
-  percent: string;
   spend_limit_percent: string;
   code: string;
   link: string;
@@ -438,7 +437,6 @@ export interface InviteDto {
   inviter: string;
   title: string;
   text: string;
-  percent: string;
   already_signed_in: boolean;
 }
 

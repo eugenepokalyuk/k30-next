@@ -3,11 +3,7 @@
 import React, { FC } from 'react';
 import { useRouter } from 'next/navigation';
 
-import {
-  useMyPromosQuery,
-  useMyReferralsQuery,
-  useMySubscriptionsQuery,
-} from '@/store/api/k30Api';
+import { useMyPromosQuery, useMySubscriptionsQuery } from '@/store/api/k30Api';
 import { useAppSelector } from '@/store/hooks';
 import {
   selectIsAuthorized,
@@ -35,9 +31,6 @@ export const AccountView: FC = () => {
     skip: !isAuthorized,
   });
   const { data: promos } = useMyPromosQuery(undefined, { skip: !isAuthorized });
-  const { data: referrals } = useMyReferralsQuery(undefined, {
-    skip: !isAuthorized,
-  });
 
   React.useEffect(() => {
     if (isReady && !isAuthorized) router.replace(Routes.Login);
@@ -45,23 +38,18 @@ export const AccountView: FC = () => {
 
   const tabs: ProfileTab[] = [
     { id: 'orders', label: 'Покупки', content: <OrdersList /> },
-  ];
-
-  if (promos?.length) {
-    tabs.push({
-      id: 'promos',
-      label: 'Промокоды',
-      content: <PromosList promos={promos} />,
-    });
-  }
-
-  if (referrals?.is_enabled) {
-    tabs.push({
+    {
       id: 'referrals',
       label: 'Реферальная программа',
       content: <ReferralCard />,
-    });
-  }
+    },
+    {
+      id: 'promos',
+      label: 'Промокоды',
+      count: promos?.length ?? 0,
+      content: <PromosList promos={promos ?? []} />,
+    },
+  ];
 
   if (!isReady || !isAuthorized || !user) {
     return (

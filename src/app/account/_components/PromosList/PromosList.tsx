@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { duration, ease } from '@/components/motion';
-import { Button, CheckIcon, CopyIcon } from '@/components/ui';
+import { Button, CheckIcon, CopyIcon, Notice } from '@/components/ui';
 import type { OfferedPromoDto } from '@/store/api/types';
 import { Routes } from '@/utils/consts';
 import { formatDate } from '@/utils/helpers';
@@ -16,18 +16,29 @@ interface Props {
   promos: OfferedPromoDto[];
 }
 
-export const PromosList: FC<Props> = ({ promos }) => (
-  <div className={classes.list}>
-    {promos.map((promo) => (
-      <PromoRow key={promo.code} promo={promo} />
-    ))}
+export const PromosList: FC<Props> = ({ promos }) => {
+  if (!promos.length) {
+    return (
+      <Notice tone="info" title="Промокодов пока нет">
+        Здесь появятся коды, которые мы выдадим лично вам. Код из рассылки
+        или от друга вводится сразу на странице оформления заказа
+      </Notice>
+    );
+  }
 
-    <p className={classes.note}>
-      Код вводится на странице оформления заказа. Промокод и бонусы не
-      суммируются — применится что-то одно
-    </p>
-  </div>
-);
+  return (
+    <div className={classes.list}>
+      {promos.map((promo) => (
+        <PromoRow key={promo.code} promo={promo} />
+      ))}
+
+      <p className={classes.note}>
+        Код вводится на странице оформления заказа. Промокод и бонусы не
+        суммируются — применится что-то одно
+      </p>
+    </div>
+  );
+};
 
 const PromoRow: FC<{ promo: OfferedPromoDto }> = ({ promo }) => {
   const [copied, setCopied] = React.useState(false);

@@ -48,11 +48,9 @@ export const InviteView: FC = () => {
             <span className={classes.inviter_text}>
               <span className={classes.inviter_name}>Вас пригласил {inviter}</span>
 
-              {data?.percent && (
-                <span className={classes.inviter_note}>
-                  Зарегистрируйтесь — приглашение засчитается автоматически
-                </span>
-              )}
+              <span className={classes.inviter_note}>
+                Зарегистрируйтесь — приглашение засчитается автоматически
+              </span>
             </span>
           </Reveal>
         )}
