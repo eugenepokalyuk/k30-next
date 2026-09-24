@@ -35,7 +35,7 @@ export const Footer: FC = () => {
             Вопросы
           </Link>
           <Link className={classes.link} href={Routes.Account}>
-            Личный кабинет
+            Профиль
           </Link>
           <Link className={classes.link} href={Routes.Terms}>
             Пользовательское соглашение

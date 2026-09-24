@@ -177,6 +177,7 @@ export interface AuthResponse {
   refresh: string;
   user: UserDto;
   claimed_orders?: number;
+  invited?: boolean;
 }
 
 export interface TelegramStartDto {
@@ -322,6 +323,7 @@ export interface PaymentDto {
   method: string;
   amount: string;
   discount: string;
+  bonus_spent: string;
   promo_code: string;
   currency: string;
   status: PaymentStatus;
@@ -355,6 +357,7 @@ export interface OrderDto {
   price: string | null;
   full_price: string | null;
   discount: string;
+  bonus_spent: string;
   promo_code: string;
   key_code: string;
   status: OrderStatus;
@@ -389,6 +392,70 @@ export interface PromoCheckResponse {
   success: boolean;
   error: string;
   promo: AppliedPromoDto | null;
+}
+
+export interface InvitedFriendDto {
+  email: string;
+  joined_at: string;
+  has_purchase: boolean;
+  first_purchase_at: string | null;
+  earned: string;
+}
+
+export interface BonusEntryDto {
+  amount: string;
+  kind: 'referral' | 'tier' | 'spent' | 'manual';
+  reason: string;
+  comment: string;
+  created_at: string;
+}
+
+export interface RewardTierDto {
+  friends: number;
+  amount: string;
+  reached: boolean;
+}
+
+export interface ReferralsDto {
+  is_enabled: boolean;
+  title: string;
+  text: string;
+  percent: string;
+  spend_limit_percent: string;
+  code: string;
+  link: string;
+  balance: string;
+  invited_count: number;
+  friends_with_purchase: number;
+  invited: InvitedFriendDto[];
+  tiers: RewardTierDto[];
+  entries: BonusEntryDto[];
+}
+
+export interface InviteDto {
+  is_enabled: boolean;
+  valid: boolean;
+  inviter: string;
+  title: string;
+  text: string;
+  percent: string;
+  already_signed_in: boolean;
+}
+
+export interface BonusesDto {
+  is_enabled: boolean;
+  balance: string;
+  available: string;
+  spend_limit_percent: string;
+}
+
+export interface OfferedPromoDto {
+  code: string;
+  kind: PromoKind;
+  value: string;
+  label: string;
+  ends_at: string | null;
+  uses_left: number | null;
 }
 
 export interface PromoUseDto {

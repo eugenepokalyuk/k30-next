@@ -20,6 +20,7 @@ export const CheckoutView: FC = () => {
     order,
     payment,
     promo,
+    bonus,
     created,
     payError,
     pay,
@@ -67,6 +68,7 @@ export const CheckoutView: FC = () => {
           data={order.data}
           payment={payment}
           promo={promo}
+          bonus={bonus}
           isSending={created.isLoading}
           error={payError}
           onPay={pay}

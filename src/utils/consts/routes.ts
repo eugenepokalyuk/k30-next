@@ -2,6 +2,7 @@ export const Routes = {
   Home: '/',
   Activate: '/activate',
   Login: '/login',
+  Invite: '/invite',
   Account: '/account',
   Services: '/#services',
   AllServices: '/services',

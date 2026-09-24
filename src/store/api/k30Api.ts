@@ -13,6 +13,7 @@ import {
   tokenRefreshed,
 } from '@/store/slices/auth/authSlice';
 import type { RootState } from '@/store/store';
+import { referralStorage } from '@/utils/helpers';
 
 import type {
   ActivateResponse,
@@ -22,6 +23,7 @@ import type {
   AdvantageDto,
   AuthOptionsDto,
   AuthResponse,
+  BonusesDto,
   BuyBlockDto,
   BuyerRulesDto,
   CheckAccountResponse,
@@ -33,13 +35,15 @@ import type {
   HowStepDto,
   IconDto,
   InformerDto,
+  InviteDto,
   LegalPageDto,
   LegalSlug,
+  OfferedPromoDto,
   OrderDto,
   PaymentDto,
   PaymentOptionsDto,
   PromoCheckResponse,
-  PromoUseDto,
+  ReferralsDto,
   ServiceDto,
   SiteSettingsDto,
   SubscriptionDto,
@@ -101,7 +105,7 @@ const baseQueryWithReauth: BaseQueryFn<
 export const k30Api = createApi({
   reducerPath: 'k30Api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Me', 'Orders', 'Activations', 'Payment', 'Promos'],
+  tagTypes: ['Me', 'Orders', 'Activations', 'Payment', 'Promos', 'Bonuses'],
   endpoints: (builder) => ({
     services: builder.query<ServiceDto[], void>({
       query: () => 'services/',
@@ -209,13 +213,18 @@ export const k30Api = createApi({
       EmailLoginResponse,
       { email: string; code: string }
     >({
-      query: (body) => ({ url: 'auth/email/verify', method: 'POST', body }),
+      query: (body) => ({
+        url: 'auth/email/verify',
+        method: 'POST',
+        body: { ...body, ref: referralStorage.read() },
+      }),
 
       async onQueryStarted(_body, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           dispatch(signedIn(data));
           authStorage.write(data.refresh);
+          if (data.invited) referralStorage.write(null);
         } catch {
         }
       },
@@ -228,7 +237,7 @@ export const k30Api = createApi({
       query: (body) => ({
         url: 'auth/telegram/webapp',
         method: 'POST',
-        body,
+        body: { ...body, ref: referralStorage.read() },
       }),
 
       async onQueryStarted(_body, { dispatch, queryFulfilled }) {
@@ -252,7 +261,7 @@ export const k30Api = createApi({
       query: (body) => ({
         url: 'auth/telegram/widget',
         method: 'POST',
-        body,
+        body: { ...body, ref: referralStorage.read() },
       }),
 
       async onQueryStarted(_body, { dispatch, queryFulfilled }) {
@@ -327,10 +336,16 @@ export const k30Api = createApi({
 
     createPayment: builder.mutation<
       CreatePaymentResponse,
-      { service: string; plan: string; method: string; promo?: string }
+      {
+        service: string;
+        plan: string;
+        method: string;
+        promo?: string;
+        use_bonus?: boolean;
+      }
     >({
       query: (body) => ({ url: 'payments', method: 'POST', body }),
-      invalidatesTags: ['Orders'],
+      invalidatesTags: ['Orders', 'Bonuses'],
     }),
 
     checkPromo: builder.mutation<
@@ -340,9 +355,29 @@ export const k30Api = createApi({
       query: (body) => ({ url: 'promo/check', method: 'POST', body }),
     }),
 
-    myPromos: builder.query<PromoUseDto[], void>({
+    myPromos: builder.query<OfferedPromoDto[], void>({
       query: () => 'me/promos',
       providesTags: ['Promos'],
+    }),
+
+    invite: builder.query<InviteDto, string>({
+      query: (code) => `invite/${encodeURIComponent(code)}`,
+    }),
+
+    myReferrals: builder.query<ReferralsDto, void>({
+      query: () => 'me/referrals',
+      providesTags: ['Bonuses'],
+    }),
+
+    myBonuses: builder.query<
+      BonusesDto,
+      { service: string; plan: string; promo?: string }
+    >({
+      query: ({ service, plan, promo }) =>
+        `me/bonuses?service=${encodeURIComponent(service)}` +
+        `&plan=${encodeURIComponent(plan)}` +
+        (promo ? `&promo=${encodeURIComponent(promo)}` : ''),
+      providesTags: ['Bonuses'],
     }),
 
     paymentStatus: builder.query<
@@ -350,7 +385,7 @@ export const k30Api = createApi({
       string
     >({
       query: (id) => `payments/${id}`,
-      providesTags: ['Payment', 'Orders', 'Promos'],
+      providesTags: ['Payment', 'Orders', 'Promos', 'Bonuses'],
     }),
   }),
 });
@@ -391,6 +426,9 @@ export const {
   useCreatePaymentMutation,
   useCheckPromoMutation,
   useMyPromosQuery,
+  useInviteQuery,
+  useMyReferralsQuery,
+  useMyBonusesQuery,
   usePaymentMethodsQuery,
   usePaymentStatusQuery,
 } = k30Api;

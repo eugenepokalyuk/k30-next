@@ -12,6 +12,8 @@ import { formatPrice } from '@/utils/helpers';
 
 import classes from './OrderSummary.module.scss';
 import { CheckoutAction } from './CheckoutAction';
+import { BonusSwitch } from '../BonusSwitch/BonusSwitch';
+import type { Bonus } from '../BonusSwitch/useBonus';
 import type { PaymentChoice } from '../CheckoutView/useCheckout';
 import { PaymentMethods } from '../PaymentMethods/PaymentMethods';
 import { PromoField } from '../PromoField/PromoField';
@@ -21,6 +23,7 @@ interface Props {
   data: CheckoutDto;
   payment: PaymentChoice;
   promo: Promo;
+  bonus: Bonus;
   isSending: boolean;
   error: unknown;
   onPay: () => void;
@@ -30,12 +33,16 @@ export const OrderSummary: FC<Props> = ({
   data,
   payment,
   promo,
+  bonus,
   isSending,
   error,
   onPay,
 }) => {
   const applied = promo.applied;
-  const total = formatPrice(applied ? applied.total : data.total);
+  const spent = bonus.isOn && !applied ? Number(bonus.available) : 0;
+  const afterPromo = Number(applied ? applied.total : (data.total ?? 0));
+  const total =
+    data.total === null ? null : formatPrice((afterPromo - spent).toFixed(2));
 
   return (
     <Reveal className={classes.summary}>
@@ -63,8 +70,10 @@ export const OrderSummary: FC<Props> = ({
 
       <PromoField promo={promo} />
 
+      <BonusSwitch bonus={bonus} />
+
       <AnimatePresence initial={false}>
-        {applied && (
+        {(applied || spent > 0) && (
           <motion.div
             className={classes.lines}
             initial={{ opacity: 0, height: 0 }}
@@ -80,14 +89,25 @@ export const OrderSummary: FC<Props> = ({
                 </span>
               </p>
 
-              <p className={classes.line}>
-                <span className={classes.line_label}>
-                  Скидка по промокоду {applied.code}
-                </span>
-                <span className={clsx(classes.line_value, classes.discount)}>
-                  −{formatPrice(applied.discount)}
-                </span>
-              </p>
+              {applied && (
+                <p className={classes.line}>
+                  <span className={classes.line_label}>
+                    Скидка по промокоду {applied.code}
+                  </span>
+                  <span className={clsx(classes.line_value, classes.discount)}>
+                    −{formatPrice(applied.discount)}
+                  </span>
+                </p>
+              )}
+
+              {spent > 0 && (
+                <p className={classes.line}>
+                  <span className={classes.line_label}>Списано бонусов</span>
+                  <span className={clsx(classes.line_value, classes.discount)}>
+                    −{formatPrice(bonus.available)}
+                  </span>
+                </p>
+              )}
             </div>
           </motion.div>
         )}
@@ -110,7 +130,7 @@ export const OrderSummary: FC<Props> = ({
       {!data.plan.in_stock && (
         <Notice tone="info" title="Тарифа нет в наличии">
           Заказ примем, но ключ придётся подождать — он появится здесь и в
-          кабинете, как только поступит на склад
+          профиле, как только поступит на склад
         </Notice>
       )}
 

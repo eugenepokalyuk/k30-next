@@ -9,6 +9,7 @@ import { store } from '@/store/store';
 
 import { AuthHydrator } from './AuthHydrator';
 import { CartHydrator } from './CartHydrator';
+import { ReferralCatcher } from './ReferralCatcher';
 import { TelegramHydrator } from './TelegramHydrator';
 
 export const AppProviders: FC<React.PropsWithChildren> = ({ children }) => (
@@ -16,6 +17,7 @@ export const AppProviders: FC<React.PropsWithChildren> = ({ children }) => (
     <AuthHydrator />
     <TelegramHydrator />
     <CartHydrator />
+    <ReferralCatcher />
     <MotionConfig reducedMotion="user" transition={transition}>
       {children}
     </MotionConfig>

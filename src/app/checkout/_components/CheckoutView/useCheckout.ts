@@ -16,6 +16,7 @@ import {
   selectCartReady,
 } from '@/store/slices/cart';
 
+import { useBonus } from '../BonusSwitch/useBonus';
 import { usePromo } from '../PromoField/usePromo';
 
 export const useCheckout = () => {
@@ -37,6 +38,17 @@ export const useCheckout = () => {
 
   const promo = usePromo({ service, plan, skip: Boolean(returnedTo) });
 
+  const bonus = useBonus({
+    service,
+    plan,
+    skip: Boolean(returnedTo),
+    onUse: promo.clear,
+  });
+
+  React.useEffect(() => {
+    if (promo.applied) bonus.reset();
+  }, [bonus, promo.applied]);
+
   const [createPayment, created] = useCreatePaymentMutation();
 
   React.useEffect(() => {
@@ -53,6 +65,7 @@ export const useCheckout = () => {
         plan,
         method: payment.method,
         promo: promo.applied?.code,
+        use_bonus: bonus.isOn,
       }).unwrap();
 
       if (result.payment?.pay_url) {
@@ -72,6 +85,7 @@ export const useCheckout = () => {
     order,
     payment,
     promo,
+    bonus,
     created,
     payError: promoRefusal(created.error) ? null : created.error,
     pay,

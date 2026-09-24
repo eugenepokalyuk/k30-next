@@ -5,6 +5,7 @@ import React, { FC } from 'react';
 import { Reveal } from '@/components/motion';
 import { BlockIcon, Section } from '@/components/ui';
 import { useAdvantagesQuery } from '@/store/api/k30Api';
+import { balancedColumns } from '@/utils/helpers';
 
 import classes from './AdvantagesSection.module.scss';
 
@@ -15,7 +16,10 @@ export const AdvantagesSection: FC = () => {
 
   return (
     <Section overline="Преимущества" title="Почему выбирают нас">
-      <ul className={classes.grid}>
+      <ul
+        className={classes.grid}
+        style={{ '--cols': balancedColumns(data.length) } as React.CSSProperties}
+      >
         {data.map((item, index) => {
           return (
             <Reveal

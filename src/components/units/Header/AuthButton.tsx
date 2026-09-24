@@ -28,7 +28,7 @@ export const AuthButton: FC<Props> = ({ onNavigate }) => {
       className={classes.button}
     >
       {isAuthorized && <UserIcon size={16} />}
-      {isAuthorized ? 'Кабинет' : 'Войти'}
+      {isAuthorized ? 'Профиль' : 'Войти'}
     </Button>
   );
 };

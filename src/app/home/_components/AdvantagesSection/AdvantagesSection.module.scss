@@ -15,7 +15,7 @@
   }
 
   @include s.media_up(lg) {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
   }
 }
 

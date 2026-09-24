@@ -1,0 +1,72 @@
+@use '@/styles/index' as s;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(4);
+}
+
+.bar {
+  display: flex;
+  gap: s.gap(1);
+  overflow-x: auto;
+
+  padding: s.gap(1);
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_3;
+  background: var(--background_elevated);
+
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.tab {
+  position: relative;
+
+  flex: 1;
+  padding: s.gap(2.5) s.gap(3);
+  border-radius: s.$br_2;
+
+  background: transparent;
+  color: var(--text_secondary);
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition: color s.$transition-duration s.$ease_out;
+
+  @include s.text_body_2;
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--text_default);
+    }
+  }
+
+  &:focus-visible {
+    @include s.focus_ring;
+  }
+}
+
+.on {
+  color: var(--text_default);
+  font-weight: s.$semi_bold;
+}
+
+.marker {
+  position: absolute;
+  inset: 0;
+
+  border-radius: s.$br_2;
+  background: var(--background_secondary);
+}
+
+.label {
+  position: relative;
+}
+
+.panel {
+  min-height: 120px;
+}

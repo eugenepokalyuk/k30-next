@@ -1,22 +1,33 @@
 'use client';
 
 import React, { FC } from 'react';
+import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { duration, ease } from '@/components/motion';
-import { Button, ChevronDownIcon, Field } from '@/components/ui';
+import {
+  Button,
+  ChevronDownIcon,
+  Field,
+  KeyIcon,
+  UserIcon,
+} from '@/components/ui';
 import { useUpdateMeMutation } from '@/store/api/k30Api';
 import type { UserDto } from '@/store/api/types';
 import { useAppDispatch } from '@/store/hooks';
-import { profileLoaded } from '@/store/slices/auth';
+import { authStorage, profileLoaded, signedOut } from '@/store/slices/auth';
+import { Routes } from '@/utils/consts';
+import { formatDate } from '@/utils/helpers';
 
 import classes from './ProfileCard.module.scss';
 
 interface Props {
   user: UserDto;
+  active: number;
 }
 
-export const ProfileCard: FC<Props> = ({ user }) => {
+export const ProfileCard: FC<Props> = ({ user, active }) => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const [updateMe, { isLoading }] = useUpdateMeMutation();
   const id = React.useId();
@@ -32,6 +43,12 @@ export const ProfileCard: FC<Props> = ({ user }) => {
     const timer = window.setTimeout(() => setSaved(false), 2000);
     return () => window.clearTimeout(timer);
   }, [saved]);
+
+  const signOut = () => {
+    authStorage.write(null);
+    dispatch(signedOut());
+    router.replace(Routes.Home);
+  };
 
   const save = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -49,12 +66,37 @@ export const ProfileCard: FC<Props> = ({ user }) => {
     }
   };
 
-  const summary = [name.trim(), telegram.trim()]
-    .filter(Boolean)
-    .join(' · ');
+  const summary = [name.trim(), telegram.trim()].filter(Boolean).join(' · ');
 
   return (
     <section className={classes.card}>
+      <header className={classes.identity}>
+        <span className={classes.avatar}>
+          <UserIcon size={24} />
+        </span>
+
+        <div className={classes.person}>
+          <p className={classes.email}>{user.email}</p>
+          <p className={classes.meta}>
+            {active > 0 ? activeLabel(active) : 'Активных подписок нет'}
+            <span className={classes.separator} aria-hidden>
+              ·
+            </span>
+            с нами с {formatDate(user.date_joined)}
+          </p>
+        </div>
+
+        <div className={classes.top_actions}>
+          <Button href={Routes.Activate} size="small">
+            <KeyIcon size={16} />
+            Активировать ключ
+          </Button>
+          <Button type="button" size="small" variant="ghost" onClick={signOut}>
+            Выйти
+          </Button>
+        </div>
+      </header>
+
       <h2 className={classes.heading}>
         <button
           type="button"
@@ -64,7 +106,7 @@ export const ProfileCard: FC<Props> = ({ user }) => {
           aria-controls={id}
         >
           <span className={classes.head}>
-            <span className={classes.title}>Профиль</span>
+            <span className={classes.title}>Личные данные</span>
 
             {!isOpen && (
               <span className={classes.summary}>
@@ -104,7 +146,7 @@ export const ProfileCard: FC<Props> = ({ user }) => {
                 placeholder="@username"
                 value={telegram}
                 onChange={setTelegram}
-                hint="По нему сходятся заказы из телеграма с этим кабинетом"
+                hint="По нему сходятся заказы из телеграма с этим профилем"
               />
 
               <div className={classes.actions}>
@@ -119,3 +161,11 @@ export const ProfileCard: FC<Props> = ({ user }) => {
     </section>
   );
 };
+
+function activeLabel(count: number): string {
+  const tail = count % 10;
+  const teen = count % 100 >= 11 && count % 100 <= 14;
+  if (!teen && tail === 1) return `${count} активная подписка`;
+  if (!teen && tail >= 2 && tail <= 4) return `${count} активные подписки`;
+  return `${count} активных подписок`;
+}

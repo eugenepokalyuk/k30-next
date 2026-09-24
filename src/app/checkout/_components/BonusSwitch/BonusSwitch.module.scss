@@ -1,0 +1,76 @@
+@use '@/styles/index' as s;
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: s.gap(3);
+  width: 100%;
+
+  padding: s.gap(3);
+  border: 1px solid var(--stroke_default);
+  border-radius: s.$br_3;
+  background: var(--background_elevated);
+  cursor: pointer;
+  text-align: left;
+
+  transition: s.$transition;
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--stroke_strong);
+    }
+  }
+
+  &:focus-visible {
+    @include s.focus_ring;
+  }
+}
+
+.on {
+  border-color: color-mix(in srgb, var(--success) 45%, transparent);
+}
+
+.box {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+
+  width: 22px;
+  height: 22px;
+
+  border: 1px solid var(--stroke_strong);
+  border-radius: s.$br_1;
+  color: var(--success);
+
+  transition: s.$transition;
+}
+
+.box_on {
+  border-color: var(--success);
+  background: var(--success_10);
+}
+
+.tick {
+  display: inline-flex;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: s.gap(0.5);
+  min-width: 0;
+}
+
+.title {
+  @include s.text_body_2;
+
+  color: var(--text_default);
+  font-weight: s.$semi_bold;
+}
+
+.note {
+  @include s.text_caption;
+
+  color: var(--text_secondary);
+}

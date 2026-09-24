@@ -1,73 +1,95 @@
 'use client';
 
 import React, { FC } from 'react';
+import clsx from 'clsx';
+import { AnimatePresence, motion } from 'framer-motion';
 
-import { Stagger, StaggerItem } from '@/components/motion';
-import { CardIcon, Notice } from '@/components/ui';
-import { useMyPromosQuery } from '@/store/api/k30Api';
-import { formatDate, formatPrice } from '@/utils/helpers';
+import { duration, ease } from '@/components/motion';
+import { Button, CheckIcon, CopyIcon } from '@/components/ui';
+import type { OfferedPromoDto } from '@/store/api/types';
+import { Routes } from '@/utils/consts';
+import { formatDate } from '@/utils/helpers';
 
 import classes from './PromosList.module.scss';
 
-export const PromosList: FC = () => {
-  const { data, isLoading, isError } = useMyPromosQuery();
+interface Props {
+  promos: OfferedPromoDto[];
+}
 
-  if (isLoading) {
-    return <p className={classes.loading}>{'Загружаем промокоды'}</p>;
-  }
+export const PromosList: FC<Props> = ({ promos }) => (
+  <div className={classes.list}>
+    {promos.map((promo) => (
+      <PromoRow key={promo.code} promo={promo} />
+    ))}
 
-  if (isError) {
-    return (
-      <Notice tone="error" title="Не получилось загрузить промокоды">
-        {'Обновите страницу или напишите в поддержку'}
-      </Notice>
-    );
-  }
+    <p className={classes.note}>
+      Код вводится на странице оформления заказа. Промокод и бонусы не
+      суммируются — применится что-то одно
+    </p>
+  </div>
+);
 
-  if (!data?.length) {
-    return (
-      <div className={classes.empty}>
-        <span className={classes.empty_icon}>
-          <CardIcon size={24} />
-        </span>
-        <p className={classes.empty_title}>{'Промокодов пока не было'}</p>
+const PromoRow: FC<{ promo: OfferedPromoDto }> = ({ promo }) => {
+  const [copied, setCopied] = React.useState(false);
+  const timer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
 
-        <p className={classes.empty_text}>
-          {
-            'Промокод вводится при оформлении заказа. Каждый код действует один раз — использованные останутся здесь.'
-          }
-        </p>
-      </div>
-    );
-  }
+  React.useEffect(() => () => clearTimeout(timer.current), []);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(promo.code);
+      setCopied(true);
+      clearTimeout(timer.current);
+      timer.current = setTimeout(() => setCopied(false), 2000);
+    } catch {
+    }
+  };
 
   return (
-    <Stagger as="ul" className={classes.list}>
-      {data.map((use) => (
-        <StaggerItem
-          as="li"
-          key={`${use.code}-${use.used_at}`}
-          className={classes.item}
-        >
-          <span className={classes.code}>{use.code}</span>
+    <div className={classes.item}>
+      <span className={classes.code}>{promo.code}</span>
 
-          <span className={classes.text}>
-            <span className={classes.amount}>
-              Скидка {formatPrice(use.amount)}
-            </span>
+      <span className={classes.text}>
+        <span className={classes.discount}>{promo.label}</span>
+        <span className={classes.meta}>{terms(promo)}</span>
+      </span>
 
-            <span className={classes.meta}>
-              {[
-                [use.service, use.plan].filter(Boolean).join(' '),
-                use.order_number ? `заказ №${use.order_number}` : '',
-                formatDate(use.used_at),
-              ]
-                .filter(Boolean)
-                .join(' · ')}
-            </span>
-          </span>
-        </StaggerItem>
-      ))}
-    </Stagger>
+      <button
+        type="button"
+        className={clsx(classes.action, copied && classes.copied)}
+        onClick={copy}
+        aria-label={copied ? 'Код скопирован' : 'Скопировать код'}
+      >
+        <AnimatePresence initial={false} mode="popLayout">
+          <motion.span
+            key={copied ? 'done' : 'idle'}
+            className={classes.glyph}
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.6 }}
+            transition={{ duration: duration.fast, ease }}
+          >
+            {copied ? <CheckIcon size={18} /> : <CopyIcon size={18} />}
+          </motion.span>
+        </AnimatePresence>
+      </button>
+
+      <Button
+        href={Routes.Buy}
+        size="small"
+        variant="outlined"
+        className={classes.buy}
+      >
+        Выбрать подписку
+      </Button>
+    </div>
   );
 };
+
+const terms = (promo: OfferedPromoDto): string =>
+  [
+    promo.ends_at ? `действует до ${formatDate(promo.ends_at)}` : '',
+    promo.uses_left !== null ? `осталось применений: ${promo.uses_left}` : '',
+  ]
+    .filter(Boolean)
+    .join(' · ') || 'без ограничения по сроку';
