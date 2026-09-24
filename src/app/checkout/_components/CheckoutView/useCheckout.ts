@@ -45,9 +45,11 @@ export const useCheckout = () => {
     onUse: promo.clear,
   });
 
+  const { reset: resetBonus } = bonus;
+
   React.useEffect(() => {
-    if (promo.applied) bonus.reset();
-  }, [bonus, promo.applied]);
+    if (promo.applied) resetBonus();
+  }, [promo.applied, resetBonus]);
 
   const [createPayment, created] = useCreatePaymentMutation();
 

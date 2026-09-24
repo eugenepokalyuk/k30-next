@@ -26,22 +26,24 @@ export const useBonus = ({ service, plan, skip, onUse }: Options) => {
   const available = data?.available ?? '0.00';
   const isAvailable = Boolean(data?.is_enabled) && Number(available) > 0;
 
+  const reset = React.useCallback(() => setIsOn(false), []);
+
   React.useEffect(() => {
-    if (!isAvailable) setIsOn(false);
-  }, [isAvailable]);
+    if (!isAvailable) reset();
+  }, [isAvailable, reset]);
+
+  const toggle = React.useCallback(() => {
+    setIsOn((current) => !current);
+    if (!isOn) onUse();
+  }, [isOn, onUse]);
 
   return {
     balance: data?.balance ?? '0.00',
     available,
     isAvailable,
     isOn: isOn && isAvailable,
-    toggle: () => {
-      setIsOn((current) => {
-        if (!current) onUse();
-        return !current;
-      });
-    },
-    reset: () => setIsOn(false),
+    toggle,
+    reset,
   };
 };
 
