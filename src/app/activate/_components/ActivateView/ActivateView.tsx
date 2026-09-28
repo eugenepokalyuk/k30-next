@@ -1,7 +1,7 @@
 'use client';
 
 import React, { FC } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { Notice, ServiceMark, Steps } from '@/components/ui';
 import { KeySection, type KeyStatus } from '@/components/units';
@@ -16,7 +16,7 @@ import {
   selectActivationFor,
 } from '@/store/slices/activation';
 import type { ActivationStepId } from '@/utils/consts';
-import { Routes, SupportTelegram } from '@/utils/consts';
+import { activateRoute, Routes, SupportTelegram } from '@/utils/consts';
 import { formatKey, isKeyComplete } from '@/utils/helpers';
 
 import classes from './ActivateView.module.scss';
@@ -27,6 +27,7 @@ import { TargetStep } from '../TargetStep/TargetStep';
 
 export const ActivateView: FC = () => {
   const params = useSearchParams();
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const [verifyKey, { isLoading }] = useVerifyKeyMutation();
 
@@ -68,6 +69,10 @@ export const ActivateView: FC = () => {
             activation: response.activation ?? null,
           }),
         );
+
+        if (response.key.code !== code) {
+          router.replace(activateRoute(response.key.code));
+        }
       } catch (exception) {
         setError(
           apiErrorMessage(
@@ -79,7 +84,7 @@ export const ActivateView: FC = () => {
     };
 
     void load();
-  }, [code, cached, verifyKey]);
+  }, [code, cached, verifyKey, router]);
 
   const onActivation = React.useCallback(
     (activation: ActivationDto) => dispatch(activationUpdated(activation)),
